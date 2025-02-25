@@ -16,9 +16,9 @@ public class AnMonobehaviour : MonoBehaviour
     protected virtual void Reset()
     {
         this.LoadComponents();
+        this.ResetValue();
     }
-    // Update is called once per frame
-    void Update()
+    protected virtual void ResetValue()
     {
 
     }

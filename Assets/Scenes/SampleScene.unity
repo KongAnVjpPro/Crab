@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 835782373}
   - component: {fileID: 835782374}
   - component: {fileID: 835782375}
+  - component: {fileID: 835782376}
   m_Layer: 0
   m_Name: Crab
   m_TagString: Untagged
@@ -578,16 +579,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51b58ff605a0df94e843c1613a939983, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  body: {fileID: 835782369}
-  walkSpeed: 15
+  walkSpeed: 7
   jumpForce: 10
+  jumpBufferFrames: 8
+  coyoteTime: 0.1
+  maxAirJumps: 1
   groundCheckPoint: {fileID: 488698890}
   groundCheckY: 0.2
   groundCheckX: 0.5
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
-  anim: {fileID: 0}
+  dashSpeed: 10
+  dashTime: 0.5
+  dashCoolDown: 0.7
+  dashEffect: {fileID: 7253196116893317963, guid: 5cbb67732214b7b4781d4d6bc52e6865, type: 3}
+  anim: {fileID: 835782374}
+  body: {fileID: 835782369}
 --- !u!95 &835782374
 Animator:
   serializedVersion: 5
@@ -621,7 +629,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b8702712af4e1c40b53b0e038c17a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerMovement: {fileID: 0}
+  playerMovement: {fileID: 835782373}
+--- !u!114 &835782376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835782368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3f7bb534ce4bd9a4a9d201d6d599eb03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jumping: 0
+  dashing: 0
 --- !u!1 &1519562655
 GameObject:
   m_ObjectHideFlags: 0
