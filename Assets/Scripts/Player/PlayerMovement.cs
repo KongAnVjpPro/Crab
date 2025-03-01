@@ -46,7 +46,14 @@ public class PlayerMovement : AnMonobehaviour
     [SerializeField] LayerMask attackableLayer;
     [SerializeField] float damage = 1f;
     [SerializeField] GameObject slashEffect;
+    [Space(5)]
 
+    [Header("Recoil")]
+    [SerializeField] int recoilXSteps = 5;
+    [SerializeField] int recoilYSteps = 5;
+    [SerializeField] float recoilXSpeed = 100;
+    [SerializeField] float recoilYSpeed = 100;
+    int stepsXRecoiled = 0, stepsYRecoiled = 0;
 
 
     private bool dashed = false;
@@ -106,6 +113,7 @@ public class PlayerMovement : AnMonobehaviour
         Flip();
         StartDash();
         Attack();
+        Recoil();
     }
     protected virtual void GetInputs()
     {
@@ -162,34 +170,34 @@ public class PlayerMovement : AnMonobehaviour
 
             if (yAxis == 0 || yAxis < 0 && Grounded())
             {
-                Hit(sideAttackTransform, sideAttackArea);
+                Hit(sideAttackTransform, sideAttackArea, ref pState.recoilingX, recoilXSpeed);
                 Instantiate(slashEffect, sideAttackTransform);
             }
             else if (yAxis > 0)
             {
-                Hit(upAttackTransform, upAttackArea);
+                Hit(upAttackTransform, upAttackArea, ref pState.recoilingY, recoilYSpeed);
                 SlashEffectAtAngle(slashEffect, 90, upAttackTransform);
             }
             else if (yAxis < 0 && !Grounded())
             {
-                Hit(downAttackTransform, downAttackArea);
+                Hit(downAttackTransform, downAttackArea, ref pState.recoilingY, recoilYSpeed);
                 SlashEffectAtAngle(slashEffect, -90, downAttackTransform);
             }
         }
     }
-    void Hit(Transform _attackTransform, Vector2 _attackArea)
+    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilDir, float _recoilStrength)
     {
         Collider2D[] objectToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
 
         if (objectToHit.Length > 0)
         {
-            Debug.Log("HIt");
+            _recoilDir = true;
         }
         for (int i = 0; i < objectToHit.Length; i++)
         {
             if (objectToHit[i].GetComponent<Enemy>() != null)
             {
-                objectToHit[i].GetComponent<Enemy>().EnemyHit(damage);
+                objectToHit[i].GetComponent<Enemy>().EnemyHit(damage, (transform.position - objectToHit[i].transform.position).normalized, _recoilStrength);
             }
         }
     }
@@ -198,6 +206,17 @@ public class PlayerMovement : AnMonobehaviour
         _slashEffect = Instantiate(_slashEffect, _attackTransform);
         _slashEffect.transform.eulerAngles = new Vector3(0, 0, _effectAngle);
         _slashEffect.transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
+    }
+    void StopRecoilX()
+    {
+        stepsXRecoiled = 0;
+        pState.recoilingX = false;
+    }
+    void StopRecoilY()
+    {
+        stepsYRecoiled = 0;
+        pState.recoilingY = false;
+
     }
     public bool Grounded()
     {
@@ -213,16 +232,75 @@ public class PlayerMovement : AnMonobehaviour
         }
 
     }
+    void Recoil()
+    {
+        if (pState.recoilingX)
+        {
+
+            if (pState.lookingRight)
+            {
+                body.velocity = new Vector2(-recoilXSpeed, 0);
+            }
+            else
+            {
+                body.velocity = new Vector2(recoilXSpeed, 0);
+            }
+        }
+        if (pState.recoilingY)
+        {
+
+            body.gravityScale = 0;
+            if (yAxis < 0)
+            {
+
+                body.velocity = new Vector2(body.velocity.x, recoilYSpeed);
+            }
+            else
+            {
+                body.velocity = new Vector2(body.velocity.x, -recoilYSpeed);
+            }
+            airJumpCounter = 0;
+        }
+        else
+        {
+            body.gravityScale = gravity;
+        }
+
+        //stop recoil
+        if (pState.recoilingX && recoilXSteps > stepsXRecoiled)
+        {
+            stepsXRecoiled++;
+        }
+        else
+        {
+            StopRecoilX();
+        }
+
+        if (pState.recoilingY && recoilYSteps > stepsYRecoiled)
+        {
+            stepsYRecoiled++;
+        }
+        else
+        {
+            StopRecoilY();
+        }
+        if (Grounded())
+        {
+            StopRecoilY();
+        }
+    }
     void Flip()
     {
         if (xAxis < 0)
         {
             transform.localScale = new Vector2(-1, transform.localScale.y);
+            pState.lookingRight = false;
             // transform.eulerAngles = new Vector2(0, 180);
         }
         else if (xAxis > 0)
         {
             transform.localScale = new Vector2(1, transform.localScale.y);
+            pState.lookingRight = true;
             // transform.eulerAngles = new Vector2(0, 0);
         }
     }

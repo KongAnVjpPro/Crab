@@ -424,6 +424,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
+  recoilLength: 0.5
+  recoilFactor: 5
+  isRecoiling: 0
 --- !u!1 &488698889
 GameObject:
   m_ObjectHideFlags: 0
@@ -576,63 +579,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraFollow: {fileID: 519420033}
---- !u!1001 &762798303
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 622931185587841804, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_Name
-      value: BlueSlashThin
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 5.4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5771766383648022293, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
 --- !u!1 &835782368
 GameObject:
   m_ObjectHideFlags: 0
@@ -838,6 +784,10 @@ MonoBehaviour:
     m_Bits: 64
   damage: 1
   slashEffect: {fileID: 622931185587841804, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
+  recoilXSteps: 5
+  recoilYSteps: 5
+  recoilXSpeed: 100
+  recoilYSpeed: 100
   anim: {fileID: 835782374}
   body: {fileID: 835782369}
 --- !u!95 &835782374
@@ -888,6 +838,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumping: 0
   dashing: 0
+  recoilingX: 0
+  recoilingY: 0
+  lookingRight: 1
 --- !u!1 &1159355448
 GameObject:
   m_ObjectHideFlags: 0
@@ -913,7 +866,7 @@ Transform:
   m_GameObject: {fileID: 1159355448}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -3.45, z: 0}
+  m_LocalPosition: {x: -0.02, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1075,7 +1028,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.05, y: -4.21, z: 0}
-  m_LocalScale: {x: 15, y: 1, z: 1}
+  m_LocalScale: {x: 100, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -1120,4 +1073,3 @@ SceneRoots:
   - {fileID: 1519562658}
   - {fileID: 227127023}
   - {fileID: 257020006}
-  - {fileID: 762798303}
