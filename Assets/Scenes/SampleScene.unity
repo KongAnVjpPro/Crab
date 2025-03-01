@@ -265,6 +265,7 @@ GameObject:
   - component: {fileID: 257020004}
   - component: {fileID: 257020007}
   - component: {fileID: 257020008}
+  - component: {fileID: 257020009}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
@@ -295,9 +296,9 @@ Rigidbody2D:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &257020005
 SpriteRenderer:
@@ -420,13 +421,61 @@ MonoBehaviour:
   m_GameObject: {fileID: 257020003}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0084d6aaab1de346a31989ce789e76d, type: 3}
+  m_Script: {fileID: 11500000, guid: 52b815ba548dc6c4f9be59481e9eda41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 10
   recoilLength: 0.5
-  recoilFactor: 5
+  recoilFactor: 10
   isRecoiling: 0
+  playerMovement: {fileID: 835782373}
+  speed: 5
+  damage: 0
+--- !u!61 &257020009
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 257020003}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 1, y: 1}
+    newSize: {x: 1, y: 1}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1.5, y: 1.5}
+  m_EdgeRadius: 0
 --- !u!1 &488698889
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,8 +835,10 @@ MonoBehaviour:
   slashEffect: {fileID: 622931185587841804, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
   recoilXSteps: 5
   recoilYSteps: 5
-  recoilXSpeed: 100
+  recoilXSpeed: 50
   recoilYSpeed: 100
+  health: 10
+  maxHealth: 10
   anim: {fileID: 835782374}
   body: {fileID: 835782369}
 --- !u!95 &835782374
@@ -841,6 +892,7 @@ MonoBehaviour:
   recoilingX: 0
   recoilingY: 0
   lookingRight: 1
+  invicible: 0
 --- !u!1 &1159355448
 GameObject:
   m_ObjectHideFlags: 0

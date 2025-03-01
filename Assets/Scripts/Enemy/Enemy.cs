@@ -4,13 +4,16 @@ using UnityEngine;
 
 public class Enemy : AnMonobehaviour
 {
-    [SerializeField] float health = 10f;
-    [SerializeField] float recoilLength = 0.5f;
-    [SerializeField] float recoilFactor = 5;
-    [SerializeField] bool isRecoiling = false;
+    [SerializeField] protected float health = 10f;
+    [SerializeField] protected float recoilLength = 0.5f;
+    [SerializeField] protected float recoilFactor = 5;
+    [SerializeField] protected bool isRecoiling = false;
+    [SerializeField] protected PlayerMovement playerMovement;
+    [SerializeField] protected float speed = 5f;
+    [SerializeField] protected float damage = 1f;
 
-    float recoilTimer;
-    Rigidbody2D rb;
+    protected float recoilTimer;
+    protected Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,10 +23,11 @@ public class Enemy : AnMonobehaviour
     {
         base.LoadComponents();
         rb = GetComponent<Rigidbody2D>();
+        // playerMovement = PlayerController.Instance.PlayerMovement;
     }
 
     // Update is called once per frame
-    void Update()
+    protected virtual void Update()
     {
         if (health <= 0)
         {
@@ -42,12 +46,25 @@ public class Enemy : AnMonobehaviour
             }
         }
     }
-    public void EnemyHit(float _damageDone, Vector2 _hitDirection, float _hitForce)
+    public virtual void EnemyHit(float _damageDone, Vector2 _hitDirection, float _hitForce)
     {
         health -= _damageDone;
         if (!isRecoiling)
         {
             rb.AddForce(-_hitForce * recoilFactor * _hitDirection);
+        }
+    }
+    protected virtual void Attack()
+    {
+        PlayerController.Instance.PlayerMovement.TakeDamage(damage);
+    }
+
+    protected virtual void OnTriggerStay2D(Collider2D _other)
+    {
+        if (_other.CompareTag("Player") && !PlayerController.Instance.PlayerMovement.PState.invicible)
+        {
+            Attack();
+
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Callbacks;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
 
@@ -54,10 +55,17 @@ public class PlayerMovement : AnMonobehaviour
     [SerializeField] float recoilXSpeed = 100;
     [SerializeField] float recoilYSpeed = 100;
     int stepsXRecoiled = 0, stepsYRecoiled = 0;
+    [Space(5)]
+
+    [Header("Health Settings:")]
+    public int health = 10;
+    public int maxHealth = 10;
+    [Space(5)]
 
 
     private bool dashed = false;
-    PlayerStateList pState;
+    protected PlayerStateList pState;
+    public PlayerStateList PState => pState;
     [SerializeField] protected Animator anim;
     [SerializeField] protected Rigidbody2D body;
     private float xAxis, yAxis;
@@ -73,6 +81,7 @@ public class PlayerMovement : AnMonobehaviour
         this.LoadAnim();
         this.LoadPlayerStateList();
         gravity = body.gravityScale;
+        health = maxHealth;
     }
 
     protected virtual void LoadRigibody()
@@ -113,6 +122,10 @@ public class PlayerMovement : AnMonobehaviour
         Flip();
         StartDash();
         Attack();
+
+    }
+    void FixedUpdate()
+    {
         Recoil();
     }
     protected virtual void GetInputs()
@@ -218,6 +231,23 @@ public class PlayerMovement : AnMonobehaviour
         pState.recoilingY = false;
 
     }
+    public void TakeDamage(float _damage)
+    {
+        health -= Mathf.RoundToInt(_damage);
+        StartCoroutine(StopTakingDamage());
+    }
+    IEnumerator StopTakingDamage()
+    {
+        pState.invicible = true;
+        anim.SetTrigger("TakeDamage");
+        ClampHealth();
+        yield return new WaitForSeconds(1f);
+        pState.invicible = false;
+    }
+    void ClampHealth()
+    {
+        health = Mathf.Clamp(health, 0, maxHealth);
+    }
     public bool Grounded()
     {
         if (Physics2D.Raycast(groundCheckPoint.position, Vector2.down, groundCheckY, whatIsGround) ||
@@ -274,7 +304,9 @@ public class PlayerMovement : AnMonobehaviour
         else
         {
             StopRecoilX();
+
         }
+
 
         if (pState.recoilingY && recoilYSteps > stepsYRecoiled)
         {
