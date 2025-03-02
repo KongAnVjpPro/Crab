@@ -1,10 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Callbacks;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Scripting.APIUpdating;
+using UnityEngine.UI;
 
 public class PlayerMovement : AnMonobehaviour
 {
@@ -47,6 +49,8 @@ public class PlayerMovement : AnMonobehaviour
     [SerializeField] LayerMask attackableLayer;
     [SerializeField] float damage = 1f;
     [SerializeField] GameObject slashEffect;
+    bool restoreTime;
+    float restoreTimeSpeed;
     [Space(5)]
 
     [Header("Recoil")]
@@ -60,6 +64,23 @@ public class PlayerMovement : AnMonobehaviour
     [Header("Health Settings:")]
     public int health = 10;
     public int maxHealth = 10;
+    [SerializeField] GameObject bloodSpurt;
+    [SerializeField] float hitFlashSpeed = 2f;
+    public delegate void OnHealthChangedDelegate();
+    [HideInInspector] public OnHealthChangedDelegate onHealthChangedCallback;
+
+
+    float healTimer;
+    [SerializeField] float timeToHeal = 1;
+    [Space(5)]
+
+    [Header("Mana Settings:")]
+    [SerializeField] Image manaStorage;
+    [SerializeField] float mana = 1f;
+    [SerializeField] float manaDrainSpeed = 0.2f;
+    [SerializeField] float manaGain;
+
+
     [Space(5)]
 
 
@@ -68,6 +89,7 @@ public class PlayerMovement : AnMonobehaviour
     public PlayerStateList PState => pState;
     [SerializeField] protected Animator anim;
     [SerializeField] protected Rigidbody2D body;
+    private SpriteRenderer sr;
     private float xAxis, yAxis;
     private bool canDash = true;
     private float gravity;
@@ -81,7 +103,10 @@ public class PlayerMovement : AnMonobehaviour
         this.LoadAnim();
         this.LoadPlayerStateList();
         gravity = body.gravityScale;
-        health = maxHealth;
+        Health = maxHealth;
+        sr = GetComponent<SpriteRenderer>();
+        Mana = mana;
+        manaStorage.fillAmount = Mana;
     }
 
     protected virtual void LoadRigibody()
@@ -122,17 +147,20 @@ public class PlayerMovement : AnMonobehaviour
         Flip();
         StartDash();
         Attack();
-
+        RestoreTimeScale();
+        FlashWhileInvincible();
+        Heal();
     }
     void FixedUpdate()
     {
+        if (pState.dashing) return;
         Recoil();
     }
     protected virtual void GetInputs()
     {
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
-        attack = Input.GetMouseButtonDown(0);
+        attack = Input.GetButtonDown("Attack");
     }
     protected virtual void Move()
     {
@@ -201,16 +229,30 @@ public class PlayerMovement : AnMonobehaviour
     void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilDir, float _recoilStrength)
     {
         Collider2D[] objectToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
-
+        List<Enemy> hitEnemies = new List<Enemy>();
         if (objectToHit.Length > 0)
         {
             _recoilDir = true;
         }
         for (int i = 0; i < objectToHit.Length; i++)
         {
-            if (objectToHit[i].GetComponent<Enemy>() != null)
+            Enemy e = objectToHit[i].GetComponent<Enemy>();
+            if (e != null)
             {
-                objectToHit[i].GetComponent<Enemy>().EnemyHit(damage, (transform.position - objectToHit[i].transform.position).normalized, _recoilStrength);
+                if (hitEnemies.Contains(e))
+                {
+                    continue;
+                }
+                else
+                {
+                    hitEnemies.Add(e);
+                    objectToHit[i].GetComponent<Enemy>().EnemyHit(damage, (transform.position - objectToHit[i].transform.position).normalized, _recoilStrength);
+                    if (objectToHit[i].CompareTag("Enemy"))
+                    {
+                        Mana += manaGain;
+                    }
+                }
+
             }
         }
     }
@@ -233,20 +275,109 @@ public class PlayerMovement : AnMonobehaviour
     }
     public void TakeDamage(float _damage)
     {
-        health -= Mathf.RoundToInt(_damage);
+        Health -= Mathf.RoundToInt(_damage);
         StartCoroutine(StopTakingDamage());
     }
     IEnumerator StopTakingDamage()
     {
         pState.invicible = true;
+        GameObject _bloodSpurt = Instantiate(bloodSpurt, transform.position, quaternion.identity);
+        Destroy(_bloodSpurt, 1.5f);
         anim.SetTrigger("TakeDamage");
-        ClampHealth();
         yield return new WaitForSeconds(1f);
         pState.invicible = false;
     }
-    void ClampHealth()
+    void FlashWhileInvincible()
     {
-        health = Mathf.Clamp(health, 0, maxHealth);
+        sr.material.color = pState.invicible ? Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time * hitFlashSpeed, 1.0f)) : Color.white;
+    }
+    void RestoreTimeScale()
+    {
+        if (restoreTime)
+        {
+            if (Time.timeScale < 1)
+            {
+                Time.timeScale += Time.deltaTime * restoreTimeSpeed;
+            }
+            else
+            {
+                Time.timeScale = 1;
+                restoreTime = false;
+            }
+        }
+    }
+    public void HitStopTime(float _newTimeScale, int _restoreSpeed, float _delay)
+    {
+        restoreTimeSpeed = _restoreSpeed;
+        Time.timeScale = _newTimeScale;
+        if (_delay > 0) //been attacked
+        {
+            StopCoroutine(StartTimeAgain(_delay));//avoid multiples hit stacking
+            StartCoroutine(StartTimeAgain(_delay));
+        }
+        else
+        {
+            restoreTime = true;
+        }
+    }
+    IEnumerator StartTimeAgain(float _delay)
+    {
+        restoreTime = true;
+        yield return new WaitForSeconds(_delay);
+    }
+    public int Health
+    {
+        get { return health; }
+        set
+        {
+            if (health != value)
+            {
+                health = Mathf.Clamp(value, 0, maxHealth);
+
+                if (onHealthChangedCallback != null)
+                {
+                    onHealthChangedCallback.Invoke();
+                }
+            }
+        }
+    }
+    public float Mana
+    {
+        get { return mana; }
+        set
+        {
+            //if mana stats change
+            if (mana != value)
+            {
+                mana = Mathf.Clamp(value, 0, 1);
+                manaStorage.fillAmount = Mana;
+            }
+        }
+    }
+    void Heal()
+    {
+        if (Input.GetButton("Healing") && Health < maxHealth && (mana > 0) && !pState.jumping && !pState.dashing)
+        {
+            pState.healing = true;
+            anim.SetBool("Healing", true);
+
+            //healing
+            healTimer += Time.deltaTime;
+            if (healTimer >= timeToHeal)
+            {
+                Health++;
+                healTimer = 0;
+            }
+            //drain mana
+            Mana -= Time.deltaTime * manaDrainSpeed;
+
+        }
+        else
+        {
+            pState.healing = false;
+            anim.SetBool("Healing", false);
+            healTimer = 0;
+        }
     }
     public bool Grounded()
     {

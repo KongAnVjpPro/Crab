@@ -52,6 +52,7 @@ public class Enemy : AnMonobehaviour
         if (!isRecoiling)
         {
             rb.AddForce(-_hitForce * recoilFactor * _hitDirection);
+            isRecoiling = true;
         }
     }
     protected virtual void Attack()
@@ -64,7 +65,7 @@ public class Enemy : AnMonobehaviour
         if (_other.CompareTag("Player") && !PlayerController.Instance.PlayerMovement.PState.invicible)
         {
             Attack();
-
+            PlayerController.Instance.PlayerMovement.HitStopTime(0, 5, 0.5f);
         }
     }
 }

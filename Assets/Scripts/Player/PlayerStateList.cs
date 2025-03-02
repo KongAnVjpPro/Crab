@@ -9,4 +9,5 @@ public class PlayerStateList : AnMonobehaviour
     public bool recoilingX, recoilingY;
     public bool lookingRight;
     public bool invicible;
+    public bool healing;
 }
