@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : AnMonobehaviour
+public class PlayerController : MyMonobehaviour
 {
     [SerializeField] protected PlayerMovement playerMovement;
     public PlayerMovement PlayerMovement => playerMovement;

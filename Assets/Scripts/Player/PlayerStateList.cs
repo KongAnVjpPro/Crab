@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerStateList : AnMonobehaviour
+public class PlayerStateList : MyMonobehaviour
 {
     public bool jumping = false;
     public bool dashing = false;
@@ -10,4 +10,5 @@ public class PlayerStateList : AnMonobehaviour
     public bool lookingRight;
     public bool invicible;
     public bool healing;
+    public bool casting;
 }

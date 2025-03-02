@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : AnMonobehaviour
+public class CameraController : MyMonobehaviour
 {
     [SerializeField] protected CameraFollow cameraFollow;
     public CameraFollow CameraFollow => cameraFollow;

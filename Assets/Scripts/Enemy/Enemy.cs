@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : AnMonobehaviour
+public class Enemy : MyMonobehaviour
 {
     [SerializeField] protected float health = 10f;
     [SerializeField] protected float recoilLength = 0.5f;
