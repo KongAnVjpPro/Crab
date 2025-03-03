@@ -53,7 +53,7 @@ public class PlayerController : MyMonobehaviour
     [SerializeField] int recoilXSteps = 5;
     [SerializeField] int recoilYSteps = 5;
     [SerializeField] float recoilXSpeed = 100;
-    [SerializeField] float recoilYSpeed = 100;
+    [SerializeField] float recoilYSpeed = 32;
     int stepsXRecoiled = 0, stepsYRecoiled = 0;
     [Space(5)]
 
@@ -155,6 +155,7 @@ public class PlayerController : MyMonobehaviour
                 Destroy(gameObject);
             }
         }
+        DontDestroyOnLoad(gameObject);
     }
     protected override void ResetValue()
     {
@@ -264,8 +265,8 @@ public class PlayerController : MyMonobehaviour
         pState.dashing = true;
         anim.SetTrigger("Dashing");
         rb.gravityScale = 0;
-
-        rb.velocity = new Vector2(transform.localScale.x * dashSpeed, 0);
+        int _dir = pState.lookingRight ? 1 : -1;
+        rb.velocity = new Vector2(_dir * dashSpeed, 0);
         if (Grounded())
         {
             Instantiate(dashEffect, transform);
@@ -595,28 +596,28 @@ public class PlayerController : MyMonobehaviour
     #region Jump
     void Jump()
     {
-        if (Input.GetButtonUp("Jump") && rb.velocity.y > 0)//tha nup jump
+
+
+        if (jumpBufferCounter > 0 && coyoteTimeCounter > 0 && !pState.jumping)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            pState.jumping = true;
+
+        }
+        if (!Grounded() && airJumpCounter < maxAirJumps && Input.GetButtonDown("Jump"))
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            pState.jumping = true;
+            airJumpCounter++;
+
+        }
+        if (Input.GetButtonUp("Jump") && rb.velocity.y > 3)
         {
             rb.velocity = new Vector2(rb.velocity.x, 0);
             pState.jumping = false;
         }
-        if (!pState.jumping)//neu ko nhay
-        {       //o day nghia la neu vua roi mat dat khoang thoi gian coyotetime > 0 va nhan nut nhay thi se nhay
-            if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)//coyoteTime la khoang thoi gian khi roi mat dat
-            {                                                   //jumpBuffer khoang thoi gian nhan nut som
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                pState.jumping = true;
 
-            }
-            else if (!Grounded() && airJumpCounter < maxAirJumps && Input.GetButtonDown("Jump"))
-            {
-                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
-                pState.jumping = true;
-                airJumpCounter++;
 
-            }
-
-        }
 
         anim.SetBool("Jumping", !Grounded());
     }

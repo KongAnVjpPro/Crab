@@ -8,7 +8,7 @@ public class Zombie : Enemy
     {
         base.Awake();
     }
-    void Start()
+    protected virtual void Start()
     {
         rb.gravityScale = 12f;
     }
