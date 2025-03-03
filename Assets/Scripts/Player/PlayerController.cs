@@ -201,16 +201,22 @@ public class PlayerController : MyMonobehaviour
     {
         GetInputs();
         UpdateJumpVariables();
+
         if (pState.dashing && Time.timeScale == 1) return;
+        RestoreTimeScale();
+        FlashWhileInvincible();
+        Heal();
+
+        CastSpell();
+
+        if (pState.healing) return;
         Move();
         Jump();
         Flip();
         StartDash();
         Attack();
-        RestoreTimeScale();
-        FlashWhileInvincible();
-        Heal();
-        CastSpell();
+
+
     }
     void OnTriggerEnter2D(Collider2D _other)
     {
@@ -233,6 +239,7 @@ public class PlayerController : MyMonobehaviour
     }
     protected virtual void Move()
     {
+        if (pState.healing) rb.velocity = new Vector2(0, 0);
         rb.velocity = new Vector2(walkSpeed * xAxis, rb.velocity.y);
         anim.SetBool("Walking", rb.velocity.x != 0 && Grounded());
 
@@ -387,14 +394,15 @@ public class PlayerController : MyMonobehaviour
     }
     IEnumerator StartTimeAgain(float _delay)
     {
+
         restoreTime = true;
-        yield return new WaitForSeconds(_delay);
+        yield return new WaitForSecondsRealtime(_delay);
     }
     #endregion
     #region Heal
     void Heal()
     {
-        if (Input.GetButton("Healing") && Health < maxHealth && (mana > 0) && !pState.jumping && !pState.dashing)
+        if (Input.GetButton("Healing") && Health < maxHealth && (mana > 0) && Grounded() && !pState.dashing)
         {
             pState.healing = true;
             anim.SetBool("Healing", true);
