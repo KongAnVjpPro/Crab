@@ -1262,9 +1262,9 @@ MonoBehaviour:
   downSpellForce: 0
   sideSpellFireball: {fileID: 7674779421777944736, guid: 2cdbb0b2313bc7645859482b1f712cd0, type: 3}
   upSpellExplosion: {fileID: 1049526724449326175, guid: 073febdddaf1f9c4e9973ed475febf0c, type: 3}
-  downSpellFireball: {fileID: 0}
-  anim: {fileID: 5249674410845116984}
-  body: {fileID: 835782369}
+  downSpellFireball: {fileID: 1598012262984463487}
+  anim: {fileID: 835782374}
+  rb: {fileID: 835782369}
 --- !u!95 &835782374
 Animator:
   serializedVersion: 5

@@ -8,7 +8,6 @@ public class Enemy : MyMonobehaviour
     [SerializeField] protected float recoilLength = 0.5f;
     [SerializeField] protected float recoilFactor = 5;
     [SerializeField] protected bool isRecoiling = false;
-    [SerializeField] protected PlayerMovement playerMovement;
     [SerializeField] protected float speed = 5f;
     [SerializeField] protected float damage = 1f;
 
@@ -57,15 +56,15 @@ public class Enemy : MyMonobehaviour
     }
     protected virtual void Attack()
     {
-        PlayerController.Instance.PlayerMovement.TakeDamage(damage);
+        PlayerController.Instance.TakeDamage(damage);
     }
 
     protected virtual void OnTriggerStay2D(Collider2D _other)
     {
-        if (_other.CompareTag("Player") && !PlayerController.Instance.PlayerMovement.PState.invicible)
+        if (_other.CompareTag("Player") && !PlayerController.Instance.PState.invicible)
         {
             Attack();
-            PlayerController.Instance.PlayerMovement.HitStopTime(0, 5, 0.5f);
+            PlayerController.Instance.HitStopTime(0, 5, 0.5f);
         }
     }
 }

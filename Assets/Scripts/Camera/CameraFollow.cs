@@ -12,7 +12,7 @@ public class CameraFollow : MyMonobehaviour
     }
     public void CameraMove()
     {
-        transform.position = Vector3.Lerp(transform.position, PlayerController.Instance.PlayerMovement.transform.position + defaultCam, followSpeed * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position, PlayerController.Instance.transform.position + defaultCam, followSpeed * Time.deltaTime);
 
     }
 }

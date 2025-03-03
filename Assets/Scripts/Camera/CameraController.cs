@@ -6,8 +6,6 @@ public class CameraController : MyMonobehaviour
 {
     [SerializeField] protected CameraFollow cameraFollow;
     public CameraFollow CameraFollow => cameraFollow;
-    // private CameraController instance;
-    // public CameraController Instance => instance;
     protected override void LoadComponents()
     {
         base.LoadComponents();

@@ -5,18 +5,17 @@ using UnityEngine.UI;
 
 public class HeartController : MyMonobehaviour
 {
-    PlayerMovement playerMovement;
+
     private GameObject[] heartContainers;
     private Image[] heartFills;
     public Transform heartsParent;
     public GameObject heartContainerPrefab;
     void Start()
     {
-        playerMovement = PlayerController.Instance.PlayerMovement;
-        heartContainers = new GameObject[PlayerController.Instance.PlayerMovement.maxHealth];
-        heartFills = new Image[PlayerController.Instance.PlayerMovement.maxHealth];
+        heartContainers = new GameObject[PlayerController.Instance.maxHealth];
+        heartFills = new Image[PlayerController.Instance.maxHealth];
 
-        PlayerController.Instance.PlayerMovement.onHealthChangedCallback += UpdateHeartsHUD;
+        PlayerController.Instance.onHealthChangedCallback += UpdateHeartsHUD;
         InstantiateHeartContainers();
         UpdateHeartsHUD();
     }
@@ -24,7 +23,7 @@ public class HeartController : MyMonobehaviour
     {
         for (int i = 0; i < heartContainers.Length; i++)
         {
-            if (i < PlayerController.Instance.PlayerMovement.maxHealth)
+            if (i < PlayerController.Instance.maxHealth)
             {
                 heartContainers[i].SetActive(true);
             }
@@ -38,7 +37,7 @@ public class HeartController : MyMonobehaviour
     {
         for (int i = 0; i < heartFills.Length; i++)
         {
-            if (i < PlayerController.Instance.PlayerMovement.Health)
+            if (i < PlayerController.Instance.Health)
             {
                 heartFills[i].fillAmount = 1;
             }
@@ -50,7 +49,7 @@ public class HeartController : MyMonobehaviour
     }
     void InstantiateHeartContainers()
     {
-        for (int i = 0; i < PlayerController.Instance.PlayerMovement.maxHealth; i++)
+        for (int i = 0; i < PlayerController.Instance.maxHealth; i++)
         {
             GameObject temp = Instantiate(heartContainerPrefab);
             temp.transform.SetParent(heartsParent, false);
