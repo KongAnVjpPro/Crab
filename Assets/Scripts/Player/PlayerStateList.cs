@@ -11,4 +11,5 @@ public class PlayerStateList : MyMonobehaviour
     public bool invicible;
     public bool healing;
     public bool casting;
+    public bool cutscene = false;
 }

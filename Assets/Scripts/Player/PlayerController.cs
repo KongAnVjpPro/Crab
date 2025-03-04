@@ -200,6 +200,7 @@ public class PlayerController : MyMonobehaviour
     }
     private void Update()
     {
+        if (pState.cutscene) return;
         GetInputs();
         UpdateJumpVariables();
 
@@ -641,6 +642,22 @@ public class PlayerController : MyMonobehaviour
         {
             jumpBufferCounter -= Time.deltaTime;
         }
+    }
+    #endregion
+    #region Scene
+    public IEnumerator WalkIntoNewScene(Vector2 _exitDir, float _delay)
+    {   //if exit direction is upwards
+        if (_exitDir.y > 0)
+        {
+            rb.velocity = jumpForce * _exitDir;
+        }
+        if (_exitDir.x != 0)
+        {
+            xAxis = _exitDir.x > 0 ? 1 : -1;
+        }
+        Flip();
+        yield return new WaitForSeconds(_delay);
+        pState.cutscene = false;
     }
     #endregion
 }
