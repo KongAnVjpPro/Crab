@@ -13,22 +13,22 @@ public class SceneTransition : MyMonobehaviour
 
 
 
-    void OnTriggerEnter2D(Collider2D _other)
+    void OnTriggerEnter2D(Collider2D _other)//transition to new level
     {
         if (_other.CompareTag("Player"))
         {
-            GameManager.Instance.transitionedFromScene = SceneManager.GetActiveScene().name;
+            GameManager.Instance.transitionedFromScene = SceneManager.GetActiveScene().name;//store prev level
             PlayerController.Instance.PState.cutscene = true;
-            StartCoroutine(UIManager.Instance.sceneFader.FadeAndLoadScene(SceneFader.FadeDirection.In, transitionTo));
+            StartCoroutine(UIManager.Instance.sceneFader.FadeAndLoadScene(SceneFader.FadeDirection.In, transitionTo));//come to new level and play fade anim
         }
 
     }
     void Start()
     {
-        if (transitionTo == GameManager.Instance.transitionedFromScene)
+        if (transitionTo == GameManager.Instance.transitionedFromScene)//if the prev scene == where this port to
         {
             PlayerController.Instance.transform.position = startPoint.position;
-            StartCoroutine(PlayerController.Instance.WalkIntoNewScene(exitDirection, exitTime));
+            StartCoroutine(PlayerController.Instance.WalkIntoNewScene(exitDirection, exitTime));//flip or add force
         }
         StartCoroutine(UIManager.Instance.sceneFader.Fade(SceneFader.FadeDirection.Out));
 

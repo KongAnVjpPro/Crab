@@ -64,7 +64,7 @@ public class Enemy : MyMonobehaviour
         if (_other.CompareTag("Player") && !PlayerController.Instance.PState.invicible)
         {
             Attack();
-            PlayerController.Instance.HitStopTime(0, 5, 0.5f);
+            PlayerController.Instance.HitStopTime(0.1f, 5, 0.5f);//avoid time stop
         }
     }
 }

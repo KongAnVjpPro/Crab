@@ -183,7 +183,7 @@ public class PlayerController : MyMonobehaviour
     protected virtual void LoadAnim()
     {
         if (this.anim != null) return;
-        this.anim = GetComponent<Animator>();
+        this.anim = GetComponentInChildren<Animator>();
     }
     protected virtual void LoadPlayerStateList()
     {
