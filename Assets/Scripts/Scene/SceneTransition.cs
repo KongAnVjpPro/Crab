@@ -17,8 +17,10 @@ public class SceneTransition : MyMonobehaviour
     {
         if (_other.CompareTag("Player"))
         {
+
             GameManager.Instance.transitionedFromScene = SceneManager.GetActiveScene().name;//store prev level
             PlayerController.Instance.PState.cutscene = true;
+            PlayerController.Instance.PState.invicible = true;
             StartCoroutine(UIManager.Instance.sceneFader.FadeAndLoadScene(SceneFader.FadeDirection.In, transitionTo));//come to new level and play fade anim
         }
 

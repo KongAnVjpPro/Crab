@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraFollow : MyMonobehaviour
 {
     [SerializeField] protected float followSpeed = 5f;
-    [SerializeField] Vector3 defaultCam = new Vector3(0, 0, -10f);
+    [SerializeField] Vector3 defaultCam = new Vector3(0, 0, -20f);
     void Update()
     {
         CameraMove();

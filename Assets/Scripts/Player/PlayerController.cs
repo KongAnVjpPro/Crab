@@ -25,7 +25,7 @@ public class PlayerController : MyMonobehaviour
     [Header("Ground Check Settings:")]
     [SerializeField] protected Transform groundCheckPoint;
     [SerializeField] protected float groundCheckY = 0.2f;
-    [SerializeField] protected float groundCheckX = 0.5f;
+    [SerializeField] protected float groundCheckX = 0.6f;//box collider size /2
     [SerializeField] protected LayerMask whatIsGround;
     [Space(5)]
 
@@ -61,7 +61,7 @@ public class PlayerController : MyMonobehaviour
     public int health = 10;
     public int maxHealth = 10;
     [SerializeField] GameObject bloodSpurt;
-    [SerializeField] float hitFlashSpeed = 2f;
+    [SerializeField] float hitFlashSpeed = 15f;
     public delegate void OnHealthChangedDelegate();
     [HideInInspector] public OnHealthChangedDelegate onHealthChangedCallback;
 
@@ -94,7 +94,7 @@ public class PlayerController : MyMonobehaviour
     public PlayerStateList PState => pState;
     [SerializeField] protected Animator anim;
     [SerializeField] protected Rigidbody2D rb;
-    private SpriteRenderer sr;
+    private List<SpriteRenderer> sr;
     private float xAxis, yAxis;
     private bool canDash = true;
     private float gravity;
@@ -168,7 +168,7 @@ public class PlayerController : MyMonobehaviour
     protected virtual void LoadSprite()
     {
         if (this.sr != null) return;
-        this.sr = GetComponent<SpriteRenderer>();
+        this.sr = PlayerManager.Instance.PlayerModel.Sr;
     }
     protected virtual void LoadRigibody()
     {
@@ -361,7 +361,22 @@ public class PlayerController : MyMonobehaviour
     }
     void FlashWhileInvincible()
     {
-        sr.material.color = pState.invicible ? Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time * hitFlashSpeed, 1.0f)) : Color.white;
+        if (pState.invicible && !pState.cutscene)
+        {
+            foreach (SpriteRenderer child in sr)
+            {
+                child.material.color = Color.Lerp(Color.white, Color.black, Mathf.PingPong(Time.time * hitFlashSpeed, 1.0f));
+            }
+        }
+        else
+        {
+            foreach (SpriteRenderer child in sr)
+            {
+                child.material.color = Color.white;
+            }
+        }
+
+
     }
     #endregion
     #region Time Scale When Hit
@@ -646,7 +661,11 @@ public class PlayerController : MyMonobehaviour
     #endregion
     #region Scene
     public IEnumerator WalkIntoNewScene(Vector2 _exitDir, float _delay)
-    {   //if exit direction is upwards
+    {
+
+        pState.invicible = true;
+        //if exit direction is upwards
+
         if (_exitDir.y > 0)
         {
             rb.velocity = jumpForce * _exitDir;
@@ -657,6 +676,7 @@ public class PlayerController : MyMonobehaviour
         }
         Flip();
         yield return new WaitForSeconds(_delay);
+        pState.invicible = false;
         pState.cutscene = false;
     }
     #endregion
