@@ -26,7 +26,7 @@ public class FireBall : MyMonobehaviour
     {
         if (_other.tag == "enemy")
         {
-            _other.GetComponent<Enemy>().EnemyHit(damage, (_other.transform.position - transform.position).normalized, -hitForce);
+            _other.GetComponent<Enemy>().EnemyGetHit(damage, (_other.transform.position - transform.position).normalized, -hitForce);
         }
     }
 }

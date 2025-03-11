@@ -191,13 +191,13 @@ public class PlayerController : MyMonobehaviour
         this.pState = GetComponent<PlayerStateList>();
     }
     #endregion
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(sideAttackTransform.position, sideAttackArea);
-        Gizmos.DrawWireCube(upAttackTransform.position, upAttackArea);
-        Gizmos.DrawWireCube(downAttackTransform.position, downAttackArea);
-    }
+    // private void OnDrawGizmos()
+    // {
+    //     Gizmos.color = Color.red;
+    //     Gizmos.DrawWireCube(sideAttackTransform.position, sideAttackArea);
+    //     Gizmos.DrawWireCube(upAttackTransform.position, upAttackArea);
+    //     Gizmos.DrawWireCube(downAttackTransform.position, downAttackArea);
+    // }
     private void Update()
     {
         if (pState.cutscene) return;
@@ -224,7 +224,7 @@ public class PlayerController : MyMonobehaviour
     {
         if (_other.GetComponent<Enemy>() != null && pState.casting)
         {
-            _other.GetComponent<Enemy>().EnemyHit(spellDamage, (_other.transform.position - transform.position).normalized, -recoilYSpeed);
+            _other.GetComponent<Enemy>().EnemyGetHit(spellDamage, (_other.transform.position - transform.position).normalized, -recoilYSpeed);
 
         }
     }
@@ -292,28 +292,28 @@ public class PlayerController : MyMonobehaviour
 
             if (yAxis == 0 || yAxis < 0 && Grounded())
             {
-                Hit(sideAttackTransform, sideAttackArea, ref pState.recoilingX, recoilXSpeed);
+                Hit(sideAttackTransform, sideAttackArea, ref pState.recoilingX, (pState.lookingRight ? Vector2.left : Vector2.right), recoilXSpeed);
                 Instantiate(slashEffect, sideAttackTransform);
             }
             else if (yAxis > 0)
             {
-                Hit(upAttackTransform, upAttackArea, ref pState.recoilingY, recoilYSpeed);
+                Hit(upAttackTransform, upAttackArea, ref pState.recoilingY, Vector2.down, recoilYSpeed);
                 SlashEffectAtAngle(slashEffect, 90, upAttackTransform);
             }
             else if (yAxis < 0 && !Grounded())
             {
-                Hit(downAttackTransform, downAttackArea, ref pState.recoilingY, recoilYSpeed);
+                Hit(downAttackTransform, downAttackArea, ref pState.recoilingY, Vector2.up, recoilYSpeed);
                 SlashEffectAtAngle(slashEffect, -90, downAttackTransform);
             }
         }
     }
-    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilDir, float _recoilStrength)
+    void Hit(Transform _attackTransform, Vector2 _attackArea, ref bool _recoilBool, Vector2 _recoilDir, float _recoilStrength)
     {
         Collider2D[] objectToHit = Physics2D.OverlapBoxAll(_attackTransform.position, _attackArea, 0, attackableLayer);
         List<Enemy> hitEnemies = new List<Enemy>();
         if (objectToHit.Length > 0)
         {
-            _recoilDir = true;
+            _recoilBool = true;
         }
         for (int i = 0; i < objectToHit.Length; i++)
         {
@@ -326,8 +326,9 @@ public class PlayerController : MyMonobehaviour
                 }
                 else
                 {
+                    // (transform.position - objectToHit[i].transform.position).normalized
                     hitEnemies.Add(e);
-                    objectToHit[i].GetComponent<Enemy>().EnemyHit(damage, (transform.position - objectToHit[i].transform.position).normalized, _recoilStrength);
+                    objectToHit[i].GetComponent<Enemy>().EnemyGetHit(damage, _recoilDir, _recoilStrength);
                     if (objectToHit[i].CompareTag("Enemy"))
                     {
                         Mana += manaGain;
