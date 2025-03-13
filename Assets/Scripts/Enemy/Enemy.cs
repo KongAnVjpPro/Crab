@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,8 +12,10 @@ public class Enemy : MyMonobehaviour
     [SerializeField] protected float speed = 5f;
     [SerializeField] protected float damage = 1f;
 
+
     protected float recoilTimer;
     protected Rigidbody2D rb;
+    protected SpriteRenderer sr;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,12 +25,26 @@ public class Enemy : MyMonobehaviour
     {
         base.LoadComponents();
         rb = GetComponent<Rigidbody2D>();
+        sr = GetComponent<SpriteRenderer>();
         // playerMovement = PlayerController.Instance.PlayerMovement;
     }
+    protected enum EnemyStates
+    {
+        //Crawler
+        Crawler_Idle,
+        Crawler_Flip,
+        //Bat
+        Swimmer_Idle,
+        Swimmer_Chase,
+        Swimmer_Stunned,
+        Swimmer_Death
+    }
+    protected EnemyStates currentEnemyState;
 
     // Update is called once per frame
     protected virtual void Update()
     {
+
         if (health <= 0)
         {
             Destroy(gameObject);
@@ -44,13 +61,18 @@ public class Enemy : MyMonobehaviour
                 recoilTimer = 0;
             }
         }
+        else
+        {
+            UpdateEnemyStates();
+        }
     }
-    public virtual void EnemyHit(float _damageDone, Vector2 _hitDirection, float _hitForce)
+    public virtual void EnemyGetHit(float _damageDone, Vector2 _hitDirection, float _hitForce)
     {
         health -= _damageDone;
         if (!isRecoiling)
         {
-            rb.AddForce(-_hitForce * recoilFactor * _hitDirection);
+            // rb.AddForce(-_hitForce * recoilFactor * _hitDirection);
+            rb.velocity = -_hitForce * recoilFactor * _hitDirection;
             isRecoiling = true;
         }
     }
@@ -66,5 +88,17 @@ public class Enemy : MyMonobehaviour
             Attack();
             PlayerController.Instance.HitStopTime(0.1f, 5, 0.5f);//avoid time stop
         }
+    }
+    protected virtual void UpdateEnemyStates()
+    {
+
+    }
+    protected virtual void ChangeState(EnemyStates _newState)
+    {
+        currentEnemyState = _newState;
+    }
+    protected virtual void MoveToPlayer()
+    {
+        transform.position = Vector2.MoveTowards(transform.position, PlayerController.Instance.transform.position, Time.deltaTime * speed);
     }
 }
