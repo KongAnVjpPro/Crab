@@ -35,7 +35,12 @@ public class Crawler : Enemy
     {
 
         base.UpdateEnemyStates();
-        switch (currentEnemyState)
+        if (health <= 0)
+        {
+            Death(0.05f);
+        }
+
+        switch (GetCurrentEnemyState)
         {
             case EnemyStates.Crawler_Idle:
 

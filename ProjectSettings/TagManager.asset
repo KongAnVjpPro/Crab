@@ -39,6 +39,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: _CameraSortingLayerTexture
+    uniqueID: 3121900769
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

@@ -15,9 +15,14 @@ public class Swimmer : Enemy
     }
     protected override void UpdateEnemyStates()
     {
+        // if (health <= 0)
+        // {
+        //     Death(0.05f);
+        // }
+
         float _dist = Vector2.Distance(transform.position, PlayerController.Instance.transform.position);
         base.UpdateEnemyStates();
-        switch (currentEnemyState)
+        switch (GetCurrentEnemyState)
         {
             case EnemyStates.Swimmer_Idle:
                 if (_dist < chaseDistance)
@@ -28,7 +33,7 @@ public class Swimmer : Enemy
             case EnemyStates.Swimmer_Chase:
                 MoveToPlayer();
                 // Debug.Log("Chase");
-                FlipBat();
+                FlipSwimmer();
                 break;
             case EnemyStates.Swimmer_Stunned:
                 timer += Time.deltaTime;
@@ -39,14 +44,31 @@ public class Swimmer : Enemy
                 }
                 break;
             case EnemyStates.Swimmer_Death:
-                Destroy(gameObject);
+                // Destroy(gameObject);
+                Death(Random.Range(5f, 10f));
                 break;
         }
     }
-    void FlipBat()
+    void FlipSwimmer()
     {
         sr.flipX = PlayerController.Instance.transform.position.x < transform.position.x;
 
+    }
+    protected override void ChangeCurrentAnimation()
+    {
+        base.ChangeCurrentAnimation();
+        anim.SetBool("Idle", GetCurrentEnemyState == EnemyStates.Swimmer_Idle);
+        anim.SetBool("Chase", GetCurrentEnemyState == EnemyStates.Swimmer_Chase);
+        anim.SetBool("Stunned", GetCurrentEnemyState == EnemyStates.Swimmer_Stunned);
+        if (GetCurrentEnemyState == EnemyStates.Swimmer_Death)
+        {
+            anim.SetTrigger("Death");
+        }
+    }
+    protected override void Death(float _destroyTime)
+    {
+        base.Death(_destroyTime);
+        rb.gravityScale = 12f;
     }
     public override void EnemyGetHit(float _damageDone, Vector2 _hitDirection, float _hitForce)
     {
