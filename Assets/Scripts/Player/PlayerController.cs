@@ -87,6 +87,8 @@ public class PlayerController : MyMonobehaviour
     [SerializeField] GameObject upSpellExplosion;
     [SerializeField] GameObject downSpellFireball;
     [Space(5)]
+    [Header("Camera Stuff")]
+    [SerializeField] private float playerFallSpeedThreshold = -10;
 
 
     private bool dashed = false;
@@ -94,6 +96,7 @@ public class PlayerController : MyMonobehaviour
     public PlayerStateList PState => pState;
     [SerializeField] protected Animator anim;
     [SerializeField] protected Rigidbody2D rb;
+    public Rigidbody2D Rb => rb;
     private List<SpriteRenderer> sr;
     private float xAxis, yAxis;
     private bool canDash = true;
@@ -198,11 +201,13 @@ public class PlayerController : MyMonobehaviour
     //     Gizmos.DrawWireCube(upAttackTransform.position, upAttackArea);
     //     Gizmos.DrawWireCube(downAttackTransform.position, downAttackArea);
     // }
+    #region Move
     private void Update()
     {
         if (pState.cutscene) return;
         GetInputs();
         UpdateJumpVariables();
+        UpdateCameraYDampForPlayerFall();
 
         if (pState.dashing && Time.timeScale == 1) return;
         RestoreTimeScale();
@@ -246,6 +251,23 @@ public class PlayerController : MyMonobehaviour
         anim.SetBool("Walking", rb.velocity.x != 0 && Grounded());
 
     }
+    void UpdateCameraYDampForPlayerFall()
+    {
+        //fall pass threshold
+        if (rb.velocity.y < playerFallSpeedThreshold && !CameraManager.Instance.isLerpingYDamping && !CameraManager.Instance.hasLerpedYDamping)
+        {
+            StartCoroutine(CameraManager.Instance.LerpYDamping(true));
+        }
+        //standing or move up
+        if (rb.velocity.y >= 0 && !CameraManager.Instance.isLerpingYDamping && CameraManager.Instance.hasLerpedYDamping)
+        {
+            CameraManager.Instance.hasLerpedYDamping = false;
+            StartCoroutine(CameraManager.Instance.LerpYDamping(false));
+        }
+
+
+    }
+    #endregion
     #region Dash
     void StartDash()
     {
@@ -353,16 +375,16 @@ public class PlayerController : MyMonobehaviour
     }
     IEnumerator StopTakingDamage()
     {
-        pState.invicible = true;
+        pState.invincible = true;
         GameObject _bloodSpurt = Instantiate(bloodSpurt, transform.position, quaternion.identity);
         Destroy(_bloodSpurt, 1.5f);
         anim.SetTrigger("TakeDamage");
         yield return new WaitForSeconds(1f);
-        pState.invicible = false;
+        pState.invincible = false;
     }
     void FlashWhileInvincible()
     {
-        if (pState.invicible && !pState.cutscene)
+        if (pState.invincible && !pState.cutscene)
         {
             foreach (SpriteRenderer child in sr)
             {
@@ -664,7 +686,7 @@ public class PlayerController : MyMonobehaviour
     public IEnumerator WalkIntoNewScene(Vector2 _exitDir, float _delay)
     {
 
-        pState.invicible = true;
+        pState.invincible = true;
         //if exit direction is upwards
 
         if (_exitDir.y > 0)
@@ -677,7 +699,7 @@ public class PlayerController : MyMonobehaviour
         }
         Flip();
         yield return new WaitForSeconds(_delay);
-        pState.invicible = false;
+        pState.invincible = false;
         pState.cutscene = false;
     }
     #endregion

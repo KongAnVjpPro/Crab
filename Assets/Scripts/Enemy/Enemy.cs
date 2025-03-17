@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MyMonobehaviour
@@ -11,11 +13,13 @@ public class Enemy : MyMonobehaviour
     [SerializeField] protected bool isRecoiling = false;
     [SerializeField] protected float speed = 5f;
     [SerializeField] protected float damage = 1f;
+    [SerializeField] protected GameObject orangeBlood;
 
 
     protected float recoilTimer;
     protected Rigidbody2D rb;
     protected SpriteRenderer sr;
+    protected Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +30,7 @@ public class Enemy : MyMonobehaviour
         base.LoadComponents();
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
+        anim = GetComponent<Animator>();
         // playerMovement = PlayerController.Instance.PlayerMovement;
     }
     protected enum EnemyStates
@@ -33,11 +38,27 @@ public class Enemy : MyMonobehaviour
         //Crawler
         Crawler_Idle,
         Crawler_Flip,
-        //Bat
+        //Swimmer
         Swimmer_Idle,
         Swimmer_Chase,
         Swimmer_Stunned,
-        Swimmer_Death
+        Swimmer_Death,
+        //Charger
+        Charger_Idle,
+        Charger_Suprised,
+        Charger_Charge
+    }
+    protected virtual EnemyStates GetCurrentEnemyState
+    {
+        get { return currentEnemyState; }
+        set
+        {
+            if (currentEnemyState != value)
+            {
+                currentEnemyState = value;
+                ChangeCurrentAnimation();
+            }
+        }
     }
     protected EnemyStates currentEnemyState;
 
@@ -45,10 +66,10 @@ public class Enemy : MyMonobehaviour
     protected virtual void Update()
     {
 
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
+        // if (health <= 0)
+        // {
+        //     Destroy(gameObject);
+        // }
         if (isRecoiling)
         {
             if (recoilTimer < recoilLength)
@@ -71,19 +92,26 @@ public class Enemy : MyMonobehaviour
         health -= _damageDone;
         if (!isRecoiling)
         {
+            //blood effect
+            GameObject _orangeBlood = Instantiate(orangeBlood, transform.position, quaternion.identity);
+            Destroy(_orangeBlood, 5.5f);
             // rb.AddForce(-_hitForce * recoilFactor * _hitDirection);
             rb.velocity = -_hitForce * recoilFactor * _hitDirection;
             isRecoiling = true;
         }
+    }
+    protected virtual void Death(float _destroyTime)
+    {
+        Destroy(gameObject, _destroyTime);
     }
     protected virtual void Attack()
     {
         PlayerController.Instance.TakeDamage(damage);
     }
 
-    protected virtual void OnTriggerStay2D(Collider2D _other)
+    protected virtual void OnCollisionStay2D(Collision2D _other)
     {
-        if (_other.CompareTag("Player") && !PlayerController.Instance.PState.invicible)
+        if (_other.gameObject.CompareTag("Player") && !PlayerController.Instance.PState.invincible && health > 0)
         {
             Attack();
             PlayerController.Instance.HitStopTime(0.1f, 5, 0.5f);//avoid time stop
@@ -93,9 +121,13 @@ public class Enemy : MyMonobehaviour
     {
 
     }
+    protected virtual void ChangeCurrentAnimation()
+    {
+
+    }
     protected virtual void ChangeState(EnemyStates _newState)
     {
-        currentEnemyState = _newState;
+        GetCurrentEnemyState = _newState;
     }
     protected virtual void MoveToPlayer()
     {

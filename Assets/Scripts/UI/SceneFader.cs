@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class SceneFader : MyMonobehaviour
 {
-    [SerializeField] private float fadeTime;
+    [SerializeField] public float fadeTime;
     private Image fadeOutUIImage;
     public enum FadeDirection
     {

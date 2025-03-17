@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MyMonobehaviour
 {
     public string transitionedFromScene;//store prev scene
+    public Vector2 platformingRespawnPoint;
     private static GameManager instance;
     public static GameManager Instance => instance;
     protected override void LoadComponents()
