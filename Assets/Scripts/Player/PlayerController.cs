@@ -94,6 +94,7 @@ public class PlayerController : MyMonobehaviour
     public PlayerStateList PState => pState;
     [SerializeField] protected Animator anim;
     [SerializeField] protected Rigidbody2D rb;
+    public Rigidbody2D Rb => rb;
     private List<SpriteRenderer> sr;
     private float xAxis, yAxis;
     private bool canDash = true;
@@ -353,16 +354,16 @@ public class PlayerController : MyMonobehaviour
     }
     IEnumerator StopTakingDamage()
     {
-        pState.invicible = true;
+        pState.invincible = true;
         GameObject _bloodSpurt = Instantiate(bloodSpurt, transform.position, quaternion.identity);
         Destroy(_bloodSpurt, 1.5f);
         anim.SetTrigger("TakeDamage");
         yield return new WaitForSeconds(1f);
-        pState.invicible = false;
+        pState.invincible = false;
     }
     void FlashWhileInvincible()
     {
-        if (pState.invicible && !pState.cutscene)
+        if (pState.invincible && !pState.cutscene)
         {
             foreach (SpriteRenderer child in sr)
             {
@@ -664,7 +665,7 @@ public class PlayerController : MyMonobehaviour
     public IEnumerator WalkIntoNewScene(Vector2 _exitDir, float _delay)
     {
 
-        pState.invicible = true;
+        pState.invincible = true;
         //if exit direction is upwards
 
         if (_exitDir.y > 0)
@@ -677,7 +678,7 @@ public class PlayerController : MyMonobehaviour
         }
         Flip();
         yield return new WaitForSeconds(_delay);
-        pState.invicible = false;
+        pState.invincible = false;
         pState.cutscene = false;
     }
     #endregion

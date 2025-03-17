@@ -111,7 +111,7 @@ public class Enemy : MyMonobehaviour
 
     protected virtual void OnCollisionStay2D(Collision2D _other)
     {
-        if (_other.gameObject.CompareTag("Player") && !PlayerController.Instance.PState.invicible && health > 0)
+        if (_other.gameObject.CompareTag("Player") && !PlayerController.Instance.PState.invincible && health > 0)
         {
             Attack();
             PlayerController.Instance.HitStopTime(0.1f, 5, 0.5f);//avoid time stop
