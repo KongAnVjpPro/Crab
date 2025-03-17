@@ -38,11 +38,15 @@ public class Enemy : MyMonobehaviour
         //Crawler
         Crawler_Idle,
         Crawler_Flip,
-        //Bat
+        //Swimmer
         Swimmer_Idle,
         Swimmer_Chase,
         Swimmer_Stunned,
-        Swimmer_Death
+        Swimmer_Death,
+        //Charger
+        Charger_Idle,
+        Charger_Suprised,
+        Charger_Charge
     }
     protected virtual EnemyStates GetCurrentEnemyState
     {
