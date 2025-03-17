@@ -87,6 +87,8 @@ public class PlayerController : MyMonobehaviour
     [SerializeField] GameObject upSpellExplosion;
     [SerializeField] GameObject downSpellFireball;
     [Space(5)]
+    [Header("Camera Stuff")]
+    [SerializeField] private float playerFallSpeedThreshold = -10;
 
 
     private bool dashed = false;
@@ -199,11 +201,13 @@ public class PlayerController : MyMonobehaviour
     //     Gizmos.DrawWireCube(upAttackTransform.position, upAttackArea);
     //     Gizmos.DrawWireCube(downAttackTransform.position, downAttackArea);
     // }
+    #region Move
     private void Update()
     {
         if (pState.cutscene) return;
         GetInputs();
         UpdateJumpVariables();
+        UpdateCameraYDampForPlayerFall();
 
         if (pState.dashing && Time.timeScale == 1) return;
         RestoreTimeScale();
@@ -247,6 +251,23 @@ public class PlayerController : MyMonobehaviour
         anim.SetBool("Walking", rb.velocity.x != 0 && Grounded());
 
     }
+    void UpdateCameraYDampForPlayerFall()
+    {
+        //fall pass threshold
+        if (rb.velocity.y < playerFallSpeedThreshold && !CameraManager.Instance.isLerpingYDamping && !CameraManager.Instance.hasLerpedYDamping)
+        {
+            StartCoroutine(CameraManager.Instance.LerpYDamping(true));
+        }
+        //standing or move up
+        if (rb.velocity.y >= 0 && !CameraManager.Instance.isLerpingYDamping && CameraManager.Instance.hasLerpedYDamping)
+        {
+            CameraManager.Instance.hasLerpedYDamping = false;
+            StartCoroutine(CameraManager.Instance.LerpYDamping(false));
+        }
+
+
+    }
+    #endregion
     #region Dash
     void StartDash()
     {
