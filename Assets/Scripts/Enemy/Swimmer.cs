@@ -50,6 +50,7 @@ public class Swimmer : Enemy
                 break;
             case EnemyStates.Swimmer_Death:
                 // Destroy(gameObject);
+                gameObject.layer = deathLayer;
                 Death(Random.Range(5f, 10f));
                 break;
         }

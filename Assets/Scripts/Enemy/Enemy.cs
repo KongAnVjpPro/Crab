@@ -14,6 +14,7 @@ public class Enemy : MyMonobehaviour
     [SerializeField] protected float speed = 5f;
     [SerializeField] protected float damage = 1f;
     [SerializeField] protected GameObject orangeBlood;
+    [SerializeField] protected LayerMask deathLayer;
 
 
     protected float recoilTimer;
@@ -31,6 +32,7 @@ public class Enemy : MyMonobehaviour
         rb = GetComponent<Rigidbody2D>();
         sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
+        deathLayer = LayerMask.NameToLayer("DeathCreature");
         // playerMovement = PlayerController.Instance.PlayerMovement;
     }
     protected enum EnemyStates

@@ -19,7 +19,7 @@ public class CameraTrigger : MyMonobehaviour
     }
     void OnTriggerEnter2D(Collider2D _other)
     {
-        Debug.Log("trigger");
+        // Debug.Log("trigger");
         if (_other.CompareTag("Player"))
         {
             CameraManager.Instance.SwapCamera(newCamera);
