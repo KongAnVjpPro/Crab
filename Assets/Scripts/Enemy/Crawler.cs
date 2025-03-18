@@ -31,6 +31,20 @@ public class Crawler : Enemy
 
 
     }
+    void OnTriggerEnter2D(Collider2D _collision)
+    {
+        Debug.Log("enter");
+        // if (_collision.gameObject.CompareTag("Enemy") && _collision.gameObject != gameObject)
+        // {
+        //     Debug.Log("enter");
+        transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+        // }
+    }
+    // void (Collision2D _collision)
+    // {//ko dc
+
+    //    
+    // // }
     protected override void UpdateEnemyStates()
     {
 
