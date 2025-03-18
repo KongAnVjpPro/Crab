@@ -25,6 +25,7 @@ public class Swimmer : Enemy
         switch (GetCurrentEnemyState)
         {
             case EnemyStates.Swimmer_Idle:
+                rb.velocity = new Vector2(0, 0);
                 if (_dist < chaseDistance)
                 {
                     ChangeState(EnemyStates.Swimmer_Chase);
@@ -34,6 +35,10 @@ public class Swimmer : Enemy
                 MoveToPlayer();
                 // Debug.Log("Chase");
                 FlipSwimmer();
+                if (_dist > chaseDistance)
+                {
+                    ChangeState(EnemyStates.Swimmer_Idle);
+                }
                 break;
             case EnemyStates.Swimmer_Stunned:
                 timer += Time.deltaTime;
