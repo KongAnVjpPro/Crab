@@ -7,6 +7,7 @@ public class UIManager : MyMonobehaviour
 {
     private static UIManager instance;
     public static UIManager Instance => instance;
+    [SerializeField] GameObject deathScreen;
     protected virtual void LoadSingleton()
     {
         if (instance != null && instance != this)
@@ -28,5 +29,14 @@ public class UIManager : MyMonobehaviour
     protected virtual void LoadSceneFader()
     {
         this.sceneFader = GetComponentInChildren<SceneFader>();
+    }
+    public IEnumerator ActivateDeathScreen()
+    {
+        yield return new WaitForSeconds(0.8f);
+        StartCoroutine(sceneFader.Fade(SceneFader.FadeDirection.In));
+
+        yield return new WaitForSeconds(0.8f);
+        deathScreen.SetActive(true);
+        // StartCoroutine(sceneFader.Fade(SceneFader.FadeDirection.Out));
     }
 }
