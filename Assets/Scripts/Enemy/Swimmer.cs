@@ -7,7 +7,14 @@ public class Swimmer : Enemy
     [SerializeField] private float chaseDistance = 5f; // default 
     [SerializeField] private float timer;
     [SerializeField] private float stunDuration = 1f;
-
+    protected override void Update()
+    {
+        base.Update();
+        if (!PlayerController.Instance.PState.alive)
+        {
+            ChangeState(EnemyStates.Swimmer_Idle);
+        }
+    }
     protected override void Awake()
     {
         base.Awake();

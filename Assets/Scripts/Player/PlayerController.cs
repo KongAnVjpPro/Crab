@@ -205,23 +205,31 @@ public class PlayerController : MyMonobehaviour
     private void Update()
     {
         if (pState.cutscene) return;
-        GetInputs();
+        if (pState.alive)
+        {
+            GetInputs();
+        }
+
         UpdateJumpVariables();
         UpdateCameraYDampForPlayerFall();
-
-        if (pState.dashing && Time.timeScale == 1) return;
         RestoreTimeScale();
+        if (pState.dashing || pState.healing) return;
+
+
+        if (pState.alive)
+        {
+            Move();
+            Jump();
+            Flip();
+            StartDash();
+            Attack();
+            Heal();
+            CastSpell();
+
+        }
         FlashWhileInvincible();
-        Heal();
 
-        CastSpell();
 
-        if (pState.healing) return;
-        Move();
-        Jump();
-        Flip();
-        StartDash();
-        Attack();
 
 
     }
@@ -370,8 +378,21 @@ public class PlayerController : MyMonobehaviour
     #region Take Damage
     public void TakeDamage(float _damage)
     {
-        Health -= Mathf.RoundToInt(_damage);
-        StartCoroutine(StopTakingDamage());
+        if (pState.alive)
+        {
+            Health -= Mathf.RoundToInt(_damage);
+            if (Health <= 0)
+            {
+                Health = 0;
+                StartCoroutine(Death());
+            }
+            else
+            {
+                StartCoroutine(StopTakingDamage());
+            }
+
+        }
+
     }
     IEnumerator StopTakingDamage()
     {
@@ -437,6 +458,19 @@ public class PlayerController : MyMonobehaviour
 
         restoreTime = true;
         yield return new WaitForSecondsRealtime(_delay);
+    }
+    #endregion
+    #region Death
+    IEnumerator Death()
+    {
+        pState.alive = false;
+        Time.timeScale = 1f;
+        GameObject _bloodSpurt = Instantiate(bloodSpurt, transform.position, quaternion.identity);
+        Destroy(_bloodSpurt, 1.5f);
+        anim.SetTrigger("Death");
+
+        yield return new WaitForSeconds(0.9f);
+        StartCoroutine(UIManager.Instance.ActivateDeathScreen());
     }
     #endregion
     #region Heal

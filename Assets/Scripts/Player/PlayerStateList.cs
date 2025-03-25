@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerStateList : MyMonobehaviour
@@ -12,4 +13,5 @@ public class PlayerStateList : MyMonobehaviour
     public bool healing;
     public bool casting;
     public bool cutscene = false;
+    public bool alive = true;
 }

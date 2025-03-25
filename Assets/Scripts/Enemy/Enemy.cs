@@ -116,7 +116,11 @@ public class Enemy : MyMonobehaviour
         if (_other.gameObject.CompareTag("Player") && !PlayerController.Instance.PState.invincible && health > 0)
         {
             Attack();
-            PlayerController.Instance.HitStopTime(0.1f, 5, 0.5f);//avoid time stop
+            if (PlayerController.Instance.PState.alive)
+            {
+                PlayerController.Instance.HitStopTime(0.1f, 5, 0.5f);//avoid time stop
+            }
+
         }
     }
     protected virtual void UpdateEnemyStates()

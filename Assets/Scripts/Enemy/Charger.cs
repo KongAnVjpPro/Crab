@@ -14,6 +14,14 @@ public class Charger : Enemy
     [SerializeField] private float chargeCoolDown = 1f;
     private float currentCoolDown = 0;
     // [SerializeField] private float surprisedTime = 1f;
+    protected override void Update()
+    {
+        base.Update();
+        if (!PlayerController.Instance.PState.alive)
+        {
+            ChangeState(EnemyStates.Charger_Idle);
+        }
+    }
     protected override void Awake()
     {
         base.Awake();
@@ -24,14 +32,14 @@ public class Charger : Enemy
         ChangeState(EnemyStates.Charger_Idle);
         rb.gravityScale = 12f;
     }
-    // protected override void Update()
-    // {
-    //     base.Update();
-    //     if (!isRecoiling)
-    //     {
-    //         transform.position = Vector2.MoveTowards(transform.position, PlayerController.Instance.transform.position, speed * Time.deltaTime);
-    //     }
-    // }
+    void OnTriggerEnter2D(Collider2D _collision)
+    {
+
+        if (_collision.gameObject.CompareTag("Enemy") && _collision.gameObject != gameObject)
+        {
+            transform.localScale = new Vector2(transform.localScale.x * -1, transform.localScale.y);
+        }
+    }
     void Flip()
     {
 
