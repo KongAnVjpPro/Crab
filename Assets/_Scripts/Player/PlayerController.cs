@@ -460,7 +460,7 @@ public class PlayerController : MyMonobehaviour
         yield return new WaitForSecondsRealtime(_delay);
     }
     #endregion
-    #region Death
+    #region Death & Respawn
     IEnumerator Death()
     {
         pState.alive = false;
@@ -471,6 +471,15 @@ public class PlayerController : MyMonobehaviour
 
         yield return new WaitForSeconds(0.9f);
         StartCoroutine(UIManager.Instance.ActivateDeathScreen());
+    }
+    public void Respawned()
+    {
+        if (!pState.alive)
+        {
+            pState.alive = true;
+            Health = maxHealth;
+            anim.Play("Hermit_Idle");
+        }
     }
     #endregion
     #region Heal
