@@ -8,6 +8,28 @@ public class UIManager : MyMonobehaviour
     private static UIManager instance;
     public static UIManager Instance => instance;
     [SerializeField] GameObject deathScreen;
+    [SerializeField] GameObject halfMana, fullMana;
+    public enum ManaState
+    {
+        FullMana,
+        HalfMana
+    }
+    public ManaState manaState;
+    public void SwitchMana(ManaState _manaState)
+    {
+        switch (_manaState)
+        {
+            case ManaState.FullMana:
+                halfMana.SetActive(false);
+                fullMana.SetActive(true);
+                break;
+            case ManaState.HalfMana:
+                halfMana.SetActive(true);
+                fullMana.SetActive(false);
+                break;
+        }
+        manaState = _manaState;
+    }
     protected virtual void LoadSingleton()
     {
         if (instance != null && instance != this)
