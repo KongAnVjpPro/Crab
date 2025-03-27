@@ -49,6 +49,12 @@ public class Enemy : MyMonobehaviour
         Charger_Idle,
         Charger_Suprised,
         Charger_Charge
+         //Shade
+        Shade_Idle,
+        Shade_Chase,
+        Shade_Stunned,
+        Shade_Death
+        //Charger
     }
     protected virtual EnemyStates GetCurrentEnemyState
     {

@@ -74,6 +74,7 @@ public class PlayerController : MyMonobehaviour
     [SerializeField] float mana = 1f;
     [SerializeField] float manaDrainSpeed = 0.2f;
     [SerializeField] float manaGain;
+    bool halfMana;
     [Space(5)]
 
 
@@ -125,9 +126,19 @@ public class PlayerController : MyMonobehaviour
             //if mana stats change
             if (mana != value)
             {
-                mana = Mathf.Clamp(value, 0, 1);
+
+
+                if (!halfMana)
+                {
+                    mana = Mathf.Clamp(value, 0, 1);
+                }
+                else
+                {
+                    mana = Mathf.Clamp(value, 0, 0.5f);
+                }
                 manaStorage.fillAmount = Mana;
             }
+
         }
     }
     #region LoadComponents
@@ -213,6 +224,11 @@ public class PlayerController : MyMonobehaviour
         UpdateJumpVariables();
         UpdateCameraYDampForPlayerFall();
         RestoreTimeScale();
+        if (pState.alive)
+        {
+            Heal(); 
+        }
+
         if (pState.dashing || pState.healing) return;
 
 
@@ -223,7 +239,7 @@ public class PlayerController : MyMonobehaviour
             Flip();
             StartDash();
             Attack();
-            Heal();
+
             CastSpell();
 
         }
@@ -477,6 +493,9 @@ public class PlayerController : MyMonobehaviour
         if (!pState.alive)
         {
             pState.alive = true;
+            halfMana = true;
+            UIManager.Instance.SwitchMana(UIManager.ManaState.HalfMana);
+            Mana = 0;
             Health = maxHealth;
             anim.Play("Hermit_Idle");
         }
