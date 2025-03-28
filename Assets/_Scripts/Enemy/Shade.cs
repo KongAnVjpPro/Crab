@@ -7,18 +7,32 @@ public class Shade : Enemy
     [SerializeField] private float chaseDistance = 5f; // default 
     [SerializeField] private float timer;
     [SerializeField] private float stunDuration = 1f;
+    private static Shade instance;
+    public static Shade Instance => instance;
     protected override void Update()
     {
         base.Update();
         if (!PlayerController.Instance.PState.alive)
         {
-            ChangeState(EnemyStates.Swimmer_Idle);
+            ChangeState(EnemyStates.Shade_Idle);
         }
     }
     protected override void Awake()
     {
         base.Awake();
-        ChangeState(EnemyStates.Swimmer_Idle);
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+        // DontDestroyOnLoad(gameObject);
+        ChangeState(EnemyStates.Shade_Idle);
     }
     protected override void UpdateEnemyStates()
     {
@@ -31,52 +45,63 @@ public class Shade : Enemy
         base.UpdateEnemyStates();
         switch (GetCurrentEnemyState)
         {
-            case EnemyStates.Swimmer_Idle:
+            case EnemyStates.Shade_Idle:
                 rb.velocity = new Vector2(0, 0);
                 if (_dist < chaseDistance)
                 {
-                    ChangeState(EnemyStates.Swimmer_Chase);
+                    ChangeState(EnemyStates.Shade_Chase);
                 }
                 break;
-            case EnemyStates.Swimmer_Chase:
+            case EnemyStates.Shade_Chase:
                 MoveToPlayer();
                 // Debug.Log("Chase");
-                FlipSwimmer();
+                FlipShade();
                 if (_dist > chaseDistance)
                 {
-                    ChangeState(EnemyStates.Swimmer_Idle);
+                    ChangeState(EnemyStates.Shade_Idle);
                 }
                 break;
-            case EnemyStates.Swimmer_Stunned:
+            case EnemyStates.Shade_Stunned:
                 timer += Time.deltaTime;
                 if (timer > stunDuration)
                 {
-                    ChangeState(EnemyStates.Swimmer_Idle);
+                    ChangeState(EnemyStates.Shade_Idle);
                     timer = 0;
                 }
                 break;
-            case EnemyStates.Swimmer_Death:
+            case EnemyStates.Shade_Death:
                 // Destroy(gameObject);
                 gameObject.layer = deathLayer;
                 Death(Random.Range(5f, 10f));
                 break;
         }
     }
-    void FlipSwimmer()
+    void FlipShade()
     {
         sr.flipX = PlayerController.Instance.transform.position.x < transform.position.x;
 
     }
     protected override void ChangeCurrentAnimation()
     {
-        base.ChangeCurrentAnimation();
-        anim.SetBool("Idle", GetCurrentEnemyState == EnemyStates.Swimmer_Idle);
-        anim.SetBool("Chase", GetCurrentEnemyState == EnemyStates.Swimmer_Chase);
-        anim.SetBool("Stunned", GetCurrentEnemyState == EnemyStates.Swimmer_Stunned);
-        if (GetCurrentEnemyState == EnemyStates.Swimmer_Death)
+        if (GetCurrentEnemyState == EnemyStates.Shade_Idle)
         {
-            anim.SetTrigger("Death");
+            // anim.Play(""); // chay idle
         }
+        // base.ChangeCurrentAnimation();
+        // anim.SetBool("Idle", GetCurrentEnemyState == EnemyStates.Shade_Idle);
+        // anim.SetBool("Chase", GetCurrentEnemyState == EnemyStates.Shade_Chase);
+        // anim.SetBool("Stunned", GetCurrentEnemyState == EnemyStates.Shade_Stunned);
+        if (GetCurrentEnemyState == EnemyStates.Shade_Death)
+        {
+            PlayerController.Instance.RestoreMana();
+            // anim.SetTrigger(""); //chay Death
+            Destroy(gameObject, 0.5f);
+        }
+    }
+    protected override void Attack()
+    {
+        // anim.SetTrigger("");//chay atk anim
+        PlayerController.Instance.TakeDamage(damage);
     }
     protected override void Death(float _destroyTime)
     {
@@ -88,11 +113,11 @@ public class Shade : Enemy
         base.EnemyGetHit(_damageDone, _hitDirection, _hitForce);
         if (health > 0)
         {
-            ChangeState(EnemyStates.Swimmer_Stunned);
+            ChangeState(EnemyStates.Shade_Stunned);
         }
         else
         {
-            ChangeState(EnemyStates.Swimmer_Death);
+            ChangeState(EnemyStates.Shade_Death);
         }
     }
 }

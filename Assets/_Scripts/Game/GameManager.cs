@@ -10,6 +10,7 @@ public class GameManager : MyMonobehaviour
     [SerializeField] CheckPoint checkPoint;
     private static GameManager instance;
     public static GameManager Instance => instance;
+    public GameObject shade;
     protected override void LoadComponents()
     {
         base.LoadComponents();
