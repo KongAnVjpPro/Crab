@@ -150,7 +150,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8079329515529175836}
   m_Layer: 5
-  m_Name: Cave_1
+  m_Name: Cave_0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -718,6 +718,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5932170460943389143}
+  - component: {fileID: 4072584132034651046}
   m_Layer: 5
   m_Name: Maps
   m_TagString: Untagged
@@ -746,6 +747,21 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &4072584132034651046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3922929023178016829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f89e0cb64d0f6fb4680395ca32c2a454, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maps:
+  - {fileID: 6376525544053603198}
+  - {fileID: 592088227701258065}
 --- !u!1 &4256599097935888060
 GameObject:
   m_ObjectHideFlags: 0
@@ -1258,7 +1274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8548083873725638890}
   m_Layer: 5
-  m_Name: Cave_0
+  m_Name: Cave_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

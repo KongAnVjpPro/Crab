@@ -1,0 +1,125 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using System.IO;
+using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using Unity.Mathematics;
+
+
+[System.Serializable]
+public struct SaveData
+{
+    public static SaveData Instance;
+
+    //map stuff
+    public HashSet<string> sceneNames;
+    //checkpoint stuff
+    public string checkPointName;
+    public Vector2 checkPointPosition;
+    //player stuff
+    public int playerHealth;
+    public float playerMana;
+    public bool playerHalfMana;
+    public Vector2 playerPosition;
+    public string lastScene;
+
+    //enemy stuff
+    //shade
+    public Vector2 shadePos;
+    public string sceneWithShade;
+    public Quaternion shadeRotation;
+    public void Initialize()
+    {
+        if (!File.Exists(Application.persistentDataPath + "/save.checkpoint.data"))
+        {
+            BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.checkpoint.data"));
+        }
+
+        if (!File.Exists(Application.persistentDataPath + "/save.player.data"))
+        {
+            BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.player.data"));
+        }
+        if (sceneNames == null)
+        {
+            sceneNames = new HashSet<string>();
+
+        }
+    }
+    public void SaveCheckPoint()
+    {
+        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.checkpoint.data")))
+        {
+            writer.Write(checkPointName);
+            writer.Write(checkPointPosition.x);
+            writer.Write(checkPointPosition.y);
+        }
+    }
+    public void LoadCheckPoint()
+    {
+        if (File.Exists(Application.persistentDataPath + "/save.checkpoint.data"))
+        {
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.checkpoint.data")))
+            {
+                checkPointName = reader.ReadString();
+                checkPointPosition.x = reader.ReadSingle();
+                checkPointPosition.y = reader.ReadSingle();
+            }
+        }
+    }
+    public void SavePlayerData()
+    {
+        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.player.data")))
+        {
+            playerHealth = PlayerController.Instance.Health;
+            writer.Write(playerHealth);
+            playerMana = PlayerController.Instance.Mana;
+            writer.Write(playerMana);
+            playerHalfMana = PlayerController.Instance.halfMana;
+            writer.Write(playerHalfMana);
+
+            playerPosition = PlayerController.Instance.transform.position;
+            writer.Write(playerPosition.x);
+            writer.Write(playerPosition.y);
+
+            lastScene = SceneManager.GetActiveScene().name;
+            writer.Write(lastScene);
+        }
+    }
+    public void LoadPlayerData()
+    {
+        if (File.Exists(Application.persistentDataPath + "/save.player.data"))
+        {
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.player.data")))
+            {
+                playerHealth = reader.ReadInt32();
+                playerMana = reader.ReadSingle();
+                playerHalfMana = reader.ReadBoolean();
+                playerPosition.x = reader.ReadSingle();
+                playerPosition.y = reader.ReadSingle();
+                lastScene = reader.ReadString();
+
+                SceneManager.LoadScene(lastScene);
+                PlayerController.Instance.transform.position = playerPosition;
+                PlayerController.Instance.halfMana = playerHalfMana;
+                PlayerController.Instance.Health = playerHealth;
+                PlayerController.Instance.Mana = playerMana;
+            }
+        }
+        else
+        {
+            Debug.Log("file doesnt exist");
+            PlayerController.Instance.Health = PlayerController.Instance.maxHealth;
+            PlayerController.Instance.halfMana = false;
+            PlayerController.Instance.Mana = 0.5f;
+        }
+
+    }
+    public void SaveShadeData()
+    {
+        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.shade.data")))
+        {
+            sceneWithShade = SceneManager.GetActiveScene().name;
+        }
+    }
+}

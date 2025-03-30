@@ -74,7 +74,7 @@ public class PlayerController : MyMonobehaviour
     [SerializeField] float mana = 1f;
     [SerializeField] float manaDrainSpeed = 0.2f;
     [SerializeField] float manaGain;
-    bool halfMana;
+    public bool halfMana;
     [Space(5)]
 
 
@@ -214,6 +214,10 @@ public class PlayerController : MyMonobehaviour
     //     Gizmos.DrawWireCube(downAttackTransform.position, downAttackArea);
     // }
     #region Move
+    void Start()
+    {
+        SaveData.Instance.LoadPlayerData();
+    }
     private void Update()
     {
         if (pState.cutscene) return;
