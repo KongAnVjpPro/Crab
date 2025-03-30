@@ -8,6 +8,7 @@ public class UIManager : MyMonobehaviour
     private static UIManager instance;
     public static UIManager Instance => instance;
     [SerializeField] GameObject deathScreen;
+    public GameObject mapHandler;
     [SerializeField] GameObject halfMana, fullMana;
     public enum ManaState
     {

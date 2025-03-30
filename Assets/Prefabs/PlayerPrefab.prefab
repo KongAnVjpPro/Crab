@@ -141,7 +141,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 5
   m_Material: {fileID: 6200000, guid: d5e3222c2e1c00145b3364b205056874, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -211,7 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkSpeed: 10
-  jumpForce: 10
+  jumpForce: 20
   jumpBufferFrames: 0.1
   coyoteTime: 0.15
   maxAirJumps: 1
@@ -239,12 +239,12 @@ MonoBehaviour:
   slashEffect: {fileID: 622931185587841804, guid: 8e7dadf665fbfc041914baac55c8b7f6, type: 3}
   recoilXSteps: 5
   recoilYSteps: 5
-  recoilXSpeed: 50
-  recoilYSpeed: 32
-  health: 10
-  maxHealth: 10
+  recoilXSpeed: 10
+  recoilYSpeed: 5
+  health: 5
+  maxHealth: 5
   bloodSpurt: {fileID: 8158697489947298841, guid: 5efb2bbe71751cc47a6b208fe3aa4704, type: 3}
-  hitFlashSpeed: 2
+  hitFlashSpeed: 15
   timeToHeal: 1
   manaStorage: {fileID: 0}
   mana: 1
@@ -257,6 +257,7 @@ MonoBehaviour:
   sideSpellFireball: {fileID: 7674779421777944736, guid: 2cdbb0b2313bc7645859482b1f712cd0, type: 3}
   upSpellExplosion: {fileID: 1049526724449326175, guid: 073febdddaf1f9c4e9973ed475febf0c, type: 3}
   downSpellFireball: {fileID: 3237567436197981307}
+  playerFallSpeedThreshold: -10
   anim: {fileID: 5782220792706789861}
   rb: {fileID: 5594857265837560130}
 --- !u!114 &8887694276067032096
@@ -289,10 +290,11 @@ MonoBehaviour:
   recoilingX: 0
   recoilingY: 0
   lookingRight: 1
-  invicible: 0
+  invincible: 0
   healing: 0
   casting: 0
   cutscene: 0
+  alive: 1
 --- !u!1 &2372935857282291732
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,9 +398,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: -1895575071
+  m_SortingLayer: 2
+  m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2c961366528f28c458c619797d0bbb2f, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

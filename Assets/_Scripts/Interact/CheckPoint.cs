@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CheckPoint : MyMonobehaviour
 {
@@ -22,6 +23,17 @@ public class CheckPoint : MyMonobehaviour
         if (_collision.CompareTag("Player") && Input.GetButtonDown("Interact"))
         {
             interacted = true;
+            SaveData.Instance.checkPointName = SceneManager.GetActiveScene().name;
+            SaveData.Instance.checkPointPosition = new Vector2(transform.position.x, transform.position.y);
+            SaveData.Instance.SaveCheckPoint();
+            SaveData.Instance.SavePlayerData();
+        }
+    }
+    void OnTriggerExit2D(Collider2D _collision)
+    {
+        if (_collision.CompareTag("Player"))
+        {
+            interacted = false;
         }
     }
 }

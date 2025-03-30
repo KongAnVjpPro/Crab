@@ -48,8 +48,8 @@ public class Enemy : MyMonobehaviour
         //Charger
         Charger_Idle,
         Charger_Suprised,
-        Charger_Charge
-         //Shade
+        Charger_Charge,
+        //Shade
         Shade_Idle,
         Shade_Chase,
         Shade_Stunned,

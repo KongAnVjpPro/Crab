@@ -74,7 +74,7 @@ public class PlayerController : MyMonobehaviour
     [SerializeField] float mana = 1f;
     [SerializeField] float manaDrainSpeed = 0.2f;
     [SerializeField] float manaGain;
-    bool halfMana;
+    public bool halfMana;
     [Space(5)]
 
 
@@ -102,6 +102,7 @@ public class PlayerController : MyMonobehaviour
     private float xAxis, yAxis;
     private bool canDash = true;
     private float gravity;
+    bool openMap;
     public int Health
     {
         get { return health; }
@@ -213,12 +214,17 @@ public class PlayerController : MyMonobehaviour
     //     Gizmos.DrawWireCube(downAttackTransform.position, downAttackArea);
     // }
     #region Move
+    void Start()
+    {
+        SaveData.Instance.LoadPlayerData();
+    }
     private void Update()
     {
         if (pState.cutscene) return;
         if (pState.alive)
         {
             GetInputs();
+            ToggleMap();
         }
 
         UpdateJumpVariables();
@@ -226,7 +232,7 @@ public class PlayerController : MyMonobehaviour
         RestoreTimeScale();
         if (pState.alive)
         {
-            Heal(); 
+            Heal();
         }
 
         if (pState.dashing || pState.healing) return;
@@ -267,6 +273,18 @@ public class PlayerController : MyMonobehaviour
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
         attack = Input.GetButtonDown("Attack");
+        openMap = Input.GetButton("Map");
+    }
+    void ToggleMap()
+    {
+        if (openMap)
+        {
+            UIManager.Instance.mapHandler.SetActive(true);
+        }
+        else
+        {
+            UIManager.Instance.mapHandler.SetActive(false);
+        }
     }
     protected virtual void Move()
     {
@@ -487,6 +505,9 @@ public class PlayerController : MyMonobehaviour
 
         yield return new WaitForSeconds(0.9f);
         StartCoroutine(UIManager.Instance.ActivateDeathScreen());
+
+        yield return new WaitForSeconds(0.9f);
+        Instantiate(GameManager.Instance.shade, transform.position, quaternion.identity);
     }
     public void Respawned()
     {
@@ -499,6 +520,11 @@ public class PlayerController : MyMonobehaviour
             Health = maxHealth;
             anim.Play("Hermit_Idle");
         }
+    }
+    public void RestoreMana()
+    {
+        halfMana = false;
+        UIManager.Instance.SwitchMana(UIManager.ManaState.FullMana);
     }
     #endregion
     #region Heal
