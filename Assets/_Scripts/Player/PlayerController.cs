@@ -511,6 +511,7 @@ public class PlayerController : MyMonobehaviour
     }
     public void Respawned()
     {
+        Debug.Log("respawned");
         if (!pState.alive)
         {
             pState.alive = true;

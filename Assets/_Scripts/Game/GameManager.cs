@@ -39,22 +39,25 @@ public class GameManager : MyMonobehaviour
         base.Awake();
 
         this.LoadSingleton();
+        if (PlayerController.Instance != null)
+        {
+            if (PlayerController.Instance.halfMana)
+            {
+                SaveData.Instance.LoadShadeData();
+                UIManager.Instance.SwitchMana(UIManager.ManaState.HalfMana);
+
+                if (SaveData.Instance.sceneWithShade == SceneManager.GetActiveScene().name || SaveData.Instance.sceneWithShade == "")
+                {
+                    Instantiate(shade, SaveData.Instance.shadePos, SaveData.Instance.shadeRotation);
+                }
+            }
+        }
 
     }
+
     public void RespawnPlayer()
     {
-        // if (checkPoint != null)
-        // {
-        //     if (checkPoint.interacted)
-        //     {
-        //         respawnPoint = checkPoint.transform.position;
-        //     }
 
-        // }
-        // else
-        // {
-        //     respawnPoint = platformingRespawnPoint;
-        // }
         SaveData.Instance.LoadCheckPoint();
         if (SaveData.Instance.checkPointName != null)
         {

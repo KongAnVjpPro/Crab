@@ -120,6 +120,40 @@ public struct SaveData
         using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.shade.data")))
         {
             sceneWithShade = SceneManager.GetActiveScene().name;
+            shadePos = Shade.Instance.transform.position;
+            shadeRotation = Shade.Instance.transform.rotation;
+
+            writer.Write(sceneWithShade);
+
+            writer.Write(shadePos.x);
+            writer.Write(shadePos.y);
+
+            writer.Write(shadeRotation.x);
+            writer.Write(shadeRotation.y);
+            writer.Write(shadeRotation.z);
+            writer.Write(shadeRotation.w);
+        }
+    }
+    public void LoadShadeData()
+    {
+        if (File.Exists(Application.persistentDataPath + "/save.shade.data"))
+        {
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.shade.data")))
+            {
+                sceneWithShade = reader.ReadString();
+                shadePos.x = reader.ReadSingle();
+                shadePos.y = reader.ReadSingle();
+
+                float rotX = reader.ReadSingle();
+                float rotY = reader.ReadSingle();
+                float rotZ = reader.ReadSingle();
+                float rotW = reader.ReadSingle();
+                shadeRotation = new Quaternion(rotX, rotY, rotZ, rotW);
+            }
+        }
+        else
+        {
+            Debug.Log("shade doesnt exist");
         }
     }
 }

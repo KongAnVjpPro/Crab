@@ -17,7 +17,7 @@ public class SceneTransition : MyMonobehaviour
     {
         if (_other.CompareTag("Player"))
         {
-
+            CheckShadeData();//khi load scene thi check de ko bi null ref
             GameManager.Instance.transitionedFromScene = SceneManager.GetActiveScene().name;//store prev level
             PlayerController.Instance.PState.cutscene = true;
             PlayerController.Instance.PState.invincible = true;
@@ -34,5 +34,16 @@ public class SceneTransition : MyMonobehaviour
         }
         StartCoroutine(UIManager.Instance.sceneFader.Fade(SceneFader.FadeDirection.Out));
 
+    }
+    void CheckShadeData()
+    {
+        GameObject[] enemyObjects = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = 0; i < enemyObjects.Length; i++)
+        {
+            if (enemyObjects[i].GetComponent<Shade>() != null)
+            {
+                SaveData.Instance.SaveShadeData();
+            }
+        }
     }
 }

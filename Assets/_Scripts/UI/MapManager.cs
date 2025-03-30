@@ -11,6 +11,7 @@ public class MapManager : MyMonobehaviour
         {
             if (checkPoint.interacted)
             {
+
                 UpdateMap();
             }
         }
@@ -18,6 +19,7 @@ public class MapManager : MyMonobehaviour
     void UpdateMap()
     {
         var savedScenes = SaveData.Instance.sceneNames;
+        Debug.Log("map");
         for (int i = 0; i < maps.Length; i++)
         {
 
