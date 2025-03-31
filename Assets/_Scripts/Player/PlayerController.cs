@@ -28,6 +28,15 @@ public class PlayerController : MyMonobehaviour
     [SerializeField] protected float groundCheckX = 0.6f;//box collider size /2
     [SerializeField] protected LayerMask whatIsGround;
     [Space(5)]
+    [Header("Wall Jump Settings:")]
+    [SerializeField] private float wallSlidingSpeed = 2f;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private float wallJumpDuration;
+    [SerializeField] private Vector2 wallJumpingPower;
+    float wallJumpDirection;
+    bool isWallSliding;
+    bool isWallJumping;
 
     [Header("Dash Settings:")]
     [SerializeField] private float dashSpeed = 3f;
@@ -156,6 +165,9 @@ public class PlayerController : MyMonobehaviour
     }
     private static PlayerController instance;
     public static PlayerController Instance => instance;
+
+    //unlocking
+    public bool unlockedWallJump;
     protected virtual void LoadSingleton()
     {
         if (instance == null)
@@ -217,6 +229,11 @@ public class PlayerController : MyMonobehaviour
     void Start()
     {
         SaveData.Instance.LoadPlayerData();
+        if (Health == 0)
+        {
+            pState.alive = false;
+            GameManager.Instance.RespawnPlayer();
+        }
     }
     private void Update()
     {
@@ -240,9 +257,19 @@ public class PlayerController : MyMonobehaviour
 
         if (pState.alive)
         {
-            Move();
-            Jump();
-            Flip();
+            if (!isWallJumping)
+            {
+                Flip();
+                Move();
+                Jump();
+
+            }
+            if (unlockedWallJump)
+            {
+                WallSlide();
+                WallJump();
+            }
+
             StartDash();
             Attack();
 
@@ -503,6 +530,11 @@ public class PlayerController : MyMonobehaviour
         Destroy(_bloodSpurt, 1.5f);
         anim.SetTrigger("Death");
 
+        //deactive
+        rb.constraints = RigidbodyConstraints2D.FreezePosition;
+        GetComponent<BoxCollider2D>().enabled = false;
+
+
         yield return new WaitForSeconds(0.9f);
         StartCoroutine(UIManager.Instance.ActivateDeathScreen());
 
@@ -511,8 +543,13 @@ public class PlayerController : MyMonobehaviour
     }
     public void Respawned()
     {
+        Debug.Log("respawned");
         if (!pState.alive)
         {
+            rb.constraints = RigidbodyConstraints2D.None;
+            rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+            GetComponent<BoxCollider2D>().enabled = true;
+
             pState.alive = true;
             halfMana = true;
             UIManager.Instance.SwitchMana(UIManager.ManaState.HalfMana);
@@ -615,6 +652,7 @@ public class PlayerController : MyMonobehaviour
         pState.casting = false;
     }
     #endregion
+
     #region Check Grounded
     public bool Grounded()
     {
@@ -768,6 +806,58 @@ public class PlayerController : MyMonobehaviour
         {
             jumpBufferCounter -= Time.deltaTime;
         }
+    }
+    #endregion
+    #region Wall Jump
+    private bool Walled()
+    {
+        return (Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer));
+    }
+    void WallSlide()
+    {
+        if (Walled() && !Grounded() && xAxis != 0)
+        {
+            isWallSliding = true;
+            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -wallSlidingSpeed, float.MaxValue));
+
+        }
+        else
+        {
+            isWallSliding = false;
+        }
+    }
+    void WallJump()
+    {
+        if (isWallSliding)
+        {
+            isWallJumping = false;
+            wallJumpDirection = !pState.lookingRight ? 1 : -1;
+
+            CancelInvoke(nameof(StopWallJumping));
+        }
+        if (Input.GetButtonDown("Jump") && isWallSliding)
+        {
+            isWallJumping = true;
+            rb.velocity = new Vector2(wallJumpDirection * wallJumpingPower.x, wallJumpingPower.y);
+
+            //mid-air acrobatics
+            dashed = false;
+            airJumpCounter = 0;
+
+            //rotate
+            // if ((pState.lookingRight && transform.eulerAngles.y == 0) || (!pState.lookingRight && transform.eulerAngles.y != 0))
+            // {
+            //     pState.lookingRight = !pState.lookingRight;
+            //     int _yRotation = pState.lookingRight ? 0 : 180;
+            //     transform.eulerAngles = new Vector2(transform.eulerAngles.x, _yRotation);
+
+            // }
+            Invoke(nameof(StopWallJumping), wallJumpDuration);
+        }
+    }
+    void StopWallJumping()
+    {
+        isWallJumping = false;
     }
     #endregion
     #region Scene

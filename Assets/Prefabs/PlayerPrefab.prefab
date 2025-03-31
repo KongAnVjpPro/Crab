@@ -72,6 +72,7 @@ Transform:
   - {fileID: 2475775477676325318}
   - {fileID: 8472039749214988094}
   - {fileID: 783436009032780345}
+  - {fileID: 117155993303220028}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7886786996348932468
@@ -221,6 +222,13 @@ MonoBehaviour:
   whatIsGround:
     serializedVersion: 2
     m_Bits: 8
+  wallSlidingSpeed: 2
+  wallCheck: {fileID: 0}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  wallJumpDuration: 0
+  wallJumpingPower: {x: 0, y: 0}
   dashSpeed: 80
   dashTime: 0.2
   dashCoolDown: 0.7
@@ -250,6 +258,7 @@ MonoBehaviour:
   mana: 1
   manaDrainSpeed: 0.2
   manaGain: 0.2
+  halfMana: 0
   manaSpellCost: 0.3
   timeBetweenCast: 0.5
   spellDamage: 0
@@ -468,6 +477,37 @@ CircleCollider2D:
   m_Offset: {x: 0.3, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
+--- !u!1 &3892587201505763661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 117155993303220028}
+  m_Layer: 0
+  m_Name: WallCheck
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &117155993303220028
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892587201505763661}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.19, y: 0.19134259, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1742257649180282169}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4679087491539525385
 GameObject:
   m_ObjectHideFlags: 0

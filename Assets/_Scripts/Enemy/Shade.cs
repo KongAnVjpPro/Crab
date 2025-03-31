@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Shade : Enemy
 {
-    [SerializeField] private float chaseDistance = 5f; // default 
+    [SerializeField] private float chaseDistance = 10f; // default 
     [SerializeField] private float timer;
     [SerializeField] private float stunDuration = 1f;
     private static Shade instance;
     public static Shade Instance => instance;
+    public GameObject model;
     protected override void Update()
     {
         base.Update();
@@ -31,6 +32,7 @@ public class Shade : Enemy
                 Destroy(gameObject);
             }
         }
+        SaveData.Instance.SaveShadeData();
         // DontDestroyOnLoad(gameObject);
         ChangeState(EnemyStates.Shade_Idle);
     }
@@ -78,7 +80,18 @@ public class Shade : Enemy
     }
     void FlipShade()
     {
-        sr.flipX = PlayerController.Instance.transform.position.x < transform.position.x;
+        // sr.flipX = 
+        if (PlayerController.Instance.transform.position.x < transform.position.x)
+        {
+            // transform.localScale = new Vector2(-1, transform.localScale.y);
+            model.transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else
+        {
+            // transform.localScale = new Vector2(1, transform.localScale.y);
+            model.transform.localScale = new Vector3(1, 1, 1);
+        }
+
 
     }
     protected override void ChangeCurrentAnimation()
@@ -94,6 +107,7 @@ public class Shade : Enemy
         if (GetCurrentEnemyState == EnemyStates.Shade_Death)
         {
             PlayerController.Instance.RestoreMana();
+            SaveData.Instance.SavePlayerData();
             // anim.SetTrigger(""); //chay Death
             Destroy(gameObject, 0.5f);
         }
