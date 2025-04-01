@@ -24,6 +24,11 @@ public struct SaveData
     public Vector2 playerPosition;
     public string lastScene;
 
+    public bool playerUnlockedWallJump;
+    public bool playerUnlockedDash;
+    public bool playerUnlockedVarJump;
+
+
     //enemy stuff
     //shade
     public Vector2 shadePos;
@@ -78,6 +83,13 @@ public struct SaveData
             playerHalfMana = PlayerController.Instance.halfMana;
             writer.Write(playerHalfMana);
 
+            playerUnlockedWallJump = PlayerController.Instance.unlockedWallJump;
+            writer.Write(playerUnlockedWallJump);
+            playerUnlockedDash = PlayerController.Instance.unlockedDash;
+            writer.Write(playerUnlockedDash);
+            playerUnlockedVarJump = PlayerController.Instance.unlockedVarJump;
+            writer.Write(playerUnlockedVarJump);
+
             playerPosition = PlayerController.Instance.transform.position;
             writer.Write(playerPosition.x);
             writer.Write(playerPosition.y);
@@ -95,8 +107,14 @@ public struct SaveData
                 playerHealth = reader.ReadInt32();
                 playerMana = reader.ReadSingle();
                 playerHalfMana = reader.ReadBoolean();
+
+                playerUnlockedWallJump = reader.ReadBoolean();
+                playerUnlockedDash = reader.ReadBoolean();
+                playerUnlockedVarJump = reader.ReadBoolean();
+
                 playerPosition.x = reader.ReadSingle();
                 playerPosition.y = reader.ReadSingle();
+
                 lastScene = reader.ReadString();
 
                 SceneManager.LoadScene(lastScene);
@@ -104,6 +122,10 @@ public struct SaveData
                 PlayerController.Instance.halfMana = playerHalfMana;
                 PlayerController.Instance.Health = playerHealth;
                 PlayerController.Instance.Mana = playerMana;
+
+                PlayerController.Instance.unlockedWallJump = playerUnlockedWallJump;
+                PlayerController.Instance.unlockedDash = playerUnlockedDash;
+                PlayerController.Instance.unlockedVarJump = playerUnlockedVarJump;
             }
         }
         else
@@ -112,6 +134,10 @@ public struct SaveData
             PlayerController.Instance.Health = PlayerController.Instance.maxHealth;
             PlayerController.Instance.halfMana = false;
             PlayerController.Instance.Mana = 0.5f;
+
+            PlayerController.Instance.unlockedWallJump = false;
+            PlayerController.Instance.unlockedDash = false;
+            PlayerController.Instance.unlockedVarJump = false;
         }
 
     }
