@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine;
 
-public class UnlockWallJump : MyMonobehaviour
+public class UnlockDash : MyMonobehaviour
 {
     bool used;
     [SerializeField] GameObject particles;
@@ -15,14 +14,14 @@ public class UnlockWallJump : MyMonobehaviour
             used = true;
 
             StartCoroutine(ShowUI());
-            PlayerController.Instance.unlockedWallJump = true;
+            PlayerController.Instance.unlockedDash = true;
             // Destroy(gameObject);
         }
     }
 
     void Start()
     {
-        if (PlayerController.Instance.unlockedWallJump)
+        if (PlayerController.Instance.unlockedDash)
         {
             Destroy(gameObject);
         }
@@ -36,7 +35,7 @@ public class UnlockWallJump : MyMonobehaviour
         canvasUI.SetActive(true);
 
         yield return new WaitForSeconds(4f);
-        PlayerController.Instance.unlockedWallJump = true;
+        PlayerController.Instance.unlockedDash = true;
         SaveData.Instance.SavePlayerData();
         canvasUI.SetActive(false);
         Destroy(gameObject);

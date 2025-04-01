@@ -168,6 +168,8 @@ public class PlayerController : MyMonobehaviour
 
     //unlocking
     public bool unlockedWallJump;
+    public bool unlockedDash;
+    public bool unlockedVarJump;
     protected virtual void LoadSingleton()
     {
         if (instance == null)
@@ -269,8 +271,11 @@ public class PlayerController : MyMonobehaviour
                 WallSlide();
                 WallJump();
             }
+            if (unlockedDash)
+            {
+                StartDash();
+            }
 
-            StartDash();
             Attack();
 
             CastSpell();
@@ -769,7 +774,7 @@ public class PlayerController : MyMonobehaviour
             pState.jumping = true;
 
         }
-        if (!Grounded() && airJumpCounter < maxAirJumps && Input.GetButtonDown("Jump"))
+        if (!Grounded() && airJumpCounter < maxAirJumps && Input.GetButtonDown("Jump") && unlockedVarJump)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpForce);
             pState.jumping = true;
