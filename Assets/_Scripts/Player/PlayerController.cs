@@ -69,6 +69,10 @@ public class PlayerController : MyMonobehaviour
     [Header("Health Settings:")]
     public int health = 10;
     public int maxHealth = 10;
+    public int maxTotalHealth = 10;
+    public int heartShards;
+
+
     [SerializeField] GameObject bloodSpurt;
     [SerializeField] float hitFlashSpeed = 15f;
     public delegate void OnHealthChangedDelegate();
@@ -91,8 +95,8 @@ public class PlayerController : MyMonobehaviour
     [SerializeField] float manaSpellCost = 0.3f;
     [SerializeField] float timeBetweenCast = 0.5f;
     float timeSinceCast;
-    [SerializeField] float spellDamage;//explosion, fireball
-    [SerializeField] float downSpellForce;//desolate dive
+    [SerializeField] float spellDamage;
+    [SerializeField] float downSpellForce;
     [SerializeField] GameObject sideSpellFireball;
     [SerializeField] GameObject upSpellExplosion;
     [SerializeField] GameObject downSpellFireball;
@@ -170,6 +174,12 @@ public class PlayerController : MyMonobehaviour
     public bool unlockedWallJump;
     public bool unlockedDash;
     public bool unlockedVarJump;
+    public bool unlockedSideCast;
+    public bool unlockedDownCast;
+    public bool unlockedUpCast;
+
+
+
     protected virtual void LoadSingleton()
     {
         if (instance == null)
@@ -622,12 +632,13 @@ public class PlayerController : MyMonobehaviour
     }
     IEnumerator CastCoroutine()
     {
-        anim.SetBool("Casting", true);
-        yield return new WaitForSeconds(0.15f);//the middle of anim
+        //the middle of anim
 
         //side cast
-        if (yAxis == 0 || (yAxis < 0 && Grounded()))
+        if ((yAxis == 0 || (yAxis < 0 && Grounded()) && unlockedSideCast))
         {
+            anim.SetBool("Casting", true);
+            yield return new WaitForSeconds(0.15f);
             GameObject _fireBall = Instantiate(sideSpellFireball, sideAttackTransform.position, quaternion.identity);
 
             //flip fireball
@@ -640,19 +651,31 @@ public class PlayerController : MyMonobehaviour
                 _fireBall.transform.eulerAngles = new Vector2(_fireBall.transform.eulerAngles.x, 180);
             }
             pState.recoilingX = true;
+
+            Mana -= manaSpellCost;
+            yield return new WaitForSeconds(0.35f);
         }
         //up cast
-        else if (yAxis > 0)
+        else if ((yAxis > 0) && unlockedUpCast)
         {
+            anim.SetBool("Casting", true);
+            yield return new WaitForSeconds(0.15f);
             Instantiate(upSpellExplosion, transform);
             rb.velocity = Vector2.zero;
+
+            Mana -= manaSpellCost;
+            yield return new WaitForSeconds(0.35f);
         }
-        else if (yAxis < 0 && !Grounded())
+        else if ((yAxis < 0) && (!Grounded()) && unlockedDownCast)
         {
+            anim.SetBool("Casting", true);
+            yield return new WaitForSeconds(0.15f);
             downSpellFireball.SetActive(true);
+
+            Mana -= manaSpellCost;
+            yield return new WaitForSeconds(0.35f);
         }
-        Mana -= manaSpellCost;
-        yield return new WaitForSeconds(0.35f);
+
         anim.SetBool("Casting", false);
         pState.casting = false;
     }

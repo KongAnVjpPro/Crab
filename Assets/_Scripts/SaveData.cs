@@ -19,6 +19,8 @@ public struct SaveData
     public Vector2 checkPointPosition;
     //player stuff
     public int playerHealth;
+    public int playerMaxHealth;
+    public int playerHeartShards;
     public float playerMana;
     public bool playerHalfMana;
     public Vector2 playerPosition;
@@ -28,6 +30,9 @@ public struct SaveData
     public bool playerUnlockedDash;
     public bool playerUnlockedVarJump;
 
+    public bool playerUnlockedSideCast;
+    public bool playerUnlockedUpCast;
+    public bool playerUnlockedDownCast;
 
     //enemy stuff
     //shade
@@ -78,17 +83,32 @@ public struct SaveData
         {
             playerHealth = PlayerController.Instance.Health;
             writer.Write(playerHealth);
+            playerHeartShards = PlayerController.Instance.heartShards;
+            writer.Write(playerHeartShards);
             playerMana = PlayerController.Instance.Mana;
             writer.Write(playerMana);
             playerHalfMana = PlayerController.Instance.halfMana;
             writer.Write(playerHalfMana);
+            playerMaxHealth = PlayerController.Instance.maxHealth;
+            writer.Write(playerMaxHealth);
 
+
+            //unlock move
             playerUnlockedWallJump = PlayerController.Instance.unlockedWallJump;
             writer.Write(playerUnlockedWallJump);
             playerUnlockedDash = PlayerController.Instance.unlockedDash;
             writer.Write(playerUnlockedDash);
             playerUnlockedVarJump = PlayerController.Instance.unlockedVarJump;
             writer.Write(playerUnlockedVarJump);
+
+            //unlock cast
+            playerUnlockedSideCast = PlayerController.Instance.unlockedSideCast;
+            writer.Write(playerUnlockedSideCast);
+            playerUnlockedUpCast = PlayerController.Instance.unlockedUpCast;
+            writer.Write(playerUnlockedUpCast);
+            playerUnlockedDownCast = PlayerController.Instance.unlockedDownCast;
+            writer.Write(playerUnlockedDownCast);
+
 
             playerPosition = PlayerController.Instance.transform.position;
             writer.Write(playerPosition.x);
@@ -105,12 +125,22 @@ public struct SaveData
             using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.player.data")))
             {
                 playerHealth = reader.ReadInt32();
+                playerHeartShards = reader.ReadInt32();
                 playerMana = reader.ReadSingle();
                 playerHalfMana = reader.ReadBoolean();
+                playerMaxHealth = reader.ReadInt32();
 
+                //load move
                 playerUnlockedWallJump = reader.ReadBoolean();
                 playerUnlockedDash = reader.ReadBoolean();
                 playerUnlockedVarJump = reader.ReadBoolean();
+
+
+                //load cast
+                playerUnlockedSideCast = reader.ReadBoolean();
+                playerUnlockedUpCast = reader.ReadBoolean();
+                playerUnlockedDownCast = reader.ReadBoolean();
+
 
                 playerPosition.x = reader.ReadSingle();
                 playerPosition.y = reader.ReadSingle();
@@ -122,22 +152,35 @@ public struct SaveData
                 PlayerController.Instance.halfMana = playerHalfMana;
                 PlayerController.Instance.Health = playerHealth;
                 PlayerController.Instance.Mana = playerMana;
+                PlayerController.Instance.heartShards = playerHeartShards;
+                PlayerController.Instance.maxHealth = playerMaxHealth;
+
 
                 PlayerController.Instance.unlockedWallJump = playerUnlockedWallJump;
                 PlayerController.Instance.unlockedDash = playerUnlockedDash;
                 PlayerController.Instance.unlockedVarJump = playerUnlockedVarJump;
+
+                PlayerController.Instance.unlockedSideCast = playerUnlockedSideCast;
+                PlayerController.Instance.unlockedUpCast = playerUnlockedUpCast;
+                PlayerController.Instance.unlockedDownCast = playerUnlockedDownCast;
             }
         }
         else
         {
             Debug.Log("file doesnt exist");
             PlayerController.Instance.Health = PlayerController.Instance.maxHealth;
+            PlayerController.Instance.maxHealth = 5;
             PlayerController.Instance.halfMana = false;
             PlayerController.Instance.Mana = 0.5f;
+            PlayerController.Instance.heartShards = 0;
 
             PlayerController.Instance.unlockedWallJump = false;
             PlayerController.Instance.unlockedDash = false;
             PlayerController.Instance.unlockedVarJump = false;
+
+            PlayerController.Instance.unlockedSideCast = false;
+            PlayerController.Instance.unlockedUpCast = false;
+            PlayerController.Instance.unlockedDownCast = false;
         }
 
     }
