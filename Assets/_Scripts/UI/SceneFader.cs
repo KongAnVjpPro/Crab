@@ -33,7 +33,8 @@ public class SceneFader : MyMonobehaviour
         float _fadeEndValue = _fadeDirection == FadeDirection.Out ? 0 : 1;
         if (_fadeDirection == FadeDirection.Out)
         {
-            // fadeOutUIImage.enabled = true;
+            fadeOutUIImage.enabled = true;
+            // fadeOutUIImage.gameObject.SetActive(true);
             while (_alpha >= _fadeEndValue)
             {
                 SetColorImage(ref _alpha, _fadeDirection);

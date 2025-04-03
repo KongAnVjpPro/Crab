@@ -880,12 +880,15 @@ public class PlayerController : MyMonobehaviour
             //     transform.eulerAngles = new Vector2(transform.eulerAngles.x, _yRotation);
 
             // }
+            pState.lookingRight = !pState.lookingRight;
+            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
             Invoke(nameof(StopWallJumping), wallJumpDuration);
         }
     }
     void StopWallJumping()
     {
         isWallJumping = false;
+        transform.localScale = new Vector3(1, 1, 1);
     }
     #endregion
     #region Scene
