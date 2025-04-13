@@ -4,17 +4,22 @@ using UnityEngine;
 public class PlayerMovement : PlayerComponent
 {
     [Header("Move")]
-    float xAxis;
     [SerializeField] protected float moveSpeed = 5f;
+
     [SerializeField] bool canMove = true;
     [SerializeField] protected float jumpForce = 5f;
+    float xAxis;
+    // float yAxis;
     [Header("Jump")]
-    private float jumpBufferCounter = 0;
+
     [SerializeField] private float jumpBufferFrames = 0.1f;
-    private float coyoteTimeCounter = 0;
+
     [SerializeField] private float coyoteTime = 0.15f;
-    private int airJumpCounter = 0;
+
     [SerializeField] private int maxAirJumps = 1;
+    private int airJumpCounter = 0;
+    private float jumpBufferCounter = 0;
+    private float coyoteTimeCounter = 0;
     [Header("Wall Jump")]
     [SerializeField] private float wallSlidingSpeed = 2f;
 
@@ -38,7 +43,7 @@ public class PlayerMovement : PlayerComponent
 
         WallSlide();
         WallJump();
-
+        PlayAnimation();
 
     }
     #region Checker
@@ -57,6 +62,7 @@ public class PlayerMovement : PlayerComponent
     void UpdateMoveVariable()
     {
         xAxis = playerController.playerInput.xAxis;
+
     }
     protected virtual void MoveHorizontal(float _xAxis)
     {
@@ -90,6 +96,10 @@ public class PlayerMovement : PlayerComponent
             MoveHorizontal(xAxis);
         }
         Flip();
+
+        //anim
+        // bool isRunning = Mathf.Abs(xAxis) > 0.01f && IsOnGround();
+        // playerController.playerAnimator.Running(isRunning);
     }
     #endregion
     #region Jump
@@ -129,6 +139,7 @@ public class PlayerMovement : PlayerComponent
         {
             playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
             playerController.pState.jumping = true;
+
 
         }
         if (!IsOnGround() && airJumpCounter < maxAirJumps && playerController.playerInput.jumpStart)
@@ -196,8 +207,19 @@ public class PlayerMovement : PlayerComponent
         if (playerController.playerInput.dash)
         {
             playerController.playerDash.StartDash(_dir);
+            // playerController.playerAnimator.Dashing();
         }
         playerController.pState.dashing = playerController.playerDash.dashing;
+    }
+    #endregion
+    #region MovementAnim
+    void PlayAnimation()
+    {
+
+        playerController.playerAnimator.Jumping(!IsOnGround() && playerController.rb.velocity.y > 0);
+        playerController.playerAnimator.Running((IsOnGround() && xAxis != 0));
+        playerController.playerAnimator.Falling(playerController.rb.velocity.y);
+        //dashing anim in dash func (playerdash)
     }
     #endregion
 }

@@ -12,16 +12,19 @@ public class StatComponent : EntityComponent
     public float CurrentMana => currentMana;
     public float CurrentStamina => currentStamina;
 
-    [Header("Total Stats: ")]
-    [SerializeField] protected float totalHealth = 20;
-    [SerializeField] protected float totalMana = 20;
-    [SerializeField] protected float totalStamina = 20;
-    [Header("Max Stats: ")]
-    [SerializeField] protected float maxHealth = 5;
-    [SerializeField] protected float maxMana = 5;
-    [SerializeField] protected float maxStamina = 5;
+    [Header("Total Stats: ")] // current max value
+    [SerializeField] protected float totalHealth = 5;
+    public float TotalHealth => totalHealth;
+    [SerializeField] protected float totalMana = 5;
+    public float TotalMana => totalMana;
+    [SerializeField] protected float totalStamina = 5;
+    public float TotalStamina => totalStamina;
+    [Header("Max Stats: ")] // max can reach
+    [SerializeField] protected float maxHealth = 25;
+    [SerializeField] protected float maxMana = 25;
+    [SerializeField] protected float maxStamina = 25;
 
-    public virtual void ChangeCurrentStats(StatType statType, float amount)
+    public virtual void ChangeCurrentStats(StatType statType, float amount)//add or sub
     {
         switch (statType)
         {
@@ -36,7 +39,7 @@ public class StatComponent : EntityComponent
                 break;
         }
     }
-    public virtual void ChangeTotalStats(StatType statType, float amount)
+    public virtual void ChangeTotalStats(StatType statType, float amount)//add or sub
     {
         switch (statType)
         {

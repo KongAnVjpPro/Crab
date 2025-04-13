@@ -35,6 +35,7 @@ public class DashComponent : EntityComponent
         canDash = false;
         dashing = true;
         entityController.rb.gravityScale = 0;
+        DashAnimation();
         entityController.rb.velocity = new Vector2(_dir * dashSpeed, 0);
 
         yield return new WaitForSeconds(dashTime);
@@ -42,7 +43,9 @@ public class DashComponent : EntityComponent
         entityController.rb.gravityScale = gravity;
         yield return new WaitForSeconds(dashCoolDown);
         canDash = true;
-
+    }
+    public virtual void DashAnimation()
+    {
 
     }
 }
