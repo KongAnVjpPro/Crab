@@ -229,7 +229,7 @@ public class PlayerMovement : PlayerComponent
     {
         if (IsOnGround() && xAxis != 0)
         {
-            playerController.playerEffect.PlayRunEffect();
+            // playerController.playerEffect.PlayRunEffect();
         }
     }
     #endregion

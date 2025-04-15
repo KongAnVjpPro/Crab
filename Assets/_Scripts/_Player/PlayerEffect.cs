@@ -6,6 +6,10 @@ public class PlayerEffect : PlayerComponent
     [SerializeField] List<GameObject> slashPool;
 
     [SerializeField] ParticleSystem bubbleEffect;
+    [Range(0, 20)]
+    [SerializeField] int occurAfterVelocity;
+    [Range(0, 0.2f)]
+    [SerializeField] float bubbleFormationPeriod;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -24,4 +28,19 @@ public class PlayerEffect : PlayerComponent
     {
         bubbleEffect.Play();
     }
+    #region Particle 
+    float counter;
+    void Update()
+    {
+        counter += Time.deltaTime;
+        if (Mathf.Abs(playerController.rb.velocity.x) > occurAfterVelocity)
+        {
+            if (counter > bubbleFormationPeriod)
+            {
+                bubbleEffect.Play();
+                counter = 0;
+            }
+        }
+    }
+    #endregion
 }
