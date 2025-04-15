@@ -12,6 +12,7 @@ public class PlayerEntity : EntityController
     public GroundCheck groundCheck;
     public WallCheck wallCheck;
     public PlayerDash playerDash;
+    public PlayerEffect playerEffect;
     protected virtual void LoadSprite()
     {
         if (this.sr != null) return;
@@ -62,6 +63,11 @@ public class PlayerEntity : EntityController
         if (playerDash != null) return;
         playerDash = GetComponent<PlayerDash>();
     }
+    protected virtual void LoadPlayerEffect()
+    {
+        if (playerEffect != null) return;
+        playerEffect = GetComponent<PlayerEffect>();
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -75,5 +81,6 @@ public class PlayerEntity : EntityController
         LoadCheckGround();
         LoadWallCheck();
         LoadPlayerDash();
+        LoadPlayerEffect();
     }
 }

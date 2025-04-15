@@ -10,6 +10,7 @@ public class PlayerAttack : PlayerComponent
 
         if (currentCD >= attackCD)
         {
+            AttackAnimation();
             Debug.Log("Attack");
             currentCD = 0;
         }
@@ -20,8 +21,14 @@ public class PlayerAttack : PlayerComponent
         currentCD += Time.deltaTime;
         if (playerController.playerInput.attack)
         {
-            Attack();
+            if (!playerController.pState.dashing)
+                Attack();
+
         }
+    }
+    void AttackAnimation()
+    {
+        playerController.playerAnimator.Attacking();
     }
 
 }

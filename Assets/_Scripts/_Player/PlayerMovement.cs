@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(WallCheck))]
 public class PlayerMovement : PlayerComponent
 {
+
     [Header("Move")]
     [SerializeField] protected float moveSpeed = 5f;
 
@@ -25,6 +26,8 @@ public class PlayerMovement : PlayerComponent
 
     [SerializeField] private float wallJumpDuration;
     [SerializeField] private Vector2 wallJumpingPower;
+
+
     float wallJumpDirection;
     bool isWallSliding;
     bool isWallJumping;
@@ -44,6 +47,7 @@ public class PlayerMovement : PlayerComponent
         WallSlide();
         WallJump();
         PlayAnimation();
+        PlayEffect();
 
     }
     #region Checker
@@ -220,6 +224,13 @@ public class PlayerMovement : PlayerComponent
         playerController.playerAnimator.Running((IsOnGround() && xAxis != 0));
         playerController.playerAnimator.Falling(playerController.rb.velocity.y);
         //dashing anim in dash func (playerdash)
+    }
+    void PlayEffect()
+    {
+        if (IsOnGround() && xAxis != 0)
+        {
+            playerController.playerEffect.PlayRunEffect();
+        }
     }
     #endregion
 }

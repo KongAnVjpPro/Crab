@@ -28,4 +28,8 @@ public class PlayerAnimator : PlayerComponent
     {
         anim.SetTrigger("Dashing");
     }
+    public void Attacking()
+    {
+        anim.SetTrigger("Attacking");
+    }
 }
