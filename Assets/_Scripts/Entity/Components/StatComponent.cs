@@ -5,9 +5,10 @@ public class StatComponent : EntityComponent
     {
         Health, Mana, Stamina
     }
-    protected float currentHealth = 5;
-    protected float currentMana = 5;
-    protected float currentStamina = 5;
+    [Header("Current Stats: ")]
+    [SerializeField] protected float currentHealth = 5;
+    [SerializeField] protected float currentMana = 5;
+    [SerializeField] protected float currentStamina = 5;
     public float CurrentHealth => currentHealth;
     public float CurrentMana => currentMana;
     public float CurrentStamina => currentStamina;

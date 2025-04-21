@@ -32,4 +32,16 @@ public class PlayerAnimator : PlayerComponent
     {
         anim.SetTrigger("Attacking");
     }
+    public void AirAttacking()
+    {
+        anim.SetTrigger("AirAttacking");
+    }
+    public void DownAttacking()
+    {
+        anim.SetTrigger("DownAttacking");
+    }
+    public void Blocking(bool value)
+    {
+        anim.SetBool("Blocking", value);
+    }
 }

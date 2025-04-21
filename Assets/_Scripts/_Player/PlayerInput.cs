@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using UnityEngine;
 public class PlayerInput : PlayerComponent
 {
@@ -9,12 +10,15 @@ public class PlayerInput : PlayerComponent
      dash,
      interact,
      heal,
-     cast;
+     cast,
+     block;
     void GetInput()
     {
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
         attack = Input.GetButtonDown("Attack");
+        block = Input.GetButton("Block");
+
 
         jumpStart = Input.GetButtonDown("Jump");
         jumpPress = Input.GetButton("Jump");
@@ -24,6 +28,7 @@ public class PlayerInput : PlayerComponent
         interact = Input.GetButtonDown("Interact");
         heal = Input.GetButton("Healing");
         cast = Input.GetButtonDown("CastSpell");
+
 
     }
     void Update()

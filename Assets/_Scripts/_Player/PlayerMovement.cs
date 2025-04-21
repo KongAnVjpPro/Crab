@@ -10,7 +10,7 @@ public class PlayerMovement : PlayerComponent
     [SerializeField] bool canMove = true;
     [SerializeField] protected float jumpForce = 5f;
     float xAxis;
-    // float yAxis;
+    float yAxis;
     [Header("Jump")]
 
     [SerializeField] private float jumpBufferFrames = 0.1f;
@@ -35,6 +35,11 @@ public class PlayerMovement : PlayerComponent
     {
         UpdateMoveVariable();
         UpdateJumpVariables();
+        if (playerController.pState.blocking)
+        {
+            Move();
+            return;
+        }
         Dash();
         if (playerController.pState.dashing) return;
         if (!isWallJumping)
@@ -66,7 +71,7 @@ public class PlayerMovement : PlayerComponent
     void UpdateMoveVariable()
     {
         xAxis = playerController.playerInput.xAxis;
-
+        yAxis = playerController.playerInput.yAxis;
     }
     protected virtual void MoveHorizontal(float _xAxis)
     {
@@ -110,6 +115,9 @@ public class PlayerMovement : PlayerComponent
 
     void UpdateJumpVariables()
     {
+
+        playerController.pState.lookingUp = yAxis > 0 ? true : false;
+        playerController.pState.lookingDown = yAxis < 0 ? true : false;
         if (IsOnGround())
         {
             playerController.pState.jumping = false;
