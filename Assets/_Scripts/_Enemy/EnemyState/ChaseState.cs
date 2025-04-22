@@ -4,6 +4,15 @@ public class ChaseState : EnemyState
 {
     public float speed = 3f;
 
+    void Awake()
+    {
+
+    }
+    public override void Init(EnemyStateMachine machine)
+    {
+        base.Init(machine);
+        stateID = EnemyStateID.Chasing;
+    }
     public override void Do()
     {
         Vector2 direction = (stateMachine.player.position - transform.position).normalized;

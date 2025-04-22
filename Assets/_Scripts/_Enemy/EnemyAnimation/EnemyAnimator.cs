@@ -1,7 +1,16 @@
+using System.Diagnostics;
 using UnityEngine;
 public class EnemyAnimator : EnemyComponent
 {
-    [SerializeField] Animator animator;
+    [SerializeField] protected Animator animator;
+    protected virtual void OnEnable()
+    {
+        enemyController.state.OnStateChanged += HandleStateChange;
+    }
+    protected virtual void OnDisable()
+    {
+        enemyController.state.OnStateChanged -= HandleStateChange;
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -11,6 +20,27 @@ public class EnemyAnimator : EnemyComponent
     {
         if (this.animator != null) return;
         this.animator = GetComponent<Animator>();
+    }
+    protected virtual void HandleStateChange(EnemyStateID stateID)
+    {
+        ResetTrigger();
+        switch (stateID)
+        {
+            case EnemyStateID.Patrolling:
+                Patrolling();
+                break;
+            case EnemyStateID.Chasing:
+                Chasing();
+                break;
+            case EnemyStateID.Attacking:
+                Attacking();
+                break;
+
+        }
+    }
+    public virtual void ResetTrigger()
+    {
+
     }
     public virtual void Attacking()
     {

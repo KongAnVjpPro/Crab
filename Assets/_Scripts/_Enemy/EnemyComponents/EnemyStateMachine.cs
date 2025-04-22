@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class EnemyStateMachine : EnemyComponent
@@ -9,7 +10,8 @@ public class EnemyStateMachine : EnemyComponent
     public PatrolState patrolState;
     public ChaseState chaseState;
     public AttackState attackState;
-
+    [Header("Action: ")]
+    public Action<EnemyStateID> OnStateChanged;
     [SerializeField] private EnemyState currentState;
 
     protected override void Awake()
@@ -18,6 +20,7 @@ public class EnemyStateMachine : EnemyComponent
         if (patrolState != null) patrolState.Init(this);
         if (chaseState != null) chaseState.Init(this);
         if (attackState != null) attackState.Init(this);
+        if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
     }
 
     private void Start()
@@ -48,6 +51,8 @@ public class EnemyStateMachine : EnemyComponent
         currentState?.Exit();
         currentState = newState;
         currentState.Enter();
+
+        OnStateChanged?.Invoke(currentState.StateID);
     }
 
     void DecideNextState()
@@ -66,4 +71,7 @@ public class EnemyStateMachine : EnemyComponent
             ChangeState(patrolState);
         }
     }
+
+
+
 }
