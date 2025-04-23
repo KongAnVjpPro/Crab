@@ -22,10 +22,12 @@ public class GroundCheck : EntityComponent
         Physics2D.Raycast(rightCheck, Vector2.down, groundCheckY, whatIsGround) ||
         Physics2D.Raycast(leftCheck, Vector2.down, groundCheckY, whatIsGround))
         {
+
             return true;
         }
         else
         {
+
             return false;
         }
 

@@ -228,7 +228,7 @@ public class PlayerMovement : PlayerComponent
     void PlayAnimation()
     {
 
-        playerController.playerAnimator.Jumping(!IsOnGround() && playerController.rb.velocity.y > 0);
+        playerController.playerAnimator.Jumping(!IsOnGround() && playerController.rb.velocity.y > 0.1f);
         playerController.playerAnimator.Running((IsOnGround() && xAxis != 0));
         playerController.playerAnimator.Falling(playerController.rb.velocity.y);
         //dashing anim in dash func (playerdash)

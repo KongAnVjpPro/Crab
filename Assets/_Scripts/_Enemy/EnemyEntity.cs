@@ -6,6 +6,8 @@ public class EnemyEntity : EntityController
     public WallCheck wallCheck;
     public EnemyStateMachine state;
     public EnemyAnimator enemyAnimator;
+    public MovementComponent enemyMove;
+    public EnemyRotator enemyRotator;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -14,6 +16,8 @@ public class EnemyEntity : EntityController
         this.LoadWallCheck();
         this.LoadGroundCheck();
         this.LoadAnimator();
+        this.LoadMovement();
+        this.LoadRotator();
     }
     protected virtual void LoadStat()
     {
@@ -39,5 +43,15 @@ public class EnemyEntity : EntityController
     {
         if (this.enemyAnimator != null) return;
         this.enemyAnimator = GetComponent<EnemyAnimator>();
+    }
+    protected virtual void LoadMovement()
+    {
+        if (this.enemyMove != null) return;
+        this.enemyMove = GetComponent<MovementComponent>();
+    }
+    protected virtual void LoadRotator()
+    {
+        if (this.enemyRotator != null) return;
+        this.enemyRotator = GetComponent<EnemyRotator>();
     }
 }
