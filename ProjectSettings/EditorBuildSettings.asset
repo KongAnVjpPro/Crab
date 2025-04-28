@@ -17,4 +17,58 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Cave_2.unity
     guid: 8632a66b298d81f41acee975e663d8d1
+  - enabled: 1
+    path: Assets/Scenes/Cave_Tutorial.unity
+    guid: d892ebaa014431f43a5800f924572780
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_1.unity
+    guid: e31f5fa0e47af444f846d32cf43d6a30
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_2.unity
+    guid: 61af0862c4d559048b76728da612984c
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_3.unity
+    guid: 3181f027bb8a98b4da0de58f979fa365
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_4.unity
+    guid: 9020b5eef4f0086408ff03de3ff6371e
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_5.unity
+    guid: 57c2f898a7935584ca22eb7863a0ebd6
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_6.unity
+    guid: 0763d2c2d85e739498b02e5a35dfe4b6
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_7.unity
+    guid: 898c631fbfb40454bbc2cdaba4e6f71c
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_8.unity
+    guid: 0e6549d5b4574f14a99780e1e7b2cc76
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_9.unity
+    guid: d5cebd5a2173e2d44b03fc021c0f446e
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_10.unity
+    guid: 7510b7c85109c754db9a5e6fd22e41df
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_11.unity
+    guid: c1b4c34ad0fcf2d49b10c33ac92f8035
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_12.unity
+    guid: b7952fe80c026ab4088be479b3a36617
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_13.unity
+    guid: 0df427fdfd78f3d4d94b6f5d8a1d8e96
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_14.unity
+    guid: 0c215f170c65d64488d803b72efacb16
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_15.unity
+    guid: 4bad3a50c6628ce4f81f22d72365c5c1
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_16.unity
+    guid: e43a44a48f3547247b67bce8513bd59e
+  - enabled: 1
+    path: Assets/Scenes/Cave_SeaWeedForest/Cave_SWF_17.unity
+    guid: 7f9b143b5843f614aa7540fdfbdaecce
   m_configObjects: {}
