@@ -13,7 +13,7 @@ public class CameraFollow : MyMonobehaviour
     }
     void Start()
     {
-        target = GameController.Instance.playerController.gameObject;
+        target = FindAnyObjectByType<PlayerEntity>().gameObject;
     }
     public void CameraMove()
     {

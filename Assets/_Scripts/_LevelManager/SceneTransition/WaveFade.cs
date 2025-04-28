@@ -35,9 +35,6 @@ public class WaveFade : New_SceneTransition
         seq.Join(lowerSaw.DORotate(new Vector3(0, 0, 0), 1f)).SetEase(Ease.InBack);
         seq.Join(canvasGroup.DOFade(0, .75f).SetEase(Ease.Linear));
         yield return seq.WaitForCompletion();
-        if (!GameController.Instance.playerController.pState.lookingRight)
-        {
-            GameController.Instance.playerController.transform.localScale = new Vector2(-1, 1);
-        }
+
     }
 }

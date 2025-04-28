@@ -21,14 +21,14 @@ public class EnemyStateMachine : EnemyComponent
         if (patrolState != null) patrolState.Init(this);
         if (chaseState != null) chaseState.Init(this);
         if (attackState != null) attackState.Init(this);
-        if (player == null) player = PlayerEntity.Instance.transform;
+        if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
     }
 
     private void Start()
     {
         if (patrolState != null)
             ChangeState(patrolState);
-        if (player == null) player = PlayerEntity.Instance.transform;
+        if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
     }
 
     private void Update()

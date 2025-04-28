@@ -14,23 +14,6 @@ public class PlayerEntity : EntityController
     public PlayerDash playerDash;
     public PlayerEffect playerEffect;
     public PlayerBlocking playerBlocking;
-    private static PlayerEntity instance;
-    public static PlayerEntity Instance => instance;
-    protected virtual void LoadSingleton()
-    {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
-        {
-            if (instance != this)
-            {
-                Destroy(gameObject);
-            }
-        }
-    }
     protected virtual void LoadSprite()
     {
         if (this.sr != null) return;
@@ -94,7 +77,6 @@ public class PlayerEntity : EntityController
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        LoadSingleton();
         this.LoadSprite();
         LoadMovement();
         LoadAnim();

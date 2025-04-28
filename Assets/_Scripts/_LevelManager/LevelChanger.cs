@@ -8,14 +8,14 @@ public class LevelChanger : MyMonobehaviour
 
     public void EnterNewZone()
     {
-        if (PlayerEntity.Instance.pState.walkIntoNewScene) return;
+        // if (PlayerEntity.Instance.pState.walkIntoNewScene) return;
         LevelConnection.ActiveConnection = _connection;//luu connect tu level truoc
         LevelManager.Instance.LoadScene(_targetSceneName, "WaveFade");
-        PlayerEntity.Instance.pState.walkIntoNewScene = true;
+        // PlayerEntity.Instance.pState.walkIntoNewScene = true;
     }
     public void ExitTrigger()
     {
-        PlayerEntity.Instance.pState.walkIntoNewScene = false;
+        // PlayerEntity.Instance.pState.walkIntoNewScene = false;
     }
     protected override void Awake()
     {
@@ -23,7 +23,7 @@ public class LevelChanger : MyMonobehaviour
         if (_connection == LevelConnection.ActiveConnection)
         {
             // Debug.Log("ye");
-            PlayerEntity.Instance.transform.position = _spawnPoint.position;
+            // PlayerEntity.Instance.transform.position = _spawnPoint.position;
         }
     }
     void Start()
