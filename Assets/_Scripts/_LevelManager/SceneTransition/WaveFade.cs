@@ -2,7 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
-public class WaveFade : New_SceneTransition
+public class WaveFade : AnimationInOut
 {
     public RectTransform upperSaw;
     public RectTransform lowerSaw;

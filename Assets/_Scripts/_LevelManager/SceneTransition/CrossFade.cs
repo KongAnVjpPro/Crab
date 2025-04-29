@@ -1,7 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
-public class CrossFade : New_SceneTransition
+public class CrossFade : AnimationInOut
 {
 
 

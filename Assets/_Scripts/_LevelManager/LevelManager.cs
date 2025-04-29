@@ -8,7 +8,7 @@ public class LevelManager : MyMonobehaviour
     private static LevelManager instance;
     public static LevelManager Instance => instance;
     public GameObject transitionContainer;
-    [SerializeField] private New_SceneTransition[] transitions;
+    [SerializeField] private AnimationInOut[] transitions;
     // private SceneTransition
     public Slider progressBar;
 
@@ -34,7 +34,7 @@ public class LevelManager : MyMonobehaviour
     }
     void Start()
     {
-        transitions = transitionContainer.GetComponentsInChildren<New_SceneTransition>();
+        transitions = transitionContainer.GetComponentsInChildren<AnimationInOut>();
     }
     public void LoadScene(string sceneName, string transitionName)
     {
@@ -43,7 +43,7 @@ public class LevelManager : MyMonobehaviour
 
     private IEnumerator LoadSceneAsync(string sceneName, string transitionName)
     {
-        New_SceneTransition transition = transitions.First(t => t.name == transitionName);
+        AnimationInOut transition = transitions.First(t => t.name == transitionName);
 
         AsyncOperation scene = SceneManager.LoadSceneAsync(sceneName);
         scene.allowSceneActivation = false;

@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-public abstract class New_SceneTransition : MyMonobehaviour
+public abstract class AnimationInOut : MyMonobehaviour
 {
     public CanvasGroup canvasGroup;
     protected override void LoadComponents()
