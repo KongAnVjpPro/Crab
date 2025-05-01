@@ -4,13 +4,13 @@ public class GameController : MyMonobehaviour
     private static GameController instance;
     public static GameController Instance => instance;
 
-    public PlayerEntity playerController;
+    // public PlayerEntity playerController;
 
     protected override void LoadComponents()
     {
         base.LoadComponents();
         this.LoadSingleton();
-        this.LoadPlayerEntity();
+        // this.LoadPlayerEntity();
     }
     protected virtual void LoadSingleton()
     {
@@ -27,9 +27,9 @@ public class GameController : MyMonobehaviour
         }
         DontDestroyOnLoad(gameObject);
     }
-    protected virtual void LoadPlayerEntity()
-    {
-        if (this.playerController != null) return;
-        playerController = GameObject.FindAnyObjectByType<PlayerEntity>();
-    }
+    // protected virtual void LoadPlayerEntity()
+    // {
+    //     if (this.playerController != null) return;
+    //     playerController = GameObject.FindAnyObjectByType<PlayerEntity>();
+    // }
 }

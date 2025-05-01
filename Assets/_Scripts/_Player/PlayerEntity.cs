@@ -1,6 +1,24 @@
 using UnityEngine;
 public class PlayerEntity : EntityController
 {
+    private static PlayerEntity instance;
+    public static PlayerEntity Instance => instance;
+
+    protected virtual void LoadSingleton()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+        DontDestroyOnLoad(gameObject);
+    }
 
     public PlayerAnimator playerAnimator;
     public PlayerInput playerInput;
@@ -77,6 +95,8 @@ public class PlayerEntity : EntityController
     protected override void LoadComponents()
     {
         base.LoadComponents();
+        LoadSingleton();
+
         this.LoadSprite();
         LoadMovement();
         LoadAnim();

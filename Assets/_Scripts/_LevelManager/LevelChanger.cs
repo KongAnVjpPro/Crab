@@ -31,7 +31,7 @@ public class LevelChanger : MyMonobehaviour
         if (_connection == LevelConnection.ActiveConnection)
         {
             // Debug.Log("ye");
-            FindObjectOfType<PlayerEntity>().transform.position = _spawnPoint.position;
+            PlayerEntity.Instance.transform.position = _spawnPoint.position;
         }
     }
 }

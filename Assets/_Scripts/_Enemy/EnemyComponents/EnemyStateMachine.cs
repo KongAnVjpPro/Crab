@@ -28,7 +28,7 @@ public class EnemyStateMachine : EnemyComponent
     {
         if (patrolState != null)
             ChangeState(patrolState);
-        if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
+        player = PlayerEntity.Instance.transform;
     }
 
     private void Update()

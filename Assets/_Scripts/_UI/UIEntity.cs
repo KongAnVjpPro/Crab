@@ -4,6 +4,7 @@ public class UIEntity : EntityController
     private static UIEntity instance;
     public static UIEntity Instance => instance;
     public UIPlayerStat playerStat;
+    public DialogueManager dialogueManager;
 
 
 
@@ -27,6 +28,12 @@ public class UIEntity : EntityController
         base.LoadComponents();
         this.LoadSingleton();
         this.LoadPlayerStat();
+        LoadDialog();
+    }
+    protected virtual void LoadDialog()
+    {
+        if (this.dialogueManager != null) return;
+        this.dialogueManager = GetComponent<DialogueManager>();
     }
     protected virtual void LoadPlayerStat()
     {

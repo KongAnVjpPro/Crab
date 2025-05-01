@@ -2957,6 +2957,7 @@ GameObject:
   - component: {fileID: 489481722499256601}
   - component: {fileID: 7875964709075103109}
   - component: {fileID: 5340320610799199374}
+  - component: {fileID: 5978737380963478387}
   m_Layer: 5
   m_Name: LevelManager
   m_TagString: Untagged
@@ -3063,6 +3064,18 @@ MonoBehaviour:
   transitionContainer: {fileID: 2651319330602152699}
   transitions: []
   progressBar: {fileID: 7393336260191751585}
+--- !u!225 &5978737380963478387
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7058206989388585539}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &7067921730581824723
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,8 +9,8 @@ public class UIPlayerStat : UIComponent
     [SerializeField] float lerpSpeed = 0.05f;
     private void Init()
     {
-        this.totalHealth = GameController.Instance.playerController.playerStat.TotalHealth;
-        this.currentHealth = GameController.Instance.playerController.playerStat.CurrentHealth;
+        this.totalHealth = PlayerEntity.Instance.playerStat.TotalHealth;
+        this.currentHealth = PlayerEntity.Instance.playerStat.CurrentHealth;
         healthSlider.maxValue = totalHealth;
         easeHealthSlider.maxValue = totalHealth;
     }
