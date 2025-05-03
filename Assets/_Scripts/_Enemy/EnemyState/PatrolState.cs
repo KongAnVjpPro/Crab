@@ -1,6 +1,6 @@
 using Cinemachine.Utility;
 using UnityEngine;
-
+using Pathfinding;
 public class PatrolState : EnemyState
 {
     private float timer;
@@ -64,9 +64,34 @@ public class PatrolState : EnemyState
     void ReturnToCenter()
     {
         Vector3 dirToCenter = (patrolCenter - transform.position).normalized;
-        stateMachine.RotateZ(new Vector2(dirToCenter.x, dirToCenter.y));
-        stateMachine.Flip(dirToCenter.x >= 0 ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
-        stateMachine.rb.velocity = dirToCenter * speed;
+
+        if (IsObstacleInDirection(dirToCenter))
+        {
+
+            Vector2[] alternateDirs = new Vector2[]
+            {
+            new Vector2(dirToCenter.x, 0).normalized,
+            new Vector2(0, dirToCenter.y).normalized,
+            new Vector2(dirToCenter.x, dirToCenter.y + 0.5f).normalized,
+            new Vector2(dirToCenter.x, dirToCenter.y - 0.5f).normalized,
+            new Vector2(-dirToCenter.x, dirToCenter.y).normalized
+            };
+
+            foreach (Vector2 dir in alternateDirs)
+            {
+                if (!IsObstacleInDirection(dir))
+                {
+                    MoveInDirection(dir);
+                    return;
+                }
+            }
+            stateMachine.rb.velocity = Vector2.zero;
+        }
+        else
+        {
+
+            MoveInDirection(dirToCenter);
+        }
     }
     private bool IsObstacleAhead()
     {
@@ -79,4 +104,21 @@ public class PatrolState : EnemyState
     {
         moveDirection *= -1;
     }
+    bool IsObstacleInDirection(Vector2 direction)
+    {
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, obstacleCheckDistance, LayerMask.GetMask("Ground"));
+        return hit.collider != null;
+
+    }
+
+    void MoveInDirection(Vector2 direction)
+    {
+        stateMachine.rb.velocity = direction * speed;
+        stateMachine.RotateZ(direction);
+        stateMachine.Flip(direction.x >= 0 ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
+    }
+
+
+
+    public AIPath aiPath;
 }

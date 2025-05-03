@@ -22,14 +22,31 @@ public class Dialogue
 public class DialogueTrigger : MonoBehaviour
 {
     public Dialogue dialogue;
+    [SerializeField] bool interact = false;
     public void TriggerDialogue()
     {
         UIEntity.Instance.dialogueManager.StartDialogue(dialogue);
     }
-    void OnTriggerStay2D(Collider2D collision)
+    void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Player" && PlayerEntity.Instance.playerInput.interact)
+        if (collision.tag == "Player")
         {
+
+            interact = true;
+        }
+    }
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Player")
+        {
+            interact = false;
+        }
+    }
+    void Update()
+    {
+        if (interact)
+        {
+            if (!PlayerEntity.Instance.playerInput.interact) return;
             if (UIEntity.Instance.dialogueManager.isDialogueActive)
                 return;
             TriggerDialogue();
