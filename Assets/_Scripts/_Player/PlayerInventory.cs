@@ -8,6 +8,7 @@ public class PlayerInventory : PlayerComponent
     {
         base.LoadComponents();
         Init();
+        UIEntity.Instance.uiInventory.SetInventory(inventory);
     }
     void Init()
     {
