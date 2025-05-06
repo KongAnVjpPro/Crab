@@ -32,6 +32,7 @@ public class PlayerEntity : EntityController
     public PlayerDash playerDash;
     public PlayerEffect playerEffect;
     public PlayerBlocking playerBlocking;
+    public PlayerInventory playerInventory;
     protected virtual void LoadSprite()
     {
         if (this.sr != null) return;
@@ -92,6 +93,11 @@ public class PlayerEntity : EntityController
         if (playerBlocking != null) return;
         playerBlocking = GetComponent<PlayerBlocking>();
     }
+    protected virtual void LoadInventory()
+    {
+        if (playerInventory != null) return;
+        playerInventory = GetComponent<PlayerInventory>();
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -109,6 +115,7 @@ public class PlayerEntity : EntityController
         LoadPlayerDash();
         LoadPlayerEffect();
         LoadPlayerBlock();
+        LoadInventory();
 
     }
 }

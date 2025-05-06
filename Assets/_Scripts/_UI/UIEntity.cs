@@ -5,6 +5,7 @@ public class UIEntity : EntityController
     public static UIEntity Instance => instance;
     public UIPlayerStat playerStat;
     public DialogueManager dialogueManager;
+    public UIInventory uiInventory;
 
 
 
@@ -26,9 +27,18 @@ public class UIEntity : EntityController
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        this.LoadSingleton();
+
         this.LoadPlayerStat();
         LoadDialog();
+        this.LoadUIInventory();
+
+
+        this.LoadSingleton();
+    }
+    protected virtual void LoadUIInventory()
+    {
+        if (this.uiInventory != null) return;
+        uiInventory = GetComponent<UIInventory>();
     }
     protected virtual void LoadDialog()
     {
