@@ -55,4 +55,12 @@ public class StatComponent : EntityComponent
                 break;
         }
     }
+    public void Heal(float amount)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, totalHealth);
+    }
+    public bool IsDead()
+    {
+        return currentHealth <= 0;
+    }
 }

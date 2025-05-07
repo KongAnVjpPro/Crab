@@ -3,6 +3,8 @@ public class GameController : MyMonobehaviour
 {
     private static GameController instance;
     public static GameController Instance => instance;
+    public bool isBlockPlayerControl = false;
+    public ItemSpawner itemSpawner;
 
     // public PlayerEntity playerController;
 
@@ -11,6 +13,7 @@ public class GameController : MyMonobehaviour
         base.LoadComponents();
         this.LoadSingleton();
         // this.LoadPlayerEntity();
+        this.LoadItemSpawner();
     }
     protected virtual void LoadSingleton()
     {
@@ -32,4 +35,9 @@ public class GameController : MyMonobehaviour
     //     if (this.playerController != null) return;
     //     playerController = GameObject.FindAnyObjectByType<PlayerEntity>();
     // }
+    protected virtual void LoadItemSpawner()
+    {
+        if (this.itemSpawner != null) return;
+        this.itemSpawner = GetComponent<ItemSpawner>();
+    }
 }

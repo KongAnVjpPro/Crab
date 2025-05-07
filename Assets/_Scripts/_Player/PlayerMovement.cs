@@ -33,8 +33,10 @@ public class PlayerMovement : PlayerComponent
     bool isWallJumping;
     void Update()
     {
+
         UpdateMoveVariable();
         UpdateJumpVariables();
+
         if (playerController.pState.blocking)
         {
             Move();

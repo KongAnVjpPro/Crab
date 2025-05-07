@@ -11,6 +11,11 @@ public class TriggerZone : MyMonobehaviour
     // public LayerMask playerLayer;
     public UnityEvent onTriggerEnter;
     public UnityEvent onTriggerExit;
+    public void ResetTrigger()
+    {
+        alreadyEntered = false;
+        alreadyExited = false;
+    }
     void OnTriggerEnter2D(Collider2D collision)
     {
         if (alreadyEntered)

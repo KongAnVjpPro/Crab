@@ -11,9 +11,30 @@ public class PlayerInput : PlayerComponent
      interact,
      heal,
      cast,
-     block;
+     block,
+     inventory;
     void GetInput()
     {
+        inventory = Input.GetKeyDown(KeyCode.I);
+
+
+        if (GameController.Instance.isBlockPlayerControl)
+        {
+            xAxis = 0;
+            yAxis = 0;
+            attack = false;
+            block = false;
+            jumpStart = false;
+            jumpPress = false;
+            jumpEnd = false;
+            dash = false;
+            interact = false;
+            heal = false;
+            cast = false;
+
+            return;
+        }
+        //Player controls
         xAxis = Input.GetAxis("Horizontal");
         yAxis = Input.GetAxis("Vertical");
         attack = Input.GetButtonDown("Attack");
