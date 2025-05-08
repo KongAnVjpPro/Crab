@@ -110,16 +110,23 @@ public class UIInventory : UIComponent
         }
     }
 
-    private void RefreshInventoryItems()
+    public void RefreshInventoryItems()
     {
         List<ItemData> items = inventory.GetItems();
-        for (int i = 0; i < items.Count; i++)
+        for (int i = 0; i < itemSlots.Count; i++)
         {
-            if (itemSlots[i] == null)
+            // if (itemSlots[i] == null)
+            // {
+            //     itemSlots[i] = Instantiate(itemSlotTemplate, itemSlotContainer);
+            //     itemSlots[i].gameObject.SetActive(true);
+            // }
+            if (i > items.Count - 1)
             {
-                itemSlots[i] = Instantiate(itemSlotTemplate, itemSlotContainer);
-                itemSlots[i].gameObject.SetActive(true);
+                itemSlots[i].ClearItemUI();
+                itemSlots[i].State = UIInventorySlot.SlotState.empty;
+                continue;
             }
+
             itemSlots[i].State = UIInventorySlot.SlotState.occupied;
             itemSlots[i].UpdateItemUI(items[i]);
 

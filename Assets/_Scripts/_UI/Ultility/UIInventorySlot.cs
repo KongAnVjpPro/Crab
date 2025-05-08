@@ -80,6 +80,7 @@ public class UIInventorySlot : MyMonobehaviour
     }
     public void UpdateItemUI(ItemData itemData)
     {
+
         itemImage.sprite = itemData.itemSO.itemSprite;
         itemCountText.text = itemData.amount.ToString();
         currentItem = itemData;

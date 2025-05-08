@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 public class UIPlayerStat : UIComponent
@@ -14,18 +15,39 @@ public class UIPlayerStat : UIComponent
         healthSlider.maxValue = totalHealth;
         easeHealthSlider.maxValue = totalHealth;
     }
+    void OnEnable()
+    {
+        StartCoroutine(RegisterAction());
+        // PlayerEntity.Instance.playerStat.OnStatChange += UpdateStatUI;
+    }
+    void OnDisable()
+    {
+        PlayerEntity.Instance.playerStat.OnStatChange -= UpdateStatUI;
+    }
     void Start()
     {
         Init();
+        // UpdateStatUI();
+    }
+    IEnumerator RegisterAction()
+    {
+        // Init();
+
+        yield return new WaitUntil(() => PlayerEntity.Instance != null && PlayerEntity.Instance.playerStat != null);
+
+        PlayerEntity.Instance.playerStat.OnStatChange += UpdateStatUI;
+        UpdateStatUI();
+
     }
     void Update()
     {
-        TakeDamage();
-        if (healthSlider.value != currentHealth)
-        {
-            healthSlider.value = currentHealth;
+        // TakeDamage();
+        // if (healthSlider.value != currentHealth)
+        // {
+        //     healthSlider.value = currentHealth;
 
-        }
+        // }
+        // TakeDamage();
         if (healthSlider.value != easeHealthSlider.value)
         {
             easeHealthSlider.value = Mathf.Lerp(easeHealthSlider.value, currentHealth, lerpSpeed);
@@ -38,7 +60,18 @@ public class UIPlayerStat : UIComponent
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            currentHealth -= 1;
+            PlayerEntity.Instance.playerStat.ChangeCurrentStats(StatComponent.StatType.Health, -1);
         }
+    }
+    void UpdateStatUI()
+    {
+        currentHealth = PlayerEntity.Instance.playerStat.CurrentHealth;
+        totalHealth = PlayerEntity.Instance.playerStat.TotalHealth;
+
+        healthSlider.maxValue = totalHealth;
+        easeHealthSlider.maxValue = totalHealth;
+
+        healthSlider.value = currentHealth;
+        // Debug.Log("b");
     }
 }

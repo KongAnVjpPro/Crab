@@ -5,6 +5,11 @@ public class PlayerAttack : PlayerComponent
     [SerializeField] float attackCD = 1f;
     [SerializeField] float currentCD = 0;
 
+    [SerializeField] bool canAttack = false;
+    private bool attackBuffered = false;
+    private float bufferDuration = 0.2f;
+    private float bufferTimer = 0f;
+
     [Header("Attack Config: ")]
     [SerializeField] Transform forwardAttackPos;
     [SerializeField] Transform downAttackPos;
@@ -42,21 +47,60 @@ public class PlayerAttack : PlayerComponent
 
         if (currentCD >= attackCD)
         {
+            playerController.pState.attacking = true;
             AttackAnimation();
             FindAndAttack();
             currentCD = 0;
+            attackBuffered = false;
         }
 
     }
     void Update()
     {
         currentCD += Time.deltaTime;
+        // if (playerController.playerInput.attack)
+        // {
+        //     if (playerController.pState.dashing) return;
+        //     UpdateAttackVariable();
+        //     Attack();
+
+        // }
+
+        CheckAttackBuffer();
+
         if (playerController.playerInput.attack)
         {
             if (playerController.pState.dashing) return;
-            UpdateAttackVariable();
-            Attack();
 
+            UpdateAttackVariable();
+
+            if (currentCD >= attackCD)
+            {
+                Attack();
+            }
+            else
+            {
+                attackBuffered = true;
+                bufferTimer = bufferDuration;
+            }
+        }
+
+    }
+    private void CheckAttackBuffer()
+    {
+        if (!attackBuffered) return;
+
+        bufferTimer -= Time.deltaTime;
+        if (bufferTimer <= 0f)
+        {
+            attackBuffered = false;
+            return;
+        }
+
+        if (currentCD >= attackCD)
+        {
+            Attack();
+            attackBuffered = false;
         }
     }
     void UpdateAttackVariable()
@@ -106,20 +150,29 @@ public class PlayerAttack : PlayerComponent
         switch (currentState)
         {
             case AttackState.forwardAttack:
-                currentAttackPos.position = forwardAttackPos.position;
+                SetAttackPosition(forwardAttackPos);
                 break;
             case AttackState.upAttack:
-                currentAttackPos.position = upAttackPos.position;
+                SetAttackPosition(upAttackPos);
                 break;
             case AttackState.downAttack:
-                currentAttackPos.position = downAttackPos.position;
+                SetAttackPosition(downAttackPos);
                 break;
-                //   currentAttackPos.position = forwardAttackPos.position;
         }
+    }
+    private void SetAttackPosition(Transform pos)
+    {
+        if (currentAttackPos != null)
+            currentAttackPos.position = pos.position;
     }
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(currentAttackPos.position, attackRange);
+    }
+    public void EndAttack()
+    {
+        playerController.pState.attacking = false;
+        Debug.Log("End");
     }
 }

@@ -87,6 +87,7 @@ public class PlayerMovement : PlayerComponent
 
     void Flip()
     {
+        if (playerController.pState.attacking) return;
         if (xAxis < 0)
         {
             transform.localScale = new Vector2(-1, transform.localScale.y);

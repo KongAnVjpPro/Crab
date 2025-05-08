@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 public class PlayerAnimator : PlayerComponent
 {
@@ -43,5 +44,16 @@ public class PlayerAnimator : PlayerComponent
     public void Blocking(bool value)
     {
         anim.SetBool("Blocking", value);
+    }
+
+
+    void LateUpdate()
+    {
+        AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+
+        if (playerController.pState.attacking && !state.IsTag("Attack"))
+        {
+            playerController.pState.attacking = false;
+        }
     }
 }

@@ -8,6 +8,7 @@ public class PlayerState : MyMonobehaviour
     public bool blocking = false;
     public bool lookingRight;
     public bool alive = true;
+    public bool attacking = false;
     // public bool walkIntoNewScene = false;
     // public bool onGround;
 

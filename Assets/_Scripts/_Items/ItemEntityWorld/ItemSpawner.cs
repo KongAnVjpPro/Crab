@@ -54,10 +54,10 @@ public class ItemSpawner : MyMonobehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SpawnRandomItem();
-        }
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     SpawnRandomItem();
+        // }
     }
     #region  Test Spawn Item
     void LoadRes()

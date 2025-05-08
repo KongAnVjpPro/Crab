@@ -26,7 +26,7 @@ public class Inventory
     {
         return itemList;
     }
-    ItemData FindItem(ItemSO itemSO)
+    public ItemData FindItem(ItemSO itemSO)
     {
         foreach (var item in itemList)
         {

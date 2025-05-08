@@ -1,6 +1,11 @@
+using System;
 using UnityEngine;
 public class PlayerEntity : EntityController
 {
+
+    // public static event Action OnPlayerEntityReady;
+
+
     private static PlayerEntity instance;
     public static PlayerEntity Instance => instance;
 
@@ -102,6 +107,7 @@ public class PlayerEntity : EntityController
     {
         base.LoadComponents();
         LoadSingleton();
+        // OnPlayerEntityReady?.Invoke();
 
         this.LoadSprite();
         LoadMovement();

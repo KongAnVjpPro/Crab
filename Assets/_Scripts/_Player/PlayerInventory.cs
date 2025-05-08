@@ -11,18 +11,37 @@ public class PlayerInventory : PlayerComponent
         base.LoadComponents();
         Init();
         UIEntity.Instance.uiInventory.SetInventory(inventory);
-        targetUseItem = PlayerEntity.Instance.playerStat;
+        targetUseItem = playerController.playerStat;
     }
     void Init()
     {
         // inventory = new Inventory();
     }
+
     public void AddItem(ItemData item)
     {
 
 
         inventory.AddItem(item);
+        UIEntity.Instance.uiInventory.SetInventory(inventory);
         // UIEntity.Instance.uiInventory.UpdateInventoryUI(inventory);z
+    }
+    public ItemData GetItem(ItemSO itemSO, int amount)
+    {
+        ItemData current = inventory.FindItem(itemSO);
+        if (current == null)
+        {
+            return null;
+        }
+        int newAmount = Mathf.Clamp(current.amount - amount, 0, current.itemSO.maxStack);
+        int amountGet = newAmount == 0 ? current.amount : amount;
+        current.amount = newAmount;
+        if (current.amount == 0)
+        {
+            inventory.GetItems().Remove(current);
+        }
+        UIEntity.Instance.uiInventory.SetInventory(inventory);
+        return new ItemData { itemSO = current.itemSO, amount = amountGet };
     }
     public bool IsFullStack(ItemData item)
     {

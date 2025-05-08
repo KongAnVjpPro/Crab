@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: TinySW
   m_EditorClassIdentifier: 
   itemType: 1
+  itemEffectSO: {fileID: 11400000, guid: 3357c8d51ee542044b1df04ea9f9e0f1, type: 2}
   itemName: TinySW
   itemSprite: {fileID: 21300000, guid: e7e94c3be379f524ab69a9afe649cbe9, type: 3}
-  itemDescription: 
+  itemDescription: Heal 1 unit HP
   maxStack: 10
