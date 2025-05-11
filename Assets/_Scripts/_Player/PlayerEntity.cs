@@ -1,4 +1,5 @@
 using System;
+using System.Net.Cache;
 using UnityEngine;
 public class PlayerEntity : EntityController
 {
@@ -38,6 +39,7 @@ public class PlayerEntity : EntityController
     public PlayerEffect playerEffect;
     public PlayerBlocking playerBlocking;
     public PlayerInventory playerInventory;
+    public Recoil playerRecoil;
     protected virtual void LoadSprite()
     {
         if (this.sr != null) return;
@@ -103,6 +105,11 @@ public class PlayerEntity : EntityController
         if (playerInventory != null) return;
         playerInventory = GetComponent<PlayerInventory>();
     }
+    protected virtual void LoadRecoil()
+    {
+        if (playerRecoil != null) return;
+        playerRecoil = GetComponent<Recoil>();
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -122,6 +129,7 @@ public class PlayerEntity : EntityController
         LoadPlayerEffect();
         LoadPlayerBlock();
         LoadInventory();
+        LoadRecoil();
 
     }
 }

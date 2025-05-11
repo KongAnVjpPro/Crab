@@ -5197,6 +5197,8 @@ GameObject:
   - component: {fileID: 2074640331871181885}
   - component: {fileID: 34954747094469670}
   - component: {fileID: 834889689617771076}
+  - component: {fileID: 2132157163461145044}
+  - component: {fileID: 7840035367646998498}
   m_Layer: 7
   m_Name: NewPlayer
   m_TagString: Player
@@ -5372,6 +5374,8 @@ MonoBehaviour:
   playerDash: {fileID: 3866344768732577095}
   playerEffect: {fileID: 34954747094469670}
   playerBlocking: {fileID: 834889689617771076}
+  playerInventory: {fileID: 2132157163461145044}
+  playerRecoil: {fileID: 7840035367646998498}
 --- !u!114 &9000300576124824971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5386,8 +5390,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
   damage: 1
-  attackCD: 0.1
+  attackCD: 0.5
   currentCD: 0
+  canAttack: 0
   forwardAttackPos: {fileID: 8423833097196182805}
   downAttackPos: {fileID: 7607920816462466494}
   upAttackPos: {fileID: 7542129324493734015}
@@ -5476,6 +5481,7 @@ MonoBehaviour:
   heal: 0
   cast: 0
   block: 0
+  inventory: 0
 --- !u!114 &8178815624067609224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5534,6 +5540,7 @@ MonoBehaviour:
   blocking: 0
   lookingRight: 0
   alive: 1
+  attacking: 0
 --- !u!114 &2074640331871181885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5581,6 +5588,43 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 5307288971361760253}
+--- !u!114 &2132157163461145044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466684574492011472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf37890f23c1b144e99a86ac07ec2be0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerController: {fileID: 5307288971361760253}
+  inventory:
+    itemList:
+    - itemSO: {fileID: 11400000, guid: 1ff35764c8c95c3438d8610b7b8adf34, type: 2}
+      amount: 2
+    - itemSO: {fileID: 11400000, guid: a2227390cb83b7141a518be71c248a45, type: 2}
+      amount: 3
+    - itemSO: {fileID: 11400000, guid: d21d976a356f74844bc9850b8fa75775, type: 2}
+      amount: 4
+  targetUseItem: {fileID: 0}
+  maxSlots: 12
+--- !u!114 &7840035367646998498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4466684574492011472}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9d49bc4c5c7f3408d4691ae4b94976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recoilXSpeed: 10
+  recoilYSpeed: 5
 --- !u!1001 &7429909385318662627
 PrefabInstance:
   m_ObjectHideFlags: 0

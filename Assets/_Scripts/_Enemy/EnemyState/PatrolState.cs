@@ -1,124 +1,182 @@
 using Cinemachine.Utility;
 using UnityEngine;
 using Pathfinding;
+using Unity.VisualScripting;
+using UnityEngine.EventSystems;
 public class PatrolState : EnemyState
 {
     private float timer;
     public float patrolDuration = 3f;
     public float speed = 2f;
     [SerializeField] Vector3 patrolCenter;
+    [SerializeField] Vector2 currentDir = new Vector2(1, 0);
     [SerializeField] float patrolRadius;
     [SerializeField] float obstacleCheckDistance = 0.5f;
-    private int moveDirection = 1;
-    public bool returnCenter = false;
+    [SerializeField] float obstacleOffsetCheck = 0.5f;
+    [SerializeField] private int moveDirection = 1;
+
+    [SerializeField] private bool returningToCenter = false;
+
+    [Header("For swimming: ")]
+    [SerializeField] float rangeRandomDirection = 45f;
+
+    public bool isSwimming = true;
     public override void Enter()
     {
         base.Enter();
         timer = 0f;
-        returnCenter = true;
-    }
 
+        float distanceToCenter = Vector3.Distance(transform.position, patrolCenter);
+        returningToCenter = distanceToCenter > patrolRadius;
+    }
+    void Awake()
+    {
+        this.patrolCenter = transform.position;
+    }
     public override void Do()
     {
-        // Vector2 dirToTarget = stateMachine.DirecionToPlayer();
-        // dirToTarget.x >= 0 ? stateMachine.Flip(EnemyRotator.FlipDirection.Right) : stateMachine.Flip(EnemyRotator.FlipDirection.Left);
         timer += Time.deltaTime;
         if (timer >= patrolDuration)
         {
             isComplete = true;
+            // return;
         }
-        float distanceToCenter = Vector3.Distance(transform.position, patrolCenter);
-
-        if (distanceToCenter > patrolRadius)
+        // stateMachine.RotateZ(new Vector2(moveDirection, 0));
+        if (returningToCenter)
         {
+            Vector2 dirToCenter = (patrolCenter - transform.position).normalized;
 
-            if (returnCenter)
+            if (!IsBlocked(dirToCenter))
             {
-                stateMachine.Flip(EnemyRotator.FlipDirection.Up);
-                ReturnToCenter();
-                return;
+                MoveInDirection(dirToCenter);
             }
-            FlipDirection();
-        }
-        returnCenter = false;
-
-        if (IsObstacleAhead())
-        {
-            FlipDirection();
-        }
-
-
-        // stateMachine.Flip((dirToTarget.x >= 0) ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
-
-        // stateMachine.RotateZ(new Vector2(1, 0));
-
-
-        Vector2 moveVector = new Vector2(moveDirection, 0);
-        stateMachine.rb.velocity = moveVector * speed;
-        stateMachine.RotateZ(moveVector);
-        stateMachine.Flip(moveDirection == 1 ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
-        // stateMachine.rb.velocity = new Vector2(speed, stateMachine.rb.velocity.y);
-
-
-    }
-    void ReturnToCenter()
-    {
-        Vector3 dirToCenter = (patrolCenter - transform.position).normalized;
-
-        if (IsObstacleInDirection(dirToCenter))
-        {
-
-            Vector2[] alternateDirs = new Vector2[]
+            else
             {
-            new Vector2(dirToCenter.x, 0).normalized,
-            new Vector2(0, dirToCenter.y).normalized,
-            new Vector2(dirToCenter.x, dirToCenter.y + 0.5f).normalized,
-            new Vector2(dirToCenter.x, dirToCenter.y - 0.5f).normalized,
-            new Vector2(-dirToCenter.x, dirToCenter.y).normalized
-            };
+                Debug.Log("Block", gameObject);
 
-            foreach (Vector2 dir in alternateDirs)
-            {
-                if (!IsObstacleInDirection(dir))
-                {
-                    MoveInDirection(dir);
-                    return;
-                }
             }
-            stateMachine.rb.velocity = Vector2.zero;
+
+            if (Vector2.Distance(transform.position, patrolCenter) <= patrolRadius)
+            {
+                returningToCenter = false;
+            }
+
+            return;
+        }
+
+        Vector2 moveVec = new Vector2(moveDirection, 0);
+
+
+        if (!isSwimming)
+        {
+            moveVec.y = stateMachine.rb.velocity.y;
+            currentDir = moveVec;
         }
         else
         {
-
-            MoveInDirection(dirToCenter);
+            moveVec = currentDir;
         }
+
+
+        float distToCenter = Vector2.Distance(transform.position, patrolCenter);
+        if (distToCenter > patrolRadius || IsBlocked(new Vector2(moveDirection, 0)))
+        {
+            // Debug.Log("Obstacle");
+            if (isSwimming)
+            {
+                RandomPatrolDirection();
+                // Debug.Log("swim");
+                return;
+            }
+            else
+            {
+                FlipDirection();
+                moveVec = new Vector2(moveDirection, isSwimming ? 0 : stateMachine.rb.velocity.y);
+            }
+
+        }
+
+        MoveInDirection(moveVec);
+        // Debug.Log("Patrol");
     }
-    private bool IsObstacleAhead()
+    void OnDrawGizmos()
     {
-        Vector2 origin = transform.position;
-        Vector2 direction = new Vector2(moveDirection, 0);
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, obstacleCheckDistance, LayerMask.GetMask("Ground"));
-        return hit.collider != null;
+
     }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(patrolCenter, patrolRadius);
+    }
+
     private void FlipDirection()
     {
+        // Debug.Log("Flip", gameObject);
         moveDirection *= -1;
     }
-    bool IsObstacleInDirection(Vector2 direction)
+    private void RandomPatrolDirection()//for swimming
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, obstacleCheckDistance, LayerMask.GetMask("Ground"));
-        return hit.collider != null;
+
+        float minAngle = -rangeRandomDirection;
+        float maxAngle = rangeRandomDirection;
+        FlipDirection();
+
+        float angle = Random.Range(minAngle, maxAngle);
+        Vector2 baseDir = new Vector2(moveDirection, 0);
+        Vector2 newDir = Quaternion.Euler(0, 0, angle) * baseDir;
+        newDir.Normalize();
+        // Debug.Log(newDir);
+        currentDir = newDir;
+
+        MoveInDirection(newDir);
 
     }
 
-    void MoveInDirection(Vector2 direction)
+    void MoveInDirection(Vector2 dir)
     {
-        stateMachine.rb.velocity = direction * speed;
-        stateMachine.RotateZ(direction);
-        stateMachine.Flip(direction.x >= 0 ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
+        // dir = new Vector2(dir.x, Random.Range(0.1f, 0.9f));
+        stateMachine.rb.velocity = dir * speed;
+        // stateMachine.RotateZ(dir);
+        // stateMachine.Flip(dir.x >= 0 ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
+
+        if (isSwimming)
+        {
+            stateMachine.RotateZ(dir);
+            stateMachine.Flip(dir.x >= 0 ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
+        }
+        else
+        {
+            stateMachine.Flip(dir.x >= 0 ? EnemyRotator.FlipDirection.Right : EnemyRotator.FlipDirection.Left);
+        }
+
+    }
+    private bool IsBlocked(Vector2 direction)
+    {
+        Vector2 origin = transform.position;
+
+        Vector2[] rayOrigins = new Vector2[]
+        {
+            origin + Vector2.up * obstacleOffsetCheck,
+            origin ,
+            origin + Vector2.down * obstacleOffsetCheck
+        };
+
+        foreach (Vector2 rayOrigin in rayOrigins)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, direction.normalized, obstacleCheckDistance, LayerMask.GetMask("Ground"));
+            if (hit.collider != null)
+                return true;
+        }
+
+        return false;
     }
 
-
-
+    public override EnemyStateID? CheckNextState()
+    {
+        float dist = Vector2.Distance(transform.position, stateMachine.player.position);
+        if (dist <= 2.5f) return EnemyStateID.Attacking;
+        if (dist <= 6f) return EnemyStateID.Chasing;
+        return EnemyStateID.Patrolling;
+    }
     public AIPath aiPath;
 }

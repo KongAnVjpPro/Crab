@@ -232,6 +232,7 @@ GameObject:
   - component: {fileID: 235870612795842142}
   - component: {fileID: 2938832569511614512}
   - component: {fileID: 7793327748018700607}
+  - component: {fileID: 355517385710547733}
   m_Layer: 11
   m_Name: SwordFishModel
   m_TagString: Untagged
@@ -260,6 +261,7 @@ Transform:
   - {fileID: 8707989996699436246}
   - {fileID: 2826290833285206866}
   - {fileID: 5356428620023425491}
+  - {fileID: 454668084068823549}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &2335536407487020124
@@ -375,6 +377,7 @@ MonoBehaviour:
   enemyAnimator: {fileID: 235870612795842142}
   enemyMove: {fileID: 7793327748018700607}
   enemyRotator: {fileID: 2938832569511614512}
+  enemyRecoil: {fileID: 355517385710547733}
 --- !u!114 &3529047226912547047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,9 +396,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   rb: {fileID: 6597298672421556112}
-  patrolState: {fileID: 8738880917859855675}
-  chaseState: {fileID: 1615034086514767420}
-  attackState: {fileID: 7768438536739060800}
+  enemyEntity: {fileID: 0}
+  hitByAttack: 0
   currentState: {fileID: 0}
 --- !u!114 &3391379196543985743
 MonoBehaviour:
@@ -493,6 +495,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canMoveHorizontal: 1
   canMoveVertical: 1
+--- !u!114 &355517385710547733
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1395613292821302697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9d49bc4c5c7f3408d4691ae4b94976, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  recoilXSpeed: 10
+  recoilYSpeed: 5
+  recoilDuration: 0.2
 --- !u!1 &2093802012669414655
 GameObject:
   m_ObjectHideFlags: 0
@@ -675,9 +692,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateID: 1
   patrolDuration: 3
-  speed: 2
-  patrolCenter: {x: 0, y: 0}
-  patrolRadius: 0
+  speed: 5
+  patrolCenter: {x: -45.7, y: 0, z: 0}
+  currentDir: {x: 1, y: 0}
+  patrolRadius: 5
+  obstacleCheckDistance: 1
+  obstacleOffsetCheck: 0.5
+  moveDirection: 1
+  returningToCenter: 0
+  rangeRandomDirection: 45
+  isSwimming: 1
+  aiPath: {fileID: 0}
 --- !u!1 &4305875246801341485
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,6 +1225,53 @@ MonoBehaviour:
   - {x: 0.5, y: -0.5, z: 0}
   - {x: 0.5, y: 0.5, z: 0}
   - {x: -0.5, y: 0.5, z: 0}
+--- !u!1 &7064185487604128461
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 454668084068823549}
+  - component: {fileID: 231997653874082171}
+  m_Layer: 11
+  m_Name: Stun
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &454668084068823549
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7064185487604128461}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7461983583836738122}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &231997653874082171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7064185487604128461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fec567df9e1b5cb469de453a88a074d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stateID: 4
+  stunDuration: 0.1
+  recoilForce: 20
 --- !u!1 &7126944101651708790
 GameObject:
   m_ObjectHideFlags: 0

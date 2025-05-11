@@ -157,7 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sr: {fileID: 7720958371857802836}
   itemData:
-    itemSO: {fileID: 0}
+    itemSO: {fileID: 11400000, guid: eca339db81eba2a42a8158d5331af6fe, type: 2}
     amount: 0
   itemSpawner: {fileID: 0}
   existTime: 5

@@ -8,6 +8,7 @@ public class EnemyEntity : EntityController
     public EnemyAnimator enemyAnimator;
     public MovementComponent enemyMove;
     public EnemyRotator enemyRotator;
+    public Recoil enemyRecoil;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -18,6 +19,7 @@ public class EnemyEntity : EntityController
         this.LoadAnimator();
         this.LoadMovement();
         this.LoadRotator();
+        this.LoadRecoil();
     }
     protected virtual void LoadStat()
     {
@@ -53,5 +55,10 @@ public class EnemyEntity : EntityController
     {
         if (this.enemyRotator != null) return;
         this.enemyRotator = GetComponent<EnemyRotator>();
+    }
+    protected virtual void LoadRecoil()
+    {
+        if (this.enemyRecoil != null) return;
+        this.enemyRecoil = GetComponent<Recoil>();
     }
 }

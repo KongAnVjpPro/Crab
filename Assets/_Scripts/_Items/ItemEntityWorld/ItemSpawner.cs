@@ -63,10 +63,10 @@ public class ItemSpawner : MyMonobehaviour
     void LoadRes()
     {
         itemSOList = new List<ItemSO>(Resources.LoadAll<ItemSO>("ScriptableObject/Item/"));
-        foreach (var item in itemSOList)
-        {
-            Debug.Log(item.itemName);
-        }
+        // foreach (var item in itemSOList)
+        // {
+        // Debug.Log(item.itemName);
+        // }
     }
     void SpawnRandomItem()
     {

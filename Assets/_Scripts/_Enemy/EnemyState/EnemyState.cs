@@ -17,7 +17,13 @@ public abstract class EnemyState : MonoBehaviour
     public virtual void Exit() { }
     public virtual void Do() { }
     public virtual void FixedDo() { }
+
+    public virtual EnemyStateID? CheckNextState() => null;
+
 }
+
+
+
 [Serializable]
 public enum EnemyStateID
 {
@@ -25,4 +31,5 @@ public enum EnemyStateID
     Patrolling = 1,
     Chasing = 2,
     Attacking = 3,
+    Stunning = 4
 }

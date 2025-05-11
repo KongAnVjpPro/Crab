@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyStateMachine : EnemyComponent
@@ -6,28 +8,44 @@ public class EnemyStateMachine : EnemyComponent
     public Transform player;
     public LayerMask playerLayer;
     public Rigidbody2D rb;
+    public EnemyEntity enemyEntity;
 
-    [Header("State: ")]
-    public PatrolState patrolState;
-    public ChaseState chaseState;
-    public AttackState attackState;
+    public Dictionary<EnemyStateID, EnemyState> stateList = new Dictionary<EnemyStateID, EnemyState>();
+
+
+    public bool hitByAttack = false;
+
     [Header("Action: ")]
     public Action<EnemyStateID> OnStateChanged;
     [SerializeField] private EnemyState currentState;
 
+
+
     protected override void Awake()
     {
+        LoadComponents();
 
-        if (patrolState != null) patrolState.Init(this);
-        if (chaseState != null) chaseState.Init(this);
-        if (attackState != null) attackState.Init(this);
         if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
+        enemyEntity = enemyController;
+    }
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadAllState();
+    }
+    protected virtual void LoadAllState()
+    {
+        foreach (EnemyState state in transform.GetComponentsInChildren<EnemyState>())
+        {
+            stateList.Add(state.StateID, state);
+            state.Init(this);
+        }
     }
 
     private void Start()
     {
-        if (patrolState != null)
-            ChangeState(patrolState);
+        if (stateList[EnemyStateID.Patrolling] != null)
+            ChangeState(stateList[EnemyStateID.Patrolling]);
         player = PlayerEntity.Instance.transform;
     }
 
@@ -35,9 +53,21 @@ public class EnemyStateMachine : EnemyComponent
     {
         currentState?.Do();
 
+        if (hitByAttack)
+        {
+            ChangeState(stateList[EnemyStateID.Stunning]);
+            return;
+        }
+
         if (currentState != null && currentState.isComplete)
         {
-            DecideNextState();
+            var next = currentState.CheckNextState();
+            if (next.HasValue && stateList.ContainsKey(next.Value))
+            {
+                ChangeState(stateList[next.Value]);
+            }
+
+            // DecideNextState();
         }
     }
 
@@ -57,22 +87,8 @@ public class EnemyStateMachine : EnemyComponent
         OnStateChanged?.Invoke(currentState.StateID);
     }
 
-    void DecideNextState()
-    {
-        float dist = Vector2.Distance(transform.position, player.position);
-        if (dist <= 2.5f)
-        {
-            ChangeState(attackState);
-        }
-        else if (dist <= 5f)
-        {
-            ChangeState(chaseState);
-        }
-        else
-        {
-            ChangeState(patrolState);
-        }
-    }
+
+
     #region Player Information
     public Vector2 DirecionToPlayer()
     {

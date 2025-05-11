@@ -76,4 +76,13 @@ public class AttackState : EnemyState
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(attackPos.position, attackRange);
     }
+
+    public override EnemyStateID? CheckNextState()
+    {
+        float dist = Vector2.Distance(transform.position, stateMachine.player.position);
+        if (dist <= 2.5f) return EnemyStateID.Attacking;
+        if (dist <= 6f) return EnemyStateID.Chasing;
+        return EnemyStateID.Patrolling;
+
+    }
 }
