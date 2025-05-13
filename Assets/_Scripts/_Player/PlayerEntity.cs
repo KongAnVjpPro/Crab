@@ -40,6 +40,8 @@ public class PlayerEntity : EntityController
     public PlayerBlocking playerBlocking;
     public PlayerInventory playerInventory;
     public Recoil playerRecoil;
+    public PlayerShellController playerShell;
+    public PlayerAbility playerAbility;
     protected virtual void LoadSprite()
     {
         if (this.sr != null) return;
@@ -109,6 +111,16 @@ public class PlayerEntity : EntityController
     {
         if (playerRecoil != null) return;
         playerRecoil = GetComponent<Recoil>();
+    }
+    protected virtual void LoadShell()
+    {
+        if (playerShell != null) return;
+        playerShell = GetComponent<PlayerShellController>();
+    }
+    protected virtual void LoadAbility()
+    {
+        if (playerAbility != null) return;
+        playerAbility = GetComponent<PlayerAbility>();
     }
     protected override void LoadComponents()
     {

@@ -10,7 +10,7 @@ public class StunState : EnemyState
     public override void Init(EnemyStateMachine machine)
     {
         base.Init(machine);
-        stateID = EnemyStateID.Stunning;
+        stateID = EnemyStateID.Stunned;
     }
 
     public override void Enter()
@@ -29,7 +29,7 @@ public class StunState : EnemyState
 
         if (stunTimer >= stunDuration)
         {
-            stateMachine.hitByAttack = false;
+            // stateMachine.hitByAttack = false;
             isComplete = true;
         }
     }
@@ -51,7 +51,7 @@ public class StunState : EnemyState
     {
         base.Exit();
         stateMachine.rb.velocity = Vector2.zero;
-        stateMachine.hitByAttack = false;
+        // stateMachine.hitByAttack = false;
     }
     public override EnemyStateID? CheckNextState()
     {

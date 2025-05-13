@@ -20,7 +20,7 @@ public class PatrolState : EnemyState
     [Header("For swimming: ")]
     [SerializeField] float rangeRandomDirection = 45f;
 
-    public bool isSwimming = true;
+    // public bool isSwimming = true;
     public override void Enter()
     {
         base.Enter();
@@ -67,7 +67,7 @@ public class PatrolState : EnemyState
         Vector2 moveVec = new Vector2(moveDirection, 0);
 
 
-        if (!isSwimming)
+        if (!stateMachine.isSwimming)
         {
             moveVec.y = stateMachine.rb.velocity.y;
             currentDir = moveVec;
@@ -82,7 +82,7 @@ public class PatrolState : EnemyState
         if (distToCenter > patrolRadius || IsBlocked(new Vector2(moveDirection, 0)))
         {
             // Debug.Log("Obstacle");
-            if (isSwimming)
+            if (stateMachine.isSwimming)
             {
                 RandomPatrolDirection();
                 // Debug.Log("swim");
@@ -91,7 +91,7 @@ public class PatrolState : EnemyState
             else
             {
                 FlipDirection();
-                moveVec = new Vector2(moveDirection, isSwimming ? 0 : stateMachine.rb.velocity.y);
+                moveVec = new Vector2(moveDirection, stateMachine.isSwimming ? 0 : stateMachine.rb.velocity.y);
             }
 
         }
@@ -139,7 +139,7 @@ public class PatrolState : EnemyState
         // stateMachine.RotateZ(dir);
         // stateMachine.Flip(dir.x >= 0 ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
 
-        if (isSwimming)
+        if (stateMachine.isSwimming)
         {
             stateMachine.RotateZ(dir);
             stateMachine.Flip(dir.x >= 0 ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);

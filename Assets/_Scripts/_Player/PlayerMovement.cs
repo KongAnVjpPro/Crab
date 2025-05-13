@@ -157,11 +157,16 @@ public class PlayerMovement : PlayerComponent
 
 
         }
+        //double jump
         if (!IsOnGround() && airJumpCounter < maxAirJumps && playerController.playerInput.jumpStart)
         {
-            playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
-            playerController.pState.jumping = true;
-            airJumpCounter++;
+            if (playerController.pState.unlockedDoubleJump)
+            {
+                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
+                playerController.pState.jumping = true;
+                airJumpCounter++;
+            }
+
 
         }
         if (playerController.playerInput.jumpEnd && playerController.rb.velocity.y > 3)
@@ -218,6 +223,7 @@ public class PlayerMovement : PlayerComponent
     #region Dash
     void Dash()
     {
+        if (!playerController.pState.unlockedDash) return;
         int _dir = playerController.pState.lookingRight ? 1 : -1;
         if (playerController.playerInput.dash)
         {

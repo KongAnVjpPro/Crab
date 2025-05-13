@@ -11,5 +11,9 @@ public class PlayerState : MyMonobehaviour
     public bool attacking = false;
     // public bool walkIntoNewScene = false;
     // public bool onGround;
+    [Header("Ability Unlocked: ")]
+    public bool unlockedDash = false;
+    public bool unlockedDoubleJump = false;
+    public bool unlockedParry = false;
 
 }

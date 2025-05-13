@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ChaseState : EnemyState
@@ -18,14 +19,23 @@ public class ChaseState : EnemyState
     {
         // Vector2 direction = (stateMachine.player.position - transform.position).normalized;
         Vector2 dirToTarget = stateMachine.DirecionToPlayer().normalized;
+        if (stateMachine.isSwimming)
+        {
+            stateMachine.Flip((dirToTarget.x >= 0) ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
+            stateMachine.RotateZ(dirToTarget);
+            stateMachine.MoveVertical(dirToTarget, 1, speed);
+        }
+        else
+        {
+            stateMachine.Flip(dirToTarget.x >= 0 ? EnemyRotator.FlipDirection.Right : EnemyRotator.FlipDirection.Left);
+        }
 
-        stateMachine.Flip((dirToTarget.x >= 0) ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
-        stateMachine.RotateZ(dirToTarget);
 
 
         // stateMachine.rb.velocity = new Vector2(direction.x * speed, stateMachine.rb.velocity.y);
+
         stateMachine.MoveHorizontal(dirToTarget, 1, speed);
-        stateMachine.MoveVertical(dirToTarget, 1, speed);
+
 
         float distance = Vector2.Distance(transform.position, stateMachine.player.position);
         if (distance <= 3f || distance > 6f)

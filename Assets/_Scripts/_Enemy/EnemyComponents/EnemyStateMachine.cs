@@ -12,8 +12,13 @@ public class EnemyStateMachine : EnemyComponent
 
     public Dictionary<EnemyStateID, EnemyState> stateList = new Dictionary<EnemyStateID, EnemyState>();
 
+    [SerializeField] private EnemyStateID? interruptState = null;
+    public bool isSwimming = false;
 
-    public bool hitByAttack = false;
+    public void SetInterruptState(EnemyStateID stateID)
+    {
+        interruptState = stateID;
+    }
 
     [Header("Action: ")]
     public Action<EnemyStateID> OnStateChanged;
@@ -51,13 +56,21 @@ public class EnemyStateMachine : EnemyComponent
 
     private void Update()
     {
-        currentState?.Do();
-
-        if (hitByAttack)
+        if (interruptState.HasValue)
         {
-            ChangeState(stateList[EnemyStateID.Stunning]);
+            ChangeState(stateList[interruptState.Value]);
+            interruptState = null;
             return;
         }
+
+
+        currentState?.Do();
+
+        // if (hitByAttack)
+        // {
+        //     ChangeState(stateList[EnemyStateID.Stunned]);
+        //     return;
+        // }
 
         if (currentState != null && currentState.isComplete)
         {

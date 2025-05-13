@@ -126,7 +126,8 @@ public class PlayerAttack : PlayerComponent
             EnemyEntity enemyCtrl = enemy.GetComponent<EnemyEntity>();
             if (enemyCtrl == null) continue;
             enemyCtrl.enemyStat.ChangeCurrentStats(StatComponent.StatType.Health, -damage);
-            enemyCtrl.state.hitByAttack = true;
+            enemyCtrl.state.SetInterruptState(EnemyStateID.Stunned);
+            playerController.playerEffect.SpawnEffect(enemyCtrl.transform, EffectAnimationID.Slash);
             // enemyCtrl.enemyRecoil.RecoilHorizontal(playerController.pState.lookingRight ? 1 : -1);
             Debug.Log("Attack");
         }

@@ -16,10 +16,16 @@ public class PlayerBlocking : PlayerComponent
     {
         playerController.playerAnimator.Blocking(playerController.pState.blocking);
     }
-
+    public void BlockProgress()
+    {
+        if (!playerController.pState.unlockedParry) return;
+        UpdateAnimation();
+        //handle block logic
+    }
     void Update()
     {
         UpdateVariables();
-        UpdateAnimation();
+        // UpdateAnimation();
+        BlockProgress();
     }
 }

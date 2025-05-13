@@ -159,12 +159,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 940794541200633750}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.635, y: -0.258, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0.007999421, y: 0.43950006, z: 0}
+  m_LocalScale: {x: 0.49999988, y: 4, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7461983583836738122}
+  m_Father: {fileID: 7948820786552030991}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1069783428404612389
 GameObject:
@@ -211,6 +211,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateID: 2
+  stateMachine: {fileID: 0}
   speed: 3
 --- !u!1 &1395613292821302697
 GameObject:
@@ -260,7 +261,6 @@ Transform:
   - {fileID: 845386450926162510}
   - {fileID: 8707989996699436246}
   - {fileID: 2826290833285206866}
-  - {fileID: 5356428620023425491}
   - {fileID: 454668084068823549}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -397,7 +397,7 @@ MonoBehaviour:
     m_Bits: 128
   rb: {fileID: 6597298672421556112}
   enemyEntity: {fileID: 0}
-  hitByAttack: 0
+  isSwimming: 1
   currentState: {fileID: 0}
 --- !u!114 &3391379196543985743
 MonoBehaviour:
@@ -691,6 +691,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateID: 1
+  stateMachine: {fileID: 0}
   patrolDuration: 3
   speed: 5
   patrolCenter: {x: -45.7, y: 0, z: 0}
@@ -701,7 +702,6 @@ MonoBehaviour:
   moveDirection: 1
   returningToCenter: 0
   rangeRandomDirection: 45
-  isSwimming: 1
   aiPath: {fileID: 0}
 --- !u!1 &4305875246801341485
 GameObject:
@@ -748,12 +748,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateID: 3
+  stateMachine: {fileID: 3529047226912547047}
   attackCooldown: 1
   attackAnimTime: 0.2
   attackPos: {fileID: 5356428620023425491}
   attackRange: 0.3
   damage: 1
   velocityMoveScale: 5
+  hitBoxSize: {x: 2.3, y: 0.2}
 --- !u!1 &4766549998193885975
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,7 +870,8 @@ Transform:
   m_LocalPosition: {x: 0.756, y: -0.256, z: 0}
   m_LocalScale: {x: 0.25, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5356428620023425491}
   m_Father: {fileID: 7461983583836738122}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: -90}
 --- !u!212 &1982374243760775406
@@ -1270,6 +1273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateID: 4
+  stateMachine: {fileID: 0}
   stunDuration: 0.1
   recoilForce: 20
 --- !u!1 &7126944101651708790
