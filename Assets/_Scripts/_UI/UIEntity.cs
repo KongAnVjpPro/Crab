@@ -6,7 +6,7 @@ public class UIEntity : EntityController
     public UIPlayerStat playerStat;
     public DialogueManager dialogueManager;
     public UIInventory uiInventory;
-
+    public UIFadeScreen uISaveScreen;
 
 
     private void LoadSingleton()
@@ -31,9 +31,15 @@ public class UIEntity : EntityController
         this.LoadPlayerStat();
         LoadDialog();
         this.LoadUIInventory();
+        LoadSaveScreen();
 
 
         this.LoadSingleton();
+    }
+    protected virtual void LoadSaveScreen()
+    {
+        if (uISaveScreen != null) return;
+        uISaveScreen = GetComponent<UIFadeScreen>();
     }
     protected virtual void LoadUIInventory()
     {

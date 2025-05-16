@@ -5,6 +5,7 @@ public class GameController : MyMonobehaviour
     public static GameController Instance => instance;
     public bool isBlockPlayerControl = false;
     public ItemSpawner itemSpawner;
+    public Transform effectHolder;
     // public AbilityManager abilityManager;
 
     // public PlayerEntity playerController;

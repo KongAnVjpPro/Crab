@@ -8,6 +8,13 @@ public class PlayerAnimator : PlayerComponent
         base.LoadComponents();
         this.LoadAnim();
     }
+    public void ResetTrigger()
+    {
+        anim.ResetTrigger("Blocking");
+        anim.ResetTrigger("Dashing");
+        anim.ResetTrigger("Hurting");
+
+    }
     protected virtual void LoadAnim()
     {
         if (this.anim != null) return;
@@ -46,6 +53,15 @@ public class PlayerAnimator : PlayerComponent
         anim.SetBool("Blocking", value);
     }
 
+    public void Hurting()
+    {
+        anim.ResetTrigger("Hurting");
+        anim.SetTrigger("Hurting");
+    }
+    public void Death()
+    {
+        anim.SetTrigger("Death");
+    }
 
     void LateUpdate()
     {

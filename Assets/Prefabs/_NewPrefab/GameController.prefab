@@ -31,6 +31,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8648698400092106130}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1015203197465432687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2472145396840701987}
+  m_Layer: 0
+  m_Name: EffectHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2472145396840701987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015203197465432687}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8648698400092106130}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4468634256697386155
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9056371700198432173}
+  m_Layer: 0
+  m_Name: CoinHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9056371700198432173
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4468634256697386155}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8648698400092106130}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8220333209223266758
 GameObject:
   m_ObjectHideFlags: 0
@@ -63,6 +125,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1045145566995436876}
+  - {fileID: 9056371700198432173}
+  - {fileID: 2472145396840701987}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1428520899353482301
@@ -79,6 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isBlockPlayerControl: 0
   itemSpawner: {fileID: 1276286125013241043}
+  effectHolder: {fileID: 2472145396840701987}
 --- !u!114 &1276286125013241043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -99,3 +164,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: eca339db81eba2a42a8158d5331af6fe, type: 2}
   - {fileID: 11400000, guid: d21d976a356f74844bc9850b8fa75775, type: 2}
   itemHolder: {fileID: 651707240066018662}
+  offsetDrop: {x: 0, y: 1, z: 0}
+  coinList: []
+  coinPrefab: {fileID: 1185808096604752370, guid: 4e85407ab2985ec4888c1e5a26f55aed, type: 3}
+  coinHolder: {fileID: 4468634256697386155}

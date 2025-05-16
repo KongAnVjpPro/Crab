@@ -2,6 +2,7 @@ using UnityEngine;
 public class PlayerDash : DashComponent
 {
     [SerializeField] protected PlayerEntity playerController;
+    [SerializeField] float staminaUse = 3f;
     protected virtual void ExplicitCasting()
     {
         this.playerController = (PlayerEntity)entityController;
@@ -14,6 +15,12 @@ public class PlayerDash : DashComponent
     }
     public override void StartDash(float _dir)
     {
+        if (playerController.playerStat.CurrentStamina < staminaUse)
+        {
+            return;
+            //canh bao something
+        }
+        playerController.playerStat.ChangeCurrentStats(StatComponent.StatType.Stamina, -staminaUse);
         base.StartDash(_dir);
     }
     public override void DashAnimation()

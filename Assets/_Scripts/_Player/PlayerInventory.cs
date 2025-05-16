@@ -1,17 +1,34 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 public class PlayerInventory : PlayerComponent
 {
-    public Inventory inventory;
+    public Inventory inventory = new Inventory();
     public StatComponent targetUseItem;
     // public bool isFull;
     public int maxSlots = 12;
+    [Header("Coin: ")]
+    [SerializeField] int currentCoin = 0;
+    public Action OnCoinChange;
     protected override void LoadComponents()
     {
         base.LoadComponents();
         Init();
-        UIEntity.Instance.uiInventory.SetInventory(inventory);
+        // UIEntity.Instance.uiInventory.SetInventory(inventory);
+        StartCoroutine(WaitForInventory());
         targetUseItem = playerController.playerStat;
+    }
+    IEnumerator WaitForInventory()
+    {
+        while (UIEntity.Instance.uiInventory == null)
+        {
+            // Debug.Log("null");
+            yield return null;
+        }
+        // if (inventory == null) Debug.Log("Null");
+        UIEntity.Instance.uiInventory.SetInventory(inventory);
+
     }
     void Init()
     {
@@ -99,4 +116,47 @@ public class PlayerInventory : PlayerComponent
 
         return true;
     }
+    void Update()
+    {
+        //test
+        // if (Input.GetKeyDown(KeyCode.Space))
+        // {
+        //     AddCoin(1);
+        // }
+        // if (Input.GetKeyDown(KeyCode.X))
+        // {
+        //     UseCoin(1);
+        // }
+    }
+    #region Coin
+    public void UseCoin(int useAmout)
+    {
+        if (!CanUseCoin(useAmout)) return;
+
+        currentCoin -= useAmout;
+        OnCoinChange?.Invoke();
+
+    }
+
+    public void AddCoin(int addAmount)
+    {
+        if (!CanAddCoin(addAmount)) return;
+        currentCoin += addAmount;
+        OnCoinChange?.Invoke();
+    }
+
+    public bool CanUseCoin(int useAmout)
+    {
+        return currentCoin >= useAmout;
+    }
+    public bool CanAddCoin(int addAmount)
+    {
+        return addAmount >= 0;
+    }
+    public int GetCurrentCoin()
+    {
+        return currentCoin;
+    }
+
+    #endregion
 }

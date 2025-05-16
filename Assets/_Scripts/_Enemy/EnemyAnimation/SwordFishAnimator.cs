@@ -23,4 +23,12 @@ public class SwordFishAnimator : EnemyAnimator
         base.Chasing();
         animator.SetTrigger("Chasing");
     }
+    public override void Death()
+    {
+        animator.SetTrigger("Death");
+    }
+    public override void Stunned()
+    {
+        animator.SetTrigger("Stunned");
+    }
 }

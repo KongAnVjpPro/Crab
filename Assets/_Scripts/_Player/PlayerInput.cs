@@ -20,18 +20,23 @@ public class PlayerInput : PlayerComponent
 
         if (GameController.Instance.isBlockPlayerControl)
         {
-            xAxis = 0;
-            yAxis = 0;
-            attack = false;
-            block = false;
-            jumpStart = false;
-            jumpPress = false;
-            jumpEnd = false;
-            dash = false;
-            interact = false;
-            heal = false;
-            cast = false;
-
+            // xAxis = 0;
+            // yAxis = 0;
+            // attack = false;
+            // block = false;
+            // jumpStart = false;
+            // jumpPress = false;
+            // jumpEnd = false;
+            // dash = false;
+            // interact = false;
+            // heal = false;
+            // cast = false;
+            BlockInput();
+            return;
+        }
+        if (playerController.pState.alive == false)
+        {
+            BlockInput();
             return;
         }
         //Player controls
@@ -51,6 +56,24 @@ public class PlayerInput : PlayerComponent
         cast = Input.GetButtonDown("CastSpell");
 
 
+    }
+    void BlockInput()
+    {
+        {
+            xAxis = 0;
+            yAxis = 0;
+            attack = false;
+            block = false;
+            jumpStart = false;
+            jumpPress = false;
+            jumpEnd = false;
+            dash = false;
+            interact = false;
+            heal = false;
+            cast = false;
+
+
+        }
     }
     void Update()
     {

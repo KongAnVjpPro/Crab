@@ -35,6 +35,13 @@ public class EnemyAnimator : EnemyComponent
             case EnemyStateID.Attacking:
                 Attacking();
                 break;
+            case EnemyStateID.Stunned:
+                Stunned();
+                break;
+
+            case EnemyStateID.Dead:
+                Death();
+                break;
 
         }
     }
@@ -51,6 +58,14 @@ public class EnemyAnimator : EnemyComponent
 
     }
     public virtual void Patrolling()
+    {
+
+    }
+    public virtual void Stunned()
+    {
+
+    }
+    public virtual void Death()
     {
 
     }

@@ -6,13 +6,14 @@ public class PlayerMovement : PlayerComponent
 
     [Header("Move")]
     [SerializeField] protected float moveSpeed = 5f;
+    [SerializeField] protected float scaledMoveSpeed = 1f;
 
     [SerializeField] bool canMove = true;
     [SerializeField] protected float jumpForce = 5f;
     float xAxis;
     float yAxis;
     [Header("Jump")]
-
+    [SerializeField] protected float scaledJumpForce = 1f;
     [SerializeField] private float jumpBufferFrames = 0.1f;
 
     [SerializeField] private float coyoteTime = 0.15f;
@@ -21,6 +22,7 @@ public class PlayerMovement : PlayerComponent
     private int airJumpCounter = 0;
     private float jumpBufferCounter = 0;
     private float coyoteTimeCounter = 0;
+    [SerializeField] float doubleJumpStamina = 2f;
     [Header("Wall Jump")]
     [SerializeField] private float wallSlidingSpeed = 2f;
 
@@ -60,7 +62,7 @@ public class PlayerMovement : PlayerComponent
     #region Checker
     bool IsOnGround()
     {
-        bool grounded = playerController.groundCheck.Grounded();
+        bool grounded = playerController.groundCheck.Grounded() || playerController.groundCheck.OtherLayerCheck(LayerMask.GetMask("Enemy"));
         if (grounded) playerController.playerDash.dashed = false;
         return grounded;
     }
@@ -79,7 +81,7 @@ public class PlayerMovement : PlayerComponent
     {
         if (canMove)
         {
-            entityController.rb.velocity = new Vector2(moveSpeed * _xAxis, entityController.rb.velocity.y);
+            entityController.rb.velocity = new Vector2(moveSpeed * _xAxis * scaledMoveSpeed, entityController.rb.velocity.y);
         }
     }
 
@@ -152,7 +154,7 @@ public class PlayerMovement : PlayerComponent
         // }
         if (jumpBufferCounter > 0 && coyoteTimeCounter > 0 && !playerController.pState.jumping)
         {
-            playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
+            playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce * scaledJumpForce);
             playerController.pState.jumping = true;
 
 
@@ -162,9 +164,14 @@ public class PlayerMovement : PlayerComponent
         {
             if (playerController.pState.unlockedDoubleJump)
             {
-                playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce);
-                playerController.pState.jumping = true;
-                airJumpCounter++;
+                if (playerController.playerStat.CurrentStamina > doubleJumpStamina)
+                {
+                    playerController.playerStat.ChangeCurrentStats(StatComponent.StatType.Stamina, -doubleJumpStamina);
+                    playerController.rb.velocity = new Vector2(playerController.rb.velocity.x, jumpForce * scaledJumpForce);
+                    playerController.pState.jumping = true;
+                    airJumpCounter++;
+                }
+
             }
 
 
@@ -250,4 +257,18 @@ public class PlayerMovement : PlayerComponent
         }
     }
     #endregion
+    #region Boost
+
+    public void BoostSpeedAndJump(float boostMove, float boostJump)
+    {
+        scaledJumpForce = boostJump;
+        scaledMoveSpeed = boostMove;
+    }
+    public void ResetBoost()
+    {
+        scaledJumpForce = 1f;
+        scaledMoveSpeed = 1f;
+    }
+    #endregion
+
 }

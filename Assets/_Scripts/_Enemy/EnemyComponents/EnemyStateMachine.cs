@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -30,7 +31,8 @@ public class EnemyStateMachine : EnemyComponent
     {
         LoadComponents();
 
-        if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
+        // if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
+        StartCoroutine(WaitForPlayer());
         enemyEntity = enemyController;
     }
     protected override void LoadComponents()
@@ -52,8 +54,17 @@ public class EnemyStateMachine : EnemyComponent
         if (stateList[EnemyStateID.Patrolling] != null)
             ChangeState(stateList[EnemyStateID.Patrolling]);
         player = PlayerEntity.Instance.transform;
+        StartCoroutine(WaitForPlayer());
     }
-
+    IEnumerator WaitForPlayer()
+    {
+        yield return new WaitForSeconds(1f);
+        while (PlayerEntity.Instance.transform == null)
+        {
+            yield return null;
+        }
+        player = PlayerEntity.Instance.transform;
+    }
     private void Update()
     {
         if (interruptState.HasValue)
@@ -91,10 +102,15 @@ public class EnemyStateMachine : EnemyComponent
 
     void ChangeState(EnemyState newState)
     {
+
         if (currentState == newState || newState == null) return;
 
         currentState?.Exit();
         currentState = newState;
+        if (PlayerEntity.Instance.pState.alive == false)
+        {
+            currentState = stateList[EnemyStateID.Patrolling];
+        }
         currentState.Enter();
 
         OnStateChanged?.Invoke(currentState.StateID);
@@ -119,6 +135,10 @@ public class EnemyStateMachine : EnemyComponent
     {
         enemyController.enemyRotator.RotateZ(vectorDir);
     }
+    public void RecoilBoth(Vector2 dir)
+    {
+        enemyController.enemyRecoil.RecoilBoth(dir.x, dir.y > 0 ? true : false);
+    }
 
     public void MoveHorizontal(Vector2 direction, float xAxis, float moveSpeed)
     {
@@ -127,6 +147,22 @@ public class EnemyStateMachine : EnemyComponent
     public void MoveVertical(Vector2 direcion, float yAxis, float moveSpeed)
     {
         enemyController.enemyMove.MoveVertical(direcion, yAxis, moveSpeed);
+    }
+    public bool IsDead()
+    {
+        return enemyController.enemyStat.IsDead();
+    }
+    public void Drop()
+    {
+        enemyController.enemyDrop.Drop();
+    }
+    public void HPBarFadeIn()
+    {
+        enemyController.enemyHealthBar.FadeIn();
+    }
+    public void HPBarFadeOut()
+    {
+        enemyController.enemyHealthBar.FadeOut();
     }
     #endregion
 }

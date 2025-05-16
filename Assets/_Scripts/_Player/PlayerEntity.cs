@@ -29,7 +29,7 @@ public class PlayerEntity : EntityController
     public PlayerAnimator playerAnimator;
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
-    public StatComponent playerStat;
+    public PlayerStat playerStat;
     public SpriteRenderer sr;
     public PlayerAttack playerAttack;
     public PlayerState pState;
@@ -55,7 +55,7 @@ public class PlayerEntity : EntityController
     protected virtual void LoadStat()
     {
         if (this.playerStat != null) return;
-        playerStat = GetComponent<StatComponent>();
+        playerStat = GetComponent<PlayerStat>();
     }
     protected virtual void LoadAnim()
     {

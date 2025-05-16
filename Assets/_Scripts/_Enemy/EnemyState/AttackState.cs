@@ -76,7 +76,9 @@ public class AttackState : EnemyState
         if (player != null)
         {
             PlayerEntity playerEntity = player.GetComponent<PlayerEntity>();
+            if (playerEntity.pState.alive == false) return;
             playerEntity.playerStat.ChangeCurrentStats(StatComponent.StatType.Health, -damage);
+            playerEntity.playerAnimator.Hurting();
             playerEntity.playerEffect.KnockedBack(dirToTarget);
 
         }
@@ -84,6 +86,11 @@ public class AttackState : EnemyState
 
     IEnumerator AttackProgress(Vector2 dirToTarget)
     {
+        if (PlayerEntity.Instance.pState.alive == false)
+        {
+            // stateMachine.player = null;
+            yield break;
+        }
         if (!stateMachine.isSwimming)
         {
             dirToTarget = new Vector2(dirToTarget.x, 0);
@@ -110,6 +117,10 @@ public class AttackState : EnemyState
 
     public override EnemyStateID? CheckNextState()
     {
+        if (!PlayerEntity.Instance.pState.alive)
+        {
+            return EnemyStateID.Patrolling;
+        }
         float dist = Vector2.Distance(transform.position, stateMachine.player.position);
         if (dist <= 2.5f) return EnemyStateID.Attacking;
         if (dist <= 6f) return EnemyStateID.Chasing;

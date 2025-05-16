@@ -32,4 +32,20 @@ public class GroundCheck : EntityComponent
         }
 
     }
+    public bool OtherLayerCheck(LayerMask otherLayer)
+    {
+        CalcValue();
+        if (Physics2D.Raycast(groundCheckPoint.position, Vector2.down, groundCheckY, otherLayer) ||
+        Physics2D.Raycast(rightCheck, Vector2.down, groundCheckY, otherLayer) ||
+        Physics2D.Raycast(leftCheck, Vector2.down, groundCheckY, otherLayer))
+        {
+
+            return true;
+        }
+        else
+        {
+
+            return false;
+        }
+    }
 }

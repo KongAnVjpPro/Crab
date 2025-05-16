@@ -25,7 +25,7 @@ public class PatrolState : EnemyState
     {
         base.Enter();
         timer = 0f;
-
+        stateMachine.HPBarFadeOut();
         float distanceToCenter = Vector3.Distance(transform.position, patrolCenter);
         returningToCenter = distanceToCenter > patrolRadius;
     }
@@ -173,6 +173,10 @@ public class PatrolState : EnemyState
 
     public override EnemyStateID? CheckNextState()
     {
+        if (!PlayerEntity.Instance.pState.alive)
+        {
+            return EnemyStateID.Patrolling;
+        }
         float dist = Vector2.Distance(transform.position, stateMachine.player.position);
         if (dist <= 2.5f) return EnemyStateID.Attacking;
         if (dist <= 6f) return EnemyStateID.Chasing;

@@ -16,7 +16,10 @@ public class PlayerShellController : PlayerComponent
     [Header("Shell data: ")]
     [SerializeField] CombinedShellData currentShell;
     public List<CombinedShellData> ownedShellList = new List<CombinedShellData>();
-    public List<string> shellSaveKey;
+    [Header("Save Load data: ")]
+    public List<string> shellSaveKey;//user for save load
+    public string lastShellEquippedKey;
+
 
     [SerializeField] List<ShellSO> defaultShell;
 
@@ -35,7 +38,7 @@ public class PlayerShellController : PlayerComponent
         EquipShell(ownedShellList[0]);
     }
 
-    void LoadOwnedShells()
+    void LoadOwnedShells()//load data
     {
         ownedShellList.Clear();
 

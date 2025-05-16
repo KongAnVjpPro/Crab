@@ -5,7 +5,7 @@ public class PlayerEffect : PlayerComponent
     [SerializeField] GameObject slashEffect;
     [SerializeField] List<EffectController> slashPool;
     Dictionary<EffectAnimationID, EffectController> effectDict = new Dictionary<EffectAnimationID, EffectController>();
-
+    [SerializeField] GameObject effectHolder;
 
 
     [SerializeField] ParticleSystem bubbleEffect;
@@ -19,6 +19,13 @@ public class PlayerEffect : PlayerComponent
         base.LoadComponents();
         this.LoadBubbleEffect();
         LoadDict();
+    }
+    void Start()
+    {
+        if (effectHolder == null)
+        {
+            effectHolder = GameController.Instance.effectHolder.gameObject;
+        }
     }
     protected virtual void LoadBubbleEffect()
     {
@@ -63,6 +70,7 @@ public class PlayerEffect : PlayerComponent
         newEff = Instantiate(effectDict[effectID]);
         if (newEff == null) Debug.LogError("Null Eff", gameObject);
         slashPool.Add(newEff);
+        newEff.transform.SetParent(effectHolder.transform);
         slashEffect.transform.position = target.position;
         newEff.gameObject.SetActive(true);
     }
