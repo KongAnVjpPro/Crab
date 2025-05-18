@@ -10,6 +10,7 @@ public class PlayerEntity : EntityController
     private static PlayerEntity instance;
     public static PlayerEntity Instance => instance;
 
+
     protected virtual void LoadSingleton()
     {
         if (instance == null)
@@ -25,7 +26,7 @@ public class PlayerEntity : EntityController
         }
         DontDestroyOnLoad(gameObject);
     }
-
+    public Collider2D selfCollider;
     public PlayerAnimator playerAnimator;
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
@@ -42,6 +43,11 @@ public class PlayerEntity : EntityController
     public Recoil playerRecoil;
     public PlayerShellController playerShell;
     public PlayerAbility playerAbility;
+    protected virtual void LoadCollider()
+    {
+        if (selfCollider != null) return;
+        selfCollider = GetComponent<Collider2D>();
+    }
     protected virtual void LoadSprite()
     {
         if (this.sr != null) return;
@@ -128,6 +134,7 @@ public class PlayerEntity : EntityController
         LoadSingleton();
         // OnPlayerEntityReady?.Invoke();
 
+        LoadCollider();
         this.LoadSprite();
         LoadMovement();
         LoadAnim();

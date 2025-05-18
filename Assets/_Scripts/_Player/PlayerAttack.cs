@@ -16,7 +16,8 @@ public class PlayerAttack : PlayerComponent
     [SerializeField] Transform upAttackPos;
     [SerializeField] Transform currentAttackPos;
     [SerializeField] LayerMask enemyLayer;
-    [SerializeField] float attackRange;
+    // [SerializeField] float attackRange = 0.52f;
+    [SerializeField] Vector2 attackArea = new Vector2(2, 1);
     [Header("Attack State: ")]
     [SerializeField] private AttackState currentState = AttackState.forwardAttack;
     public AttackState ChangeCurrentState
@@ -120,7 +121,7 @@ public class PlayerAttack : PlayerComponent
     }
     void FindAndAttack()
     {
-        Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(currentAttackPos.position, attackRange, enemyLayer);
+        Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(currentAttackPos.position, attackArea, enemyLayer);
         foreach (Collider2D enemy in enemiesToDamage)
         {
             EnemyEntity enemyCtrl = enemy.GetComponent<EnemyEntity>();
@@ -171,7 +172,9 @@ public class PlayerAttack : PlayerComponent
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(currentAttackPos.position, attackRange);
+        Gizmos.DrawWireCube(upAttackPos.position, attackArea);
+        Gizmos.DrawWireCube(downAttackPos.position, attackArea);
+        Gizmos.DrawWireCube(forwardAttackPos.position, attackArea);
     }
     public void EndAttack()
     {

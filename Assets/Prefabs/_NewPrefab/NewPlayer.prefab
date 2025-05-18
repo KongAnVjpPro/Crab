@@ -5365,6 +5365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 3523550032946179174}
+  selfCollider: {fileID: 2959677237794726573}
   playerAnimator: {fileID: 4955273035862584236}
   playerInput: {fileID: 2097593640824981836}
   playerMovement: {fileID: 3198912072496296998}
@@ -5405,7 +5406,7 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 2048
-  attackRange: 0.52
+  attackArea: {x: 1.5, y: 1.5}
   currentState: 0
 --- !u!114 &4955273035862584236
 MonoBehaviour:
@@ -5435,8 +5436,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerController: {fileID: 5307288971361760253}
   moveSpeed: 5
+  scaledMoveSpeed: 1
   canMove: 1
   jumpForce: 12
+  scaledJumpForce: 1
   jumpBufferFrames: 0.1
   coyoteTime: 0.15
   maxAirJumps: 1
@@ -5580,6 +5583,8 @@ MonoBehaviour:
   playerController: {fileID: 5307288971361760253}
   staminaUsePerSecond: 0.5
   staminaThreshHold: 0.1
+  reduceMovementWhileBlock: 0.5
+  isBlocking: 0
 --- !u!114 &2132157163461145044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5603,6 +5608,7 @@ MonoBehaviour:
       amount: 4
   targetUseItem: {fileID: 0}
   maxSlots: 12
+  currentCoin: 0
 --- !u!114 &7840035367646998498
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5693,6 +5699,8 @@ MonoBehaviour:
   staminaRecoverSpeed: 2
   delayRecover: 1
   staminaTimer: 0
+  damageReduceRate: 0.8
+  staminaBlockedSuccess: 2
 --- !u!1 &5280963071678178308
 GameObject:
   m_ObjectHideFlags: 0

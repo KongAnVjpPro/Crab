@@ -77,9 +77,10 @@ public class AttackState : EnemyState
         {
             PlayerEntity playerEntity = player.GetComponent<PlayerEntity>();
             if (playerEntity.pState.alive == false) return;
-            playerEntity.playerStat.ChangeCurrentStats(StatComponent.StatType.Health, -damage);
-            playerEntity.playerAnimator.Hurting();
-            playerEntity.playerEffect.KnockedBack(dirToTarget);
+            // playerEntity.playerStat.ChangeCurrentStats(StatComponent.StatType.Health, -damage);
+            // playerEntity.playerAnimator.Hurting();
+            // playerEntity.playerEffect.KnockedBack(dirToTarget);
+            playerEntity.playerStat.ReceiveDamage(dirToTarget, damage);
 
         }
     }
@@ -127,4 +128,5 @@ public class AttackState : EnemyState
         return EnemyStateID.Patrolling;
 
     }
+
 }

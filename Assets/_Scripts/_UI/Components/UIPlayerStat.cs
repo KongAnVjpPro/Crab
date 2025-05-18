@@ -104,6 +104,7 @@ public class UIPlayerStat : UIComponent
         staminaSlider.value = currentStamina;
         // Debug.Log("b");
     }
+    Sequence s;
     void UpdateCoin()
     {
         int currentCoin = PlayerEntity.Instance.playerInventory.GetCurrentCoin();
@@ -128,8 +129,15 @@ public class UIPlayerStat : UIComponent
 
         coinText.text = currentCoin.ToString();
 
-
-        Sequence s = DOTween.Sequence();
+        if (s != null && s.IsActive())
+        {
+            coinText.color = Color.white;
+            coinText.transform.localScale = originalScale;
+            s.Kill();
+        }
+        s = DOTween.Sequence();
+        // Sequence s = DOTween.Sequence();
+        // s.Kill();
         s.Append(coinText.DOColor(targetColor, 0.2f))
          .Join(coinText.transform.DOPunchScale(punchScale, 0.3f, 10, 1))
          .AppendInterval(0.5f)

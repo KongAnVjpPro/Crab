@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 public class PlayerStat : StatComponent
 {
@@ -10,9 +11,20 @@ public class PlayerStat : StatComponent
     [Header("Parry: ")]
     [SerializeField] float damageReduceRate = 0.8f;
     [SerializeField] float staminaBlockedSuccess = 2f;
+
+    [Header("Invincible: ")]
+    [SerializeField] float invincibleTime = 0.5f;
+    [SerializeField] float invincibleCounter = 0f;
     void Update()
     {
-        if (!playerController.pState.alive) return;
+        if (!playerController.pState.alive)
+        {
+            // if (playerController.pState.invincible)
+            // {
+            //     playerController.pState.invincible = false;
+            // }
+            return;
+        }
         if (isStopRecoverStamina)
         {
             staminaTimer += Time.deltaTime;
@@ -26,6 +38,16 @@ public class PlayerStat : StatComponent
         }
         ChangeCurrentStats(StatType.Stamina, staminaRecoverSpeed * Time.deltaTime);
 
+
+        if (playerController.pState.invincible)
+        {
+            invincibleCounter += Time.deltaTime;
+            if (invincibleCounter >= invincibleTime)
+            {
+                playerController.pState.invincible = false;
+                invincibleCounter = 0;
+            }
+        }
     }
     protected override void Awake()
     {
@@ -52,10 +74,16 @@ public class PlayerStat : StatComponent
         if (statType != StatType.Health) return;
         if (IsDead())
         {
+            if (playerController.pState.invincible)
+            {
+                playerController.pState.invincible = false;
+            }
+
 
             playerController.playerAnimator.ResetTrigger();
             playerController.pState.alive = false;
             playerController.playerAnimator.Death();
+            // playerController.selfCollider.enabled = false;
             //do some death mechanic
         }
     }
@@ -65,5 +93,19 @@ public class PlayerStat : StatComponent
         if (amountChange <= 0)
             isStopRecoverStamina = true;
         staminaTimer = 0;
+    }
+    public override void ReceiveDamage(Vector2 knockedBackDir, float damageReceive)
+    {
+
+        base.ReceiveDamage(knockedBackDir, damageReceive);
+        if (!playerController.pState.alive) return;
+        if (playerController.pState.invincible) return;
+        playerController.pState.invincible = true;
+
+        ChangeCurrentStats(StatComponent.StatType.Health, -damageReceive);
+        playerController.playerAnimator.Hurting();
+        playerController.playerEffect.KnockedBack(knockedBackDir);
+
+
     }
 }

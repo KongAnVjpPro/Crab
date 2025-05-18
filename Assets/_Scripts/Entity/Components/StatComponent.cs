@@ -67,4 +67,8 @@ public class StatComponent : EntityComponent
     {
         return currentHealth <= 0;
     }
+    public virtual void ReceiveDamage(Vector2 knockedBackDir, float damageReceive)
+    {
+
+    }
 }
