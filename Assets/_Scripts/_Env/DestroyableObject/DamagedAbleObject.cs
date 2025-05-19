@@ -7,11 +7,22 @@ public class DamagedAbleObject : MyMonobehaviour
     [Header("Config object stats: ")]
     [SerializeField] float objectHP = 3f;
     [SerializeField] float currentObjectHp = 3f;
-    [SerializeField] BoxCollider2D objectCollide;
+    [SerializeField] Collider2D objectCollide;
     [SerializeField] bool canRevive = false;
     [SerializeField] bool isRevived = false;
 
     [SerializeField] float destroyedTime = 2f;
+    [SerializeField] ParticleSystem particle;
+
+    public void PlayParticle()
+    {
+        if (particle == null) return;
+        if (particle.isPlaying)
+        {
+            particle.Stop();
+        }
+        particle?.Play();
+    }
 
     public void ReviveAnimation()
     {
@@ -88,6 +99,6 @@ public class DamagedAbleObject : MyMonobehaviour
             ReviveAnimation();
         }
     }
-    public UnityAction OnHittedEvent;
-    public UnityAction OnDestroyedEvent;
+    public UnityEvent OnHittedEvent;
+    public UnityEvent OnDestroyedEvent;
 }

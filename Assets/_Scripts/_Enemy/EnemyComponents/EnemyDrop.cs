@@ -1,10 +1,12 @@
 using UnityEngine;
 public class EnemyDrop : EnemyComponent
 {
+    [Header("All the function can use for both enemy and object, ignore enemy ctrl and bindFunction to object")]
     [SerializeField] float dropRateItem = 0;
     [SerializeField] ItemSO itemDropAble;
 
     [SerializeField] int amountRange = 1;
+    [Header("Coin: ")]
     [SerializeField] int coinAmount = 5;
     public void Drop()
     {
@@ -20,7 +22,7 @@ public class EnemyDrop : EnemyComponent
         }
 
     }
-    void DropCoin()
+    public void DropCoin()
     {
         int coinRange = Mathf.FloorToInt(Random.Range(1, coinAmount));
         for (int i = 0; i < coinRange; i++)

@@ -132,6 +132,15 @@ public class PlayerAttack : PlayerComponent
             // enemyCtrl.enemyRecoil.RecoilHorizontal(playerController.pState.lookingRight ? 1 : -1);
             Debug.Log("Attack");
         }
+
+        Collider2D[] breakableObject = Physics2D.OverlapBoxAll(currentAttackPos.position, attackArea, LayerMask.GetMask("DamageAble"));
+        foreach (Collider2D obj in breakableObject)
+        {
+            DamagedAbleObject damagedAbleobj = obj.GetComponent<DamagedAbleObject>();
+            if (damagedAbleobj == null) continue;
+            damagedAbleobj.TakeDamage(damage);
+            playerController.playerEffect.SpawnEffect(damagedAbleobj.transform, EffectAnimationID.Slash);
+        }
     }
     void AttackAnimation()
     {

@@ -67,7 +67,7 @@ public class PlayerEffect : PlayerComponent
             return;
         }
 
-        newEff = Instantiate(effectDict[effectID]);
+        newEff = Instantiate(effectDict[effectID], target.position, Quaternion.identity);
         if (newEff == null) Debug.LogError("Null Eff", gameObject);
         slashPool.Add(newEff);
         newEff.transform.SetParent(effectHolder.transform);
