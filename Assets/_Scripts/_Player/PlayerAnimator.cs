@@ -1,3 +1,6 @@
+using System;
+using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 public class PlayerAnimator : PlayerComponent
 {
@@ -6,6 +9,13 @@ public class PlayerAnimator : PlayerComponent
     {
         base.LoadComponents();
         this.LoadAnim();
+    }
+    public void ResetTrigger()
+    {
+        anim.ResetTrigger("Blocking");
+        anim.ResetTrigger("Dashing");
+        anim.ResetTrigger("Hurting");
+
     }
     protected virtual void LoadAnim()
     {
@@ -43,5 +53,36 @@ public class PlayerAnimator : PlayerComponent
     public void Blocking(bool value)
     {
         anim.SetBool("Blocking", value);
+    }
+
+    public void Hurting()
+    {
+        anim.ResetTrigger("Hurting");
+        anim.SetTrigger("Hurting");
+    }
+    public void Death()
+    {
+        anim.SetTrigger("Death");
+    }
+
+    void LateUpdate()
+    {
+        AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+
+        if (playerController.pState.attacking && !state.IsTag("Attack"))
+        {
+            playerController.pState.attacking = false;
+        }
+    }
+    public bool IsInAttackAnim()
+    {
+        AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+        return state.IsTag("Attack");
+    }
+    public float GetCurrentAnimationTime()
+    {
+        AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+        float timeRemaining = state.length * Mathf.Clamp01(1 - state.normalizedTime % 1);
+        return timeRemaining;
     }
 }

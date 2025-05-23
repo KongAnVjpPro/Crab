@@ -3,6 +3,10 @@ using UnityEngine;
 public class EnemyAnimator : EnemyComponent
 {
     [SerializeField] protected Animator animator;
+    public Animator GetAnimator()
+    {
+        return animator;
+    }
     protected virtual void OnEnable()
     {
         enemyController.state.OnStateChanged += HandleStateChange;
@@ -35,6 +39,13 @@ public class EnemyAnimator : EnemyComponent
             case EnemyStateID.Attacking:
                 Attacking();
                 break;
+            case EnemyStateID.Stunned:
+                Stunned();
+                break;
+
+            case EnemyStateID.Dead:
+                Death();
+                break;
 
         }
     }
@@ -51,6 +62,18 @@ public class EnemyAnimator : EnemyComponent
 
     }
     public virtual void Patrolling()
+    {
+
+    }
+    public virtual void Stunned()
+    {
+
+    }
+    public virtual void Death()
+    {
+
+    }
+    public virtual void PrepareRangeAttack()
     {
 
     }

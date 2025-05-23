@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class StatComponent : EntityComponent
 {
@@ -5,6 +6,7 @@ public class StatComponent : EntityComponent
     {
         Health, Mana, Stamina
     }
+    public Action OnStatChange;
     [Header("Current Stats: ")]
     [SerializeField] protected float currentHealth = 5;
     [SerializeField] protected float currentMana = 5;
@@ -39,6 +41,8 @@ public class StatComponent : EntityComponent
                 currentStamina = Mathf.Clamp(currentStamina + amount, 0, totalStamina);
                 break;
         }
+        OnStatChange?.Invoke();
+        // Debug.Log("a");
     }
     public virtual void ChangeTotalStats(StatType statType, float amount)//add or sub
     {
@@ -54,5 +58,18 @@ public class StatComponent : EntityComponent
                 totalStamina = Mathf.Clamp(totalStamina + amount, 0, maxStamina);
                 break;
         }
+    }
+    public void Heal(float amount)
+    {
+        // currentHealth = Mathf.Clamp(currentHealth + amount, 0, totalHealth);
+        ChangeCurrentStats(StatType.Health, amount);
+    }
+    public bool IsDead()
+    {
+        return currentHealth <= 0;
+    }
+    public virtual void ReceiveDamage(Vector2 knockedBackDir, float damageReceive)
+    {
+
     }
 }

@@ -11,6 +11,10 @@ public class CameraFollow : MyMonobehaviour
     {
         CameraMove();
     }
+    void Start()
+    {
+        target = FindAnyObjectByType<PlayerEntity>().gameObject;
+    }
     public void CameraMove()
     {
         transform.position = Vector3.Lerp(transform.position, target.transform.position + defaultCam, followSpeed * Time.deltaTime);

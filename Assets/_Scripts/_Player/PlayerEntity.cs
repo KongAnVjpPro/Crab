@@ -1,11 +1,36 @@
+using System;
+using System.Net.Cache;
 using UnityEngine;
 public class PlayerEntity : EntityController
 {
 
+    // public static event Action OnPlayerEntityReady;
+
+
+    private static PlayerEntity instance;
+    public static PlayerEntity Instance => instance;
+
+
+    protected virtual void LoadSingleton()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            if (instance != this)
+            {
+                Destroy(gameObject);
+            }
+        }
+        DontDestroyOnLoad(gameObject);
+    }
+    public Collider2D selfCollider;
     public PlayerAnimator playerAnimator;
     public PlayerInput playerInput;
     public PlayerMovement playerMovement;
-    public StatComponent playerStat;
+    public PlayerStat playerStat;
     public SpriteRenderer sr;
     public PlayerAttack playerAttack;
     public PlayerState pState;
@@ -14,6 +39,15 @@ public class PlayerEntity : EntityController
     public PlayerDash playerDash;
     public PlayerEffect playerEffect;
     public PlayerBlocking playerBlocking;
+    public PlayerInventory playerInventory;
+    public Recoil playerRecoil;
+    public PlayerShellController playerShell;
+    public PlayerAbility playerAbility;
+    protected virtual void LoadCollider()
+    {
+        if (selfCollider != null) return;
+        selfCollider = GetComponent<Collider2D>();
+    }
     protected virtual void LoadSprite()
     {
         if (this.sr != null) return;
@@ -27,7 +61,7 @@ public class PlayerEntity : EntityController
     protected virtual void LoadStat()
     {
         if (this.playerStat != null) return;
-        playerStat = GetComponent<StatComponent>();
+        playerStat = GetComponent<PlayerStat>();
     }
     protected virtual void LoadAnim()
     {
@@ -74,9 +108,33 @@ public class PlayerEntity : EntityController
         if (playerBlocking != null) return;
         playerBlocking = GetComponent<PlayerBlocking>();
     }
+    protected virtual void LoadInventory()
+    {
+        if (playerInventory != null) return;
+        playerInventory = GetComponent<PlayerInventory>();
+    }
+    protected virtual void LoadRecoil()
+    {
+        if (playerRecoil != null) return;
+        playerRecoil = GetComponent<Recoil>();
+    }
+    protected virtual void LoadShell()
+    {
+        if (playerShell != null) return;
+        playerShell = GetComponent<PlayerShellController>();
+    }
+    protected virtual void LoadAbility()
+    {
+        if (playerAbility != null) return;
+        playerAbility = GetComponent<PlayerAbility>();
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
+        LoadSingleton();
+        // OnPlayerEntityReady?.Invoke();
+
+        LoadCollider();
         this.LoadSprite();
         LoadMovement();
         LoadAnim();
@@ -89,5 +147,8 @@ public class PlayerEntity : EntityController
         LoadPlayerDash();
         LoadPlayerEffect();
         LoadPlayerBlock();
+        LoadInventory();
+        LoadRecoil();
+
     }
 }

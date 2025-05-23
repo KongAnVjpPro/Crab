@@ -19,8 +19,8 @@ TagManager:
   - DeathCreature
   - Wall
   - Enemy
-  - 
-  - 
+  - NPC
+  - DamageAble
   - 
   - 
   - post
@@ -54,4 +54,7 @@ TagManager:
     locked: 0
   - name: ForeGround
     uniqueID: 160570799
+    locked: 0
+  - name: Guide
+    uniqueID: 325439103
     locked: 0

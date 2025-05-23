@@ -1,42 +1,107 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
+// [Serializable]
 public class EnemyStateMachine : EnemyComponent
 {
     public Transform player;
     public LayerMask playerLayer;
     public Rigidbody2D rb;
+    public EnemyEntity enemyEntity;
 
-    [Header("State: ")]
-    public PatrolState patrolState;
-    public ChaseState chaseState;
-    public AttackState attackState;
+    public Dictionary<EnemyStateID, EnemyState> stateList = new Dictionary<EnemyStateID, EnemyState>();
+
+    [SerializeField] private EnemyStateID? interruptState = null;
+    public bool isSwimming = false;
+    public bool isRangeAttack = false;
+    public Animator enemyAnim;
+    public void SetInterruptState(EnemyStateID stateID)
+    {
+        interruptState = stateID;
+    }
+
     [Header("Action: ")]
     public Action<EnemyStateID> OnStateChanged;
     [SerializeField] private EnemyState currentState;
+    [Header("For rangeAttack")]
+    [SerializeField] public float rangeAttackDistanceCheck = 10f;
+
+
 
     protected override void Awake()
     {
+        LoadComponents();
 
-        if (patrolState != null) patrolState.Init(this);
-        if (chaseState != null) chaseState.Init(this);
-        if (attackState != null) attackState.Init(this);
-        if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
+        // if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
+        StartCoroutine(WaitForPlayer());
+        enemyEntity = enemyController;
+        enemyAnim = enemyController.enemyAnimator.GetAnimator();
+    }
+    protected override void LoadComponents()
+    {
+        base.LoadComponents();
+        this.LoadAllState();
+    }
+    protected virtual void LoadAllState()
+    {
+        foreach (EnemyState state in transform.GetComponentsInChildren<EnemyState>())
+        {
+            stateList.Add(state.StateID, state);
+            state.Init(this);
+        }
     }
 
     private void Start()
     {
-        if (patrolState != null)
-            ChangeState(patrolState);
+        if (stateList[EnemyStateID.Patrolling] != null)
+            ChangeState(stateList[EnemyStateID.Patrolling]);
+        player = PlayerEntity.Instance.transform;
+        StartCoroutine(WaitForPlayer());
     }
-
+    IEnumerator WaitForPlayer()
+    {
+        yield return new WaitForSeconds(1f);
+        while (PlayerEntity.Instance.transform == null)
+        {
+            yield return null;
+        }
+        player = PlayerEntity.Instance.transform;
+    }
     private void Update()
     {
+        if (interruptState.HasValue)
+        {
+            ChangeState(stateList[interruptState.Value]);
+            interruptState = null;
+            return;
+        }
+
+
         currentState?.Do();
+
+        // if (hitByAttack)
+        // {
+        //     ChangeState(stateList[EnemyStateID.Stunned]);
+        //     return;
+        // }
 
         if (currentState != null && currentState.isComplete)
         {
-            DecideNextState();
+            var next = currentState.CheckNextState();
+            if (next.HasValue && stateList.ContainsKey(next.Value))
+            {
+                ChangeState(stateList[next.Value]);
+            }
+            else
+            {
+                ChangeState(stateList[EnemyStateID.Patrolling]);
+
+            }
+            // DecideNextState();
+
         }
     }
 
@@ -47,31 +112,22 @@ public class EnemyStateMachine : EnemyComponent
 
     void ChangeState(EnemyState newState)
     {
+
         if (currentState == newState || newState == null) return;
 
         currentState?.Exit();
         currentState = newState;
+        if (PlayerEntity.Instance.pState.alive == false)
+        {
+            currentState = stateList[EnemyStateID.Patrolling];
+        }
         currentState.Enter();
 
         OnStateChanged?.Invoke(currentState.StateID);
     }
 
-    void DecideNextState()
-    {
-        float dist = Vector2.Distance(transform.position, player.position);
-        if (dist <= 2.5f)
-        {
-            ChangeState(attackState);
-        }
-        else if (dist <= 5f)
-        {
-            ChangeState(chaseState);
-        }
-        else
-        {
-            ChangeState(patrolState);
-        }
-    }
+
+
     #region Player Information
     public Vector2 DirecionToPlayer()
     {
@@ -89,6 +145,10 @@ public class EnemyStateMachine : EnemyComponent
     {
         enemyController.enemyRotator.RotateZ(vectorDir);
     }
+    public void RecoilBoth(Vector2 dir)
+    {
+        enemyController.enemyRecoil.RecoilBoth(dir.x, dir.y > 0 ? true : false);
+    }
 
     public void MoveHorizontal(Vector2 direction, float xAxis, float moveSpeed)
     {
@@ -97,6 +157,22 @@ public class EnemyStateMachine : EnemyComponent
     public void MoveVertical(Vector2 direcion, float yAxis, float moveSpeed)
     {
         enemyController.enemyMove.MoveVertical(direcion, yAxis, moveSpeed);
+    }
+    public bool IsDead()
+    {
+        return enemyController.enemyStat.IsDead();
+    }
+    public void Drop()
+    {
+        enemyController.enemyDrop.Drop();
+    }
+    public void HPBarFadeIn()
+    {
+        enemyController.enemyHealthBar.FadeIn();
+    }
+    public void HPBarFadeOut()
+    {
+        enemyController.enemyHealthBar.FadeOut();
     }
     #endregion
 }
