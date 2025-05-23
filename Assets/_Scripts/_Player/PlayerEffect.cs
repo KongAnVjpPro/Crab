@@ -59,6 +59,7 @@ public class PlayerEffect : PlayerComponent
     #region Effect
     public void SpawnEffect(Transform target, EffectAnimationID effectID)
     {
+
         EffectController newEff = TakeFromPool(effectID);
         if (newEff != null)
         {
@@ -99,6 +100,21 @@ public class PlayerEffect : PlayerComponent
     {
         bubbleEffect.Play();
     }
+
+
+    void OnEnable()
+    {
+        // playerController.playerStat.OnStatChange += HealEff;
+    }
+    void OnDisable()
+    {
+        // playerController.playerStat.OnStatChange -= HealEff;
+    }
+    // void HealEff()
+    // {
+    //     if (playerController.playerStat.isHealDecrease) return;
+    //     SpawnEffect(playerController.transform, EffectAnimationID.Heal);
+    // }
     #endregion
 }
 public enum EffectAnimationID

@@ -1,3 +1,5 @@
+using System;
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 public class PlayerAnimator : PlayerComponent
@@ -71,5 +73,16 @@ public class PlayerAnimator : PlayerComponent
         {
             playerController.pState.attacking = false;
         }
+    }
+    public bool IsInAttackAnim()
+    {
+        AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+        return state.IsTag("Attack");
+    }
+    public float GetCurrentAnimationTime()
+    {
+        AnimatorStateInfo state = anim.GetCurrentAnimatorStateInfo(0);
+        float timeRemaining = state.length * Mathf.Clamp01(1 - state.normalizedTime % 1);
+        return timeRemaining;
     }
 }

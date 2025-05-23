@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
+// [Serializable]
 public class EnemyStateMachine : EnemyComponent
 {
     public Transform player;
@@ -15,7 +16,8 @@ public class EnemyStateMachine : EnemyComponent
 
     [SerializeField] private EnemyStateID? interruptState = null;
     public bool isSwimming = false;
-
+    public bool isRangeAttack = false;
+    public Animator enemyAnim;
     public void SetInterruptState(EnemyStateID stateID)
     {
         interruptState = stateID;
@@ -24,6 +26,8 @@ public class EnemyStateMachine : EnemyComponent
     [Header("Action: ")]
     public Action<EnemyStateID> OnStateChanged;
     [SerializeField] private EnemyState currentState;
+    [Header("For rangeAttack")]
+    [SerializeField] public float rangeAttackDistanceCheck = 10f;
 
 
 
@@ -34,6 +38,7 @@ public class EnemyStateMachine : EnemyComponent
         // if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
         StartCoroutine(WaitForPlayer());
         enemyEntity = enemyController;
+        enemyAnim = enemyController.enemyAnimator.GetAnimator();
     }
     protected override void LoadComponents()
     {
@@ -90,8 +95,13 @@ public class EnemyStateMachine : EnemyComponent
             {
                 ChangeState(stateList[next.Value]);
             }
+            else
+            {
+                ChangeState(stateList[EnemyStateID.Patrolling]);
 
+            }
             // DecideNextState();
+
         }
     }
 

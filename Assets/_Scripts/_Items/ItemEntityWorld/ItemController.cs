@@ -58,6 +58,7 @@ public class ItemController : MyMonobehaviour
         if (!PlayerEntity.Instance.playerInventory.CanAddItem(itemData)) return;
 
         PlayerEntity.Instance.playerInventory.AddItem(itemData);
+        UIEntity.Instance.Reload();
         rg.gravityScale = 0;
         Sequence seq = DOTween.Sequence();
         seq.Join(sr.DOFade(0, 1f));

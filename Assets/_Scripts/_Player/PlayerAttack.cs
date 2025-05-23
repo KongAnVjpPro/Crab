@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 public class PlayerAttack : PlayerComponent
 {
@@ -17,7 +18,15 @@ public class PlayerAttack : PlayerComponent
     [SerializeField] Transform currentAttackPos;
     [SerializeField] LayerMask enemyLayer;
     // [SerializeField] float attackRange = 0.52f;
-    [SerializeField] Vector2 attackArea = new Vector2(2, 1);
+    [Header("Attack Area: ")]
+    [SerializeField] Vector2 downArea = new Vector2(2, 1);
+    [SerializeField] Vector2 forwardArea = new Vector2(3, 1.5f);
+    [SerializeField] Vector2 upwardArea = new Vector2(1.5f, 1.5f);
+    [SerializeField] Vector2 currentAtkArea;
+
+    [SerializeField] float attackRecoil = 2f;
+    [SerializeField] Vector2 upattackForce = new Vector2(4f, 4f);
+    [SerializeField] float appliedForceTime = 0.2f;
     [Header("Attack State: ")]
     [SerializeField] private AttackState currentState = AttackState.forwardAttack;
     public AttackState ChangeCurrentState
@@ -49,8 +58,9 @@ public class PlayerAttack : PlayerComponent
         if (currentCD >= attackCD)
         {
             playerController.pState.attacking = true;
+            hitTarget = false;
             AttackAnimation();
-            FindAndAttack();
+            // FindAndAttack();
             currentCD = 0;
             attackBuffered = false;
         }
@@ -106,7 +116,7 @@ public class PlayerAttack : PlayerComponent
     }
     void UpdateAttackVariable()
     {
-        if (playerController.pState.jumping && playerController.pState.lookingUp)
+        if (playerController.pState.lookingUp)
         {
             ChangeCurrentState = AttackState.upAttack;
         }
@@ -119,9 +129,14 @@ public class PlayerAttack : PlayerComponent
             ChangeCurrentState = AttackState.forwardAttack;
         }
     }
+    bool hitTarget = false;
     void FindAndAttack()
     {
-        Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(currentAttackPos.position, attackArea, enemyLayer);
+        // if (currentState == AttackState.upAttack)
+        // {
+        //     StartCoroutine(ApplyUpwardForce());
+        // }
+        Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(currentAttackPos.position, currentAtkArea, enemyLayer);
         foreach (Collider2D enemy in enemiesToDamage)
         {
             EnemyEntity enemyCtrl = enemy.GetComponent<EnemyEntity>();
@@ -131,16 +146,47 @@ public class PlayerAttack : PlayerComponent
             playerController.playerEffect.SpawnEffect(enemyCtrl.transform, EffectAnimationID.Slash);
             // enemyCtrl.enemyRecoil.RecoilHorizontal(playerController.pState.lookingRight ? 1 : -1);
             Debug.Log("Attack");
+            hitTarget = true;
         }
 
-        Collider2D[] breakableObject = Physics2D.OverlapBoxAll(currentAttackPos.position, attackArea, LayerMask.GetMask("DamageAble"));
+        Collider2D[] breakableObject = Physics2D.OverlapBoxAll(currentAttackPos.position, currentAtkArea, LayerMask.GetMask("DamageAble"));
         foreach (Collider2D obj in breakableObject)
         {
             DamagedAbleObject damagedAbleobj = obj.GetComponent<DamagedAbleObject>();
             if (damagedAbleobj == null) continue;
             damagedAbleobj.TakeDamage(damage);
             playerController.playerEffect.SpawnEffect(damagedAbleobj.transform, EffectAnimationID.Slash);
+            hitTarget = true;
         }
+
+        ApplyRecoil();
+    }
+    IEnumerator ApplyUpwardForce()
+    {
+        Vector2 currentV = playerController.rb.velocity;
+        // Vector2 force = new Vector2(upattackForce.x * (playerController.pState.lookingRight ? 1 : -1), upattackForce.y);
+        playerController.rb.velocity += new Vector2(0, upattackForce.y);
+        yield return new WaitForSeconds(appliedForceTime);
+        // while (playerController.rb.velocity.y > 0)
+        // {
+        //     yield return null;
+        // }
+        // playerController.rb.velocity = ;
+
+    }
+    void ApplyRecoil()
+    {
+        if (!hitTarget) return;
+        if (currentState == AttackState.forwardAttack)
+        {
+            Vector2 recoilDir = (forwardAttackPos.position - playerController.transform.position).normalized;
+            playerController.playerRecoil.RecoilBoth(recoilDir.x * attackRecoil, false);
+        }
+        else if (currentState == AttackState.downAttack)
+        {
+            playerController.playerRecoil.RecoilVertical(true, attackRecoil);
+        }
+
     }
     void AttackAnimation()
     {
@@ -156,7 +202,16 @@ public class PlayerAttack : PlayerComponent
         {
             playerController.playerAnimator.Attacking();
         }
-
+        StartCoroutine(WaitForEndAnimation());
+    }
+    IEnumerator WaitForEndAnimation()
+    {
+        while (!playerController.playerAnimator.IsInAttackAnim())
+        {
+            yield return null;
+        }
+        yield return new WaitForSeconds(playerController.playerAnimator.GetCurrentAnimationTime());
+        FindAndAttack();
     }
     private void DoInChangeState()
     {
@@ -164,12 +219,15 @@ public class PlayerAttack : PlayerComponent
         {
             case AttackState.forwardAttack:
                 SetAttackPosition(forwardAttackPos);
+                currentAtkArea = forwardArea;
                 break;
             case AttackState.upAttack:
                 SetAttackPosition(upAttackPos);
+                currentAtkArea = upwardArea;
                 break;
             case AttackState.downAttack:
                 SetAttackPosition(downAttackPos);
+                currentAtkArea = downArea;
                 break;
         }
     }
@@ -181,9 +239,9 @@ public class PlayerAttack : PlayerComponent
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(upAttackPos.position, attackArea);
-        Gizmos.DrawWireCube(downAttackPos.position, attackArea);
-        Gizmos.DrawWireCube(forwardAttackPos.position, attackArea);
+        Gizmos.DrawWireCube(upAttackPos.position, upwardArea);
+        Gizmos.DrawWireCube(downAttackPos.position, downArea);
+        Gizmos.DrawWireCube(forwardAttackPos.position, forwardArea);
     }
     public void EndAttack()
     {

@@ -12,9 +12,13 @@ public class EffectController : MyMonobehaviour
         gameObject.SetActive(false);
     }
 
-    void OnEnable()
+    protected virtual void OnEnable()
     {
         SelfDestruct();
+    }
+    protected virtual void OnDisable()
+    {
+
     }
 
 }

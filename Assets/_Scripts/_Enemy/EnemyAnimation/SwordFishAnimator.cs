@@ -31,4 +31,11 @@ public class SwordFishAnimator : EnemyAnimator
     {
         animator.SetTrigger("Stunned");
     }
+    //for rangeAttack crea
+    public override void PrepareRangeAttack()
+    {
+        base.PrepareRangeAttack();
+        animator.SetTrigger("RangeAttack");
+    }
+
 }

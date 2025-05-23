@@ -55,17 +55,28 @@ public class PlayerStat : StatComponent
         if (playerController == null)
             playerController = entityController.GetComponent<PlayerEntity>();
     }
+    // public bool isHealDecrease = true;
     public override void ChangeCurrentStats(StatType statType, float amount)
     {
         CheckStamina(statType, amount);
         if (statType == StatType.Health)
         {
+            // isHealDecrease = amount >= 0 ? false : true;
             if (playerController.playerBlocking.isBlocking)
             {
                 amount *= (1 - damageReduceRate);
                 currentStamina = Mathf.Clamp(currentStamina - staminaBlockedSuccess, 0, totalStamina);
             }
+            if (amount > 0)
+            {
+                Debug.Log("Heal");
+                playerController.playerEffect.SpawnEffect(playerController.transform, EffectAnimationID.Heal);
+            }
         }
+        // else
+        // {
+        //     // isHealDecrease = true;
+        // }
         base.ChangeCurrentStats(statType, amount);
         CheckDead(statType);
     }
@@ -85,6 +96,8 @@ public class PlayerStat : StatComponent
             playerController.playerAnimator.Death();
             // playerController.selfCollider.enabled = false;
             //do some death mechanic
+
+            GameController.Instance.OnPlayerDeath();
         }
     }
     void CheckStamina(StatType statType, float amountChange)

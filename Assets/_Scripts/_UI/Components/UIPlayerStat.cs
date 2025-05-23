@@ -62,6 +62,11 @@ public class UIPlayerStat : UIComponent
         UpdateStatUI();
 
     }
+    public void Reload()
+    {
+        UpdateStatUI();
+        UpdateCoin();
+    }
     void Update()
     {
         // TakeDamage();
@@ -104,6 +109,7 @@ public class UIPlayerStat : UIComponent
         staminaSlider.value = currentStamina;
         // Debug.Log("b");
     }
+    #region Coin HUD
     Sequence s;
     void UpdateCoin()
     {
@@ -145,4 +151,5 @@ public class UIPlayerStat : UIComponent
 
         previousCoin = currentCoin;
     }
+    #endregion
 }

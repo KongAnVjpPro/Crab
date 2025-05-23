@@ -69,7 +69,7 @@ public class AttackState : EnemyState
         // if (!stateMachine.isSwimming)
         // {
         // Vector2 boxSiz = Vector2.down;
-        Collider2D player = Physics2D.OverlapBox(attackPos.position, hitBoxSize, 0, stateMachine.playerLayer);
+        Collider2D player = Physics2D.OverlapBox(attackPos.position, hitBoxSize, Mathf.Atan2(dirToTarget.y, dirToTarget.x) * Mathf.Rad2Deg, stateMachine.playerLayer);
         // }
 
         // Collider2D target = P
@@ -98,11 +98,28 @@ public class AttackState : EnemyState
         }
         stateMachine.rb.velocity = -dirToTarget * velocityMoveScale;
         stateMachine.OnStateChanged.Invoke(this.stateID);
-        yield return new WaitForSeconds(attackAnimTime);
+        // yield return new WaitForSeconds(attackAnimTime);
+        yield return WaitForAttackAnimation();
         stateMachine.rb.velocity = dirToTarget * velocityMoveScale;
         Attack(-1 * dirToTarget);
     }
+    IEnumerator WaitForAttackAnimation()
+    {
+        // stateMachine.enemyEntity.enemyAnimator.PrepareRangeAttack();
+        // stateMachine.enemyEntity.enemyAnimator.Attacking();
 
+        while (!stateMachine.enemyAnim.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        {
+            yield return null;
+        }
+
+
+        AnimatorStateInfo aif = stateMachine.enemyAnim.GetCurrentAnimatorStateInfo(0);
+
+        float animLenght = aif.length * Mathf.Clamp01(1 - aif.normalizedTime % 1);
+        yield return new WaitForSeconds(animLenght);
+
+    }
     void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

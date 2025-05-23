@@ -61,7 +61,8 @@ public class StatComponent : EntityComponent
     }
     public void Heal(float amount)
     {
-        currentHealth = Mathf.Clamp(currentHealth + amount, 0, totalHealth);
+        // currentHealth = Mathf.Clamp(currentHealth + amount, 0, totalHealth);
+        ChangeCurrentStats(StatType.Health, amount);
     }
     public bool IsDead()
     {

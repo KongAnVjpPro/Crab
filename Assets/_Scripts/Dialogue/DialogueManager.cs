@@ -20,18 +20,31 @@ public class DialogueManager : UIComponent
     public RectTransform outPos;
     public RectTransform inPos;
     public RectTransform exactPos;
+    Sequence s;
     void ShowDialogue()
     {
-        Sequence seq = DOTween.Sequence();
-        seq.Join(canvasGroup.DOFade(1, 1));
-        seq.Join(canvasGroup.GetComponent<RectTransform>().DOAnchorPos(inPos.anchoredPosition, 0.5f));
-        seq.Join(canvasGroup.GetComponent<RectTransform>().DOAnchorPos(exactPos.anchoredPosition, 0.5f));
+        if (this.s != null && this.s.IsActive())
+        {
+            this.s.Kill();
+        }
+        s = DOTween.Sequence();
+        canvasGroup.interactable = true;
+        canvasGroup.blocksRaycasts = true;
+        s.Join(canvasGroup.DOFade(1, 1));
+        s.Join(canvasGroup.GetComponent<RectTransform>().DOAnchorPos(inPos.anchoredPosition, 0.5f));
+        s.Join(canvasGroup.GetComponent<RectTransform>().DOAnchorPos(exactPos.anchoredPosition, 0.5f));
     }
     void HideDialogue()
     {
-        Sequence seq = DOTween.Sequence();
-        seq.Join(canvasGroup.DOFade(0, 1));
-        seq.Join(canvasGroup.GetComponent<RectTransform>().DOAnchorPos(outPos.anchoredPosition, 1f)).SetEase(Ease.OutQuad);
+        if (this.s != null && this.s.IsActive())
+        {
+            this.s.Kill();
+        }
+        s = DOTween.Sequence();
+        canvasGroup.interactable = false;
+        canvasGroup.blocksRaycasts = false;
+        s.Join(canvasGroup.DOFade(0, 1));
+        s.Join(canvasGroup.GetComponent<RectTransform>().DOAnchorPos(outPos.anchoredPosition, 1f)).SetEase(Ease.OutQuad);
         // seq.Join(canvasGroup.GetComponent<RectTransform>().DOAnchorPos(exactPos.anchoredPosition,0.5f));
     }
     public void StartDialogue(Dialogue dialogue)

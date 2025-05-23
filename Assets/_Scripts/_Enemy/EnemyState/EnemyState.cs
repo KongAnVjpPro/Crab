@@ -31,6 +31,7 @@ public enum EnemyStateID
     Patrolling = 1,
     Chasing = 2,
     Attacking = 3,
+    RangeAttack = 7,
 
     //khach quan
     Stunned = 4,

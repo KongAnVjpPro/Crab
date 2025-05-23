@@ -13,7 +13,7 @@ public class DamagedAbleObject : MyMonobehaviour
 
     [SerializeField] float destroyedTime = 2f;
     [SerializeField] ParticleSystem particle;
-
+    [SerializeField] bool isInvincible = false;
     public void PlayParticle()
     {
         if (particle == null) return;
@@ -45,6 +45,10 @@ public class DamagedAbleObject : MyMonobehaviour
 
     public void TakeDamage(float damage)
     {
+        if (isInvincible)
+        {
+            return;
+        }
         currentObjectHp -= damage;
         if (currentObjectHp <= 0)
         {

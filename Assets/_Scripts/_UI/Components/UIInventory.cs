@@ -53,6 +53,12 @@ public class UIInventory : UIComponent
     }
     public void ShowInventory()
     {
+        if (UIController.isSomethingOpened)
+        {
+            // HideInventory();
+            return;
+        }
+        UIController.isSomethingOpened = true;
         // if (isInventoryOpen) return;
         isInventoryOpen = true;
         Sequence seq = DOTween.Sequence();
@@ -70,6 +76,7 @@ public class UIInventory : UIComponent
     }
     public void HideInventory()
     {
+        UIController.isSomethingOpened = false;
         // if (!isInventoryOpen) return;
         isInventoryOpen = false;
         Sequence seq = DOTween.Sequence();

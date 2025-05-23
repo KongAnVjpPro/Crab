@@ -12,10 +12,12 @@ public class PlayerInput : PlayerComponent
      heal,
      cast,
      block,
-     inventory;
+     inventory,
+     hotkey1;
     void GetInput()
     {
-        inventory = Input.GetKeyDown(KeyCode.I);
+        // inventory = Input.GetKeyDown(KeyCode.I);
+        inventory = Input.GetButtonDown("Inventory");
 
 
         if (GameController.Instance.isBlockPlayerControl)
@@ -55,6 +57,9 @@ public class PlayerInput : PlayerComponent
         heal = Input.GetButton("Healing");
         cast = Input.GetButtonDown("CastSpell");
 
+        //useItem
+        hotkey1 = Input.GetButtonDown("HotKey1");
+        // hotkey1 = Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1);
 
     }
     void BlockInput()
@@ -71,6 +76,9 @@ public class PlayerInput : PlayerComponent
             interact = false;
             heal = false;
             cast = false;
+
+            //use item
+            hotkey1 = false;
 
 
         }

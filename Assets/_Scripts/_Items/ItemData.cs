@@ -13,6 +13,7 @@ public class ItemData
     // }
     public void Use(EntityController targetUser, int amount = 1)
     {
-        itemSO.itemEffectSO.GetIUsable()?.Use(targetUser, amount);
+        int useAmount = (this.amount - amount) >= 0 ? amount : 0;
+        itemSO.itemEffectSO?.GetIUsable()?.Use(targetUser, amount);
     }
 }

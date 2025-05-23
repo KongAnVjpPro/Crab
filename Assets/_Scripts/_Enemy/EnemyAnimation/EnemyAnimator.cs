@@ -3,6 +3,10 @@ using UnityEngine;
 public class EnemyAnimator : EnemyComponent
 {
     [SerializeField] protected Animator animator;
+    public Animator GetAnimator()
+    {
+        return animator;
+    }
     protected virtual void OnEnable()
     {
         enemyController.state.OnStateChanged += HandleStateChange;
@@ -66,6 +70,10 @@ public class EnemyAnimator : EnemyComponent
 
     }
     public virtual void Death()
+    {
+
+    }
+    public virtual void PrepareRangeAttack()
     {
 
     }

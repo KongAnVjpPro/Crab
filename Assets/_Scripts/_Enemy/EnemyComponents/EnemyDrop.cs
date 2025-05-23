@@ -24,6 +24,7 @@ public class EnemyDrop : EnemyComponent
     }
     public void DropCoin()
     {
+        if (coinAmount <= 0) return;
         int coinRange = Mathf.FloorToInt(Random.Range(1, coinAmount));
         for (int i = 0; i < coinRange; i++)
         {

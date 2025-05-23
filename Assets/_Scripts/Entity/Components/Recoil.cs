@@ -16,21 +16,21 @@ public class Recoil : EntityComponent
 
     }
 
-    public void RecoilVertical(bool upward = true)
+    public void RecoilVertical(bool upward = true, float recoilYStrength = 1)
     {
 
-        StartCoroutine(ApplyRecoil(new Vector2(entityController.rb.velocity.x, (upward ? 1 : -1) * recoilYSpeed)));
+        StartCoroutine(ApplyRecoil(new Vector2(entityController.rb.velocity.x, (upward ? 1 : -1) * recoilYSpeed * recoilYStrength)));
     }
     public void SetRecoilSpeed(float xSpeed, float ySpeed)
     {
         recoilXSpeed = xSpeed;
         recoilYSpeed = ySpeed;
     }
-    public void RecoilBoth(float direction, bool upward = true)
+    public void RecoilBoth(float direction, bool upward = true, float strengthRecoilY = 1)
     {
         if (!isRecoiling && entityController != null && entityController.rb != null)
         {
-            Vector2 recoilVelocity = new Vector2(-direction * recoilXSpeed, (upward ? 1 : -1) * recoilYSpeed);
+            Vector2 recoilVelocity = new Vector2(-direction * recoilXSpeed, (upward ? 1 : -1) * recoilYSpeed * strengthRecoilY);
             StartCoroutine(ApplyRecoil(recoilVelocity));
         }
     }

@@ -21,7 +21,7 @@ public class PlayerShellController : PlayerComponent
     public string lastShellEquippedKey;
 
 
-    [SerializeField] List<ShellSO> defaultShell;
+    // [SerializeField] List<ShellSO> defaultShell;
 
 
     public Dictionary<ShellID, ShellSO> shellDict = new Dictionary<ShellID, ShellSO>();

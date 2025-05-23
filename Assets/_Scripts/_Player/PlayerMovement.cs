@@ -28,7 +28,7 @@ public class PlayerMovement : PlayerComponent
 
     [SerializeField] private float wallJumpDuration;
     [SerializeField] private Vector2 wallJumpingPower;
-
+    [SerializeField] float wallJumpThreshHold = 2f;
 
     float wallJumpDirection;
     bool isWallSliding;
@@ -187,6 +187,10 @@ public class PlayerMovement : PlayerComponent
     #region Wall Jump
     void WallSlide()
     {
+        if (playerController.playerStat.CurrentStamina < wallJumpThreshHold)
+        {
+            return;
+        }
         if (IsOnWall() && !IsOnGround() && xAxis != 0)
         {
             isWallSliding = true;
@@ -200,6 +204,10 @@ public class PlayerMovement : PlayerComponent
     }
     void WallJump()
     {
+        if (playerController.playerStat.CurrentStamina < wallJumpThreshHold)
+        {
+            return;
+        }
         if (isWallSliding)
         {
             isWallJumping = false;

@@ -14,18 +14,20 @@ public class PatrolState : EnemyState
     [SerializeField] float obstacleCheckDistance = 0.5f;
     [SerializeField] float obstacleOffsetCheck = 0.5f;
     [SerializeField] private int moveDirection = 1;
+    // [SerializeField] Vector3 right;
 
     [SerializeField] private bool returningToCenter = false;
 
     [Header("For swimming: ")]
     [SerializeField] float rangeRandomDirection = 45f;
 
+
     // public bool isSwimming = true;
     public override void Enter()
     {
         base.Enter();
         timer = 0f;
-        stateMachine.HPBarFadeOut();
+        // stateMachine.HPBarFadeOut();
         float distanceToCenter = Vector3.Distance(transform.position, patrolCenter);
         returningToCenter = distanceToCenter > patrolRadius;
     }
@@ -35,6 +37,8 @@ public class PatrolState : EnemyState
     }
     public override void Do()
     {
+        // Debug.DrawRay(stateMachine.transform.position, stateMachine.transform.right);
+
         timer += Time.deltaTime;
         if (timer >= patrolDuration)
         {
@@ -79,13 +83,16 @@ public class PatrolState : EnemyState
 
 
         float distToCenter = Vector2.Distance(transform.position, patrolCenter);
-        if (distToCenter > patrolRadius || IsBlocked(new Vector2(moveDirection, 0)))
+        // float
+        // right = moveDirection * stateMachine.transform.right;
+        if (distToCenter > patrolRadius || IsBlocked(stateMachine.transform.right))
         {
             // Debug.Log("Obstacle");
             if (stateMachine.isSwimming)
             {
                 RandomPatrolDirection();
                 // Debug.Log("swim");
+                // MoveInDirection(moveVec);
                 return;
             }
             else
@@ -97,6 +104,8 @@ public class PatrolState : EnemyState
         }
 
         MoveInDirection(moveVec);
+
+        // t(moveDirection * stateMachine.transform.right);
         // Debug.Log("Patrol");
     }
     void OnDrawGizmos()
@@ -150,15 +159,35 @@ public class PatrolState : EnemyState
         }
 
     }
-    private bool IsBlocked(Vector2 direction)
+    void t(Vector2 direction)
     {
-        Vector2 origin = transform.position;
+        Vector2 origin = stateMachine.transform.position;
 
         Vector2[] rayOrigins = new Vector2[]
         {
-            origin + Vector2.up * obstacleOffsetCheck,
+            origin + (Vector2) stateMachine.transform.up * obstacleOffsetCheck,
             origin ,
-            origin + Vector2.down * obstacleOffsetCheck
+            origin + (Vector2) stateMachine.transform.up * -1 * obstacleOffsetCheck
+        };
+        foreach (var t in rayOrigins)
+        {
+            Debug.DrawRay(t, direction.normalized);
+        }
+    }
+    private bool IsBlocked(Vector2 direction)
+    {
+        // Debug.Log("block");
+        if (!stateMachine.isSwimming)
+        {
+            direction *= moveDirection;
+        }
+        Vector2 origin = stateMachine.transform.position;
+
+        Vector2[] rayOrigins = new Vector2[]
+        {
+            origin + (Vector2) stateMachine.transform.up * obstacleOffsetCheck,
+            origin ,
+            origin + (Vector2) stateMachine.transform.up * -1 * obstacleOffsetCheck
         };
 
         foreach (Vector2 rayOrigin in rayOrigins)
@@ -178,7 +207,15 @@ public class PatrolState : EnemyState
             return EnemyStateID.Patrolling;
         }
         float dist = Vector2.Distance(transform.position, stateMachine.player.position);
-        if (dist <= 2.5f) return EnemyStateID.Attacking;
+        if (dist <= stateMachine.rangeAttackDistanceCheck && stateMachine.isRangeAttack)
+        {
+            return EnemyStateID.RangeAttack;
+        }
+        if (dist <= 2.5f)
+        {
+            // if (stateMachine.isRangeAttack) return EnemyStateID.RangeAttack;
+            return EnemyStateID.Attacking;
+        }
         if (dist <= 6f) return EnemyStateID.Chasing;
         return EnemyStateID.Patrolling;
     }

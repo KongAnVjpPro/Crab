@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 public class GameController : MyMonobehaviour
 {
@@ -6,10 +7,14 @@ public class GameController : MyMonobehaviour
     public bool isBlockPlayerControl = false;
     public ItemSpawner itemSpawner;
     public Transform effectHolder;
+    // public Transform bulletHolder;
     // public AbilityManager abilityManager;
 
     // public PlayerEntity playerController;
-
+    [Header("Save Point: ")]
+    [SerializeField] SavePoint savePoint;
+    public Vector2 respawnPoint;
+    public Vector2 trapRespawnPoint;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -43,9 +48,29 @@ public class GameController : MyMonobehaviour
         if (this.itemSpawner != null) return;
         this.itemSpawner = GetComponent<ItemSpawner>();
     }
+
+
     // protected virtual void LoadAbilityManager()
     // {
     //     if (this.abilityManager != null) return;
     //     this.abilityManager = GetComponent<AbilityManager>();
     // }
+    #region Handle Player Death
+    public void OnPlayerDeath()
+    {
+        //ui do sth
+        UIEntity.Instance.uiDeathScene.ShowDeathScene();
+
+        //block sth
+
+        isBlockPlayerControl = true;
+    }
+    #endregion
+    #region  Respawn Player
+    public void RespawnPlayer()
+    {
+
+    }
+    #endregion
+
 }

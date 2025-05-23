@@ -13,6 +13,7 @@ public class UIInventoryDescription : MyMonobehaviour
 
     [Header("Button: ")]
     public CanvasGroup buttonGroup;
+    public CanvasGroup buttonUse;
     // public Button useButton;
     // public Button decreaseButton;
     // public Button increaseButton;
@@ -33,7 +34,24 @@ public class UIInventoryDescription : MyMonobehaviour
         itemDescriptionText.text = itemData.itemSO.itemDescription;
         itemImage.sprite = itemData.itemSO.itemSprite;
 
-        ActivateButtonGroup(true);
+
+        if (currentItemData.itemSO.itemEffectSO == null)
+        {
+            // ActivateCanvas(false, buttonUse);
+            ActivateButtonGroup(false);
+
+        }
+        else
+        {
+            // ActivateCanvas(true, buttonUse);
+            ActivateButtonGroup(true);
+        }
+
+        //  ActivateButtonGroup(true);
+
+
+
+
     }
     public void HideDescription()
     {
@@ -73,6 +91,13 @@ public class UIInventoryDescription : MyMonobehaviour
     {
         if (currentItemData == null) return;
         int amount = int.Parse(itemCountText.text);
+
+        if (currentItemData.itemSO.itemEffectSO == null)
+        {
+            ActivateCanvas(false, buttonUse);
+            return;
+        }
+
         ItemData item = PlayerEntity.Instance.playerInventory.GetItem(currentItemData.itemSO, amount);
         if (item != null)
         {
@@ -82,10 +107,15 @@ public class UIInventoryDescription : MyMonobehaviour
 
             HideDescription();
         }
-
+        PlayerEntity.Instance.playerInventory.UseItem(item);
         // Debug.Log($"Use item: {item.itemSO.itemName} - amount: {amount}");
     }
     #endregion
-
+    void ActivateCanvas(bool activeValue, CanvasGroup cv)
+    {
+        cv.alpha = activeValue ? 1 : 0;
+        cv.interactable = activeValue;
+        cv.blocksRaycasts = activeValue;
+    }
 
 }

@@ -5135,7 +5135,8 @@ GameObject:
   - component: {fileID: 484216742188733852}
   - component: {fileID: 6076371850164288587}
   - component: {fileID: 1616908494434238991}
-  m_Layer: 0
+  - component: {fileID: 6239628320089042966}
+  m_Layer: 13
   m_Name: TrapHorn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5244,6 +5245,33 @@ MonoBehaviour:
   isTrapActive: 0
   playerInside: 0
   isAnimating: 0
+--- !u!114 &6239628320089042966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2991734378354353764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62fc4b9a38016024eaba34aad9f4c4f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectAnimator: {fileID: 0}
+  objectHP: 3
+  currentObjectHp: 3
+  objectCollide: {fileID: 0}
+  canRevive: 0
+  isRevived: 0
+  destroyedTime: 2
+  particle: {fileID: 0}
+  isInvincible: 1
+  OnHittedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDestroyedEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &3495196229611001290
 GameObject:
   m_ObjectHideFlags: 0

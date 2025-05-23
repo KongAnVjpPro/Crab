@@ -4,8 +4,8 @@ using UnityEngine;
 public class DeadState : EnemyState
 {
     [SerializeField] bool canRevive;
-    [SerializeField] float delayTime = 5f;
-
+    [SerializeField] float reviveTime = 5f;
+    [SerializeField] float deathTime = 2f;
     public override void Init(EnemyStateMachine machine)
     {
         base.Init(machine);
@@ -37,7 +37,7 @@ public class DeadState : EnemyState
     {
         if (!canRevive)
         {
-            StartCoroutine(WaitForDeathTime(2f));
+            StartCoroutine(WaitForDeathTime(deathTime));
         }
         if (isComplete) return;
         StartCoroutine(WaitForReviveTime());
@@ -45,7 +45,7 @@ public class DeadState : EnemyState
     }
     IEnumerator WaitForReviveTime()
     {
-        yield return new WaitForSeconds(delayTime);
+        yield return new WaitForSeconds(reviveTime);
         isComplete = true;
     }
     IEnumerator WaitForDeathTime(float timer)

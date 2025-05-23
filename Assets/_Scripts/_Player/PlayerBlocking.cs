@@ -21,6 +21,7 @@ public class PlayerBlocking : PlayerComponent
     }
     void UpdateAnimation()
     {
+        if (!playerController.pState.unlockedParry) return;
         playerController.playerAnimator.Blocking(playerController.pState.blocking);
     }
     public void BlockProgress()

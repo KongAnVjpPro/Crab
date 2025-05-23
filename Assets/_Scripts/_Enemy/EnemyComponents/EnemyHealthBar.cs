@@ -10,16 +10,25 @@ public class EnemyHealthBar : EnemyComponent
     [SerializeField] protected float totalHealth;
     [SerializeField] protected float currentHealth;
     [SerializeField] float lerpSpeed = 0.05f;
-
+    Tween tweener;
     public void FadeIn()
     {
-        hpBarCanvas.DOFade(1f, 1f);
+        if (tweener != null && tweener.active)
+        {
+            tweener.Kill();
+        }
+
+        tweener = hpBarCanvas.DOFade(1f, 2f);
         hpBarCanvas.interactable = false;
         hpBarCanvas.blocksRaycasts = false;
     }
     public void FadeOut()
     {
-        hpBarCanvas.DOFade(0, 1f);
+        if (tweener != null && tweener.active)
+        {
+            tweener.Kill();
+        }
+        tweener = hpBarCanvas.DOFade(0, 2f);
         hpBarCanvas.interactable = false;
         hpBarCanvas.blocksRaycasts = false;
     }
@@ -49,6 +58,8 @@ public class EnemyHealthBar : EnemyComponent
 
     void Update()
     {
+
+        // hpBarCanvas.transform.localScale =  ;
 
         if (healthSlider.value != easeHealthSlider.value)
         {
