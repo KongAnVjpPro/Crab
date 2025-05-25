@@ -76,6 +76,7 @@ public class UIInventory : UIComponent
     }
     public void HideInventory()
     {
+        // if (!isInventoryOpen) return;
         UIController.isSomethingOpened = false;
         // if (!isInventoryOpen) return;
         isInventoryOpen = false;

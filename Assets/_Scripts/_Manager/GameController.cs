@@ -1,5 +1,8 @@
 using System;
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public class GameController : MyMonobehaviour
 {
     private static GameController instance;
@@ -18,11 +21,18 @@ public class GameController : MyMonobehaviour
     protected override void LoadComponents()
     {
         base.LoadComponents();
+
+        SaveSystem.Instance.Initialize();
+
+
         this.LoadSingleton();
         // this.LoadPlayerEntity();
         this.LoadItemSpawner();
+        SaveScene();
         // this.LoadAbilityManager();
+
     }
+    // void LoadD
     protected virtual void LoadSingleton()
     {
         if (instance == null)
@@ -37,6 +47,59 @@ public class GameController : MyMonobehaviour
             }
         }
         DontDestroyOnLoad(gameObject);
+    }
+    void Start()
+    {
+
+
+    }
+    #region  main menu
+    public void StartGame()
+    {
+        StartCoroutine(StartAnimation());
+    }
+    public void OnClickQuitGame()
+    {
+        // UIEntity.Instance.QuitGameAnimationHandle();
+        // Application.Quit();
+        // StartCoroutine(QuitGameAnimationHandle());
+        StartCoroutine(QuitAnimation());
+    }
+    [SerializeField] CanvasGroup quitCanvas;
+    [SerializeField] CanvasGroup startCanvas;
+    [SerializeField] float quitTime = 5f;
+    [SerializeField] float fadeTime = 3f;
+    void QuitGameAnimationHandle()
+    {
+        // StartCoroutine(QuitAnimation)
+        quitCanvas.DOFade(1, quitTime).OnComplete(() =>
+        {
+
+            Application.Quit();
+        });
+    }
+    IEnumerator QuitAnimation()
+    {
+        quitCanvas.DOFade(1, fadeTime);
+        quitCanvas.blocksRaycasts = true;
+        yield return new WaitForSeconds(quitTime);
+
+        Application.Quit();
+
+    }
+    IEnumerator StartAnimation()
+    {
+        startCanvas.DOFade(1, fadeTime);
+        startCanvas.blocksRaycasts = true;
+        yield return new WaitForSeconds(quitTime);
+        SaveSystem.Instance.LoadNPCAppear();
+        SaveSystem.Instance.LoadPlayerData();
+
+    }
+    public void DeactiveStartCanvas()
+    {
+        startCanvas.DOFade(0, 2f);
+        startCanvas.blocksRaycasts = false;
     }
     // protected virtual void LoadPlayerEntity()
     // {
@@ -55,6 +118,7 @@ public class GameController : MyMonobehaviour
     //     if (this.abilityManager != null) return;
     //     this.abilityManager = GetComponent<AbilityManager>();
     // }
+    #endregion
     #region Handle Player Death
     public void OnPlayerDeath()
     {
@@ -69,8 +133,25 @@ public class GameController : MyMonobehaviour
     #region  Respawn Player
     public void RespawnPlayer()
     {
+        SaveSystem.Instance.LoadShellStation();
+        if (SaveSystem.Instance.shellSceneName != null)
+        {
+            // SceneManager.LoadScene(SaveSystem.Instance.shellSceneName);
+            LevelManager.Instance.LoadScene(SaveSystem.Instance.shellSceneName, "WaveFade");
+        }
+        if (SaveSystem.Instance.shellStationPos != null)
+        {
+            respawnPoint = SaveSystem.Instance.shellStationPos;
+        }
+        PlayerEntity.Instance.playerStat.RespawnPlayer();
+        if (respawnPoint != null) PlayerEntity.Instance.transform.position = respawnPoint;
+    }
+    #endregion
+    #region  save
+    public void SaveScene()//for map
+    {
+        string currentSceneName = SceneManager.GetActiveScene().name;
 
     }
     #endregion
-
 }

@@ -121,4 +121,28 @@ public class PlayerStat : StatComponent
 
 
     }
+    #region  Respawn
+    public void RespawnPlayer()
+    {
+
+        RestoreStat();
+        playerController.pState.alive = true;
+        // playerController.playerAnimator.ResetTrigger();
+        playerController.playerAnimator.Respawn();
+
+
+
+
+    }
+    public void RestoreStat()
+    {
+
+        ChangeCurrentStats(StatType.Health, totalHealth);
+        ChangeCurrentStats(StatType.Mana, totalStamina);
+        ChangeCurrentStats(StatType.Stamina, totalStamina);
+    }
+
+
+    #endregion
+
 }

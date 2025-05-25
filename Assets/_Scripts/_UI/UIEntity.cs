@@ -1,4 +1,6 @@
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 public class UIEntity : EntityController
 {
     private static UIEntity instance;
@@ -9,8 +11,10 @@ public class UIEntity : EntityController
     public UIFadeScreen uISaveScreen;
     public UIInventoryHotKey uiHotKey;
     public UIDeathScene uiDeathScene;
-    public UIShellManager uiUnlockedShell;
+    public UINotification uiNotification;
+    public UISetting uiSetting;
     public bool isSomethingOpened = false;
+    public CanvasGroup mainCanvas;
 
     private void LoadSingleton()
     {
@@ -31,6 +35,7 @@ public class UIEntity : EntityController
     {
         base.LoadComponents();
 
+        LoadMainCanvas();
         this.LoadPlayerStat();
         LoadDialog();
         this.LoadUIInventory();
@@ -38,6 +43,8 @@ public class UIEntity : EntityController
         LoadHotKey();
         LoadPlayerDeathScene();
         LoadShellUnlockedUI();
+        LoadSettingUI();
+
 
         this.LoadSingleton();
     }
@@ -73,8 +80,18 @@ public class UIEntity : EntityController
     }
     protected virtual void LoadShellUnlockedUI()
     {
-        if (this.uiUnlockedShell != null) return;
-        uiUnlockedShell = GetComponent<UIShellManager>();
+        if (this.uiNotification != null) return;
+        uiNotification = GetComponent<UINotification>();
+    }
+    protected virtual void LoadSettingUI()
+    {
+        if (this.uiSetting != null) return;
+        this.uiSetting = GetComponent<UISetting>();
+    }
+    protected virtual void LoadMainCanvas()
+    {
+        if (mainCanvas != null) return;
+        mainCanvas = GetComponent<CanvasGroup>();
     }
     public void Reload()
     {
@@ -82,4 +99,17 @@ public class UIEntity : EntityController
         // uiInventory.Reload();
         uiHotKey.Reload();
     }
+    public void CloseAllUI()
+    {
+        uiInventory.HideInventory();
+    }
+    public void ActivateCanvas(bool activeValue)
+    {
+        mainCanvas.interactable = activeValue;
+        mainCanvas.blocksRaycasts = activeValue;
+        mainCanvas.alpha = activeValue ? 1 : 0;
+    }
+    #region setting
+
+    #endregion
 }

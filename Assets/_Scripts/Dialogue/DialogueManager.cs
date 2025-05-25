@@ -21,6 +21,25 @@ public class DialogueManager : UIComponent
     public RectTransform inPos;
     public RectTransform exactPos;
     Sequence s;
+    [SerializeField] bool isSkip = false;
+    [SerializeField] bool isTyping = false;
+    void Update()
+    {
+        isSkip = Input.GetButtonDown("Interact") || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.KeypadEnter);
+        if (isSkip && isDialogueActive)
+        {
+            if (isTyping)
+            {
+
+                isSkip = true;
+            }
+            else
+            {
+
+                DisplayNextDialogueLine();
+            }
+        }
+    }
     void ShowDialogue()
     {
         if (this.s != null && this.s.IsActive())
@@ -50,6 +69,8 @@ public class DialogueManager : UIComponent
     public void StartDialogue(Dialogue dialogue)
     {
         isDialogueActive = true;
+        GameController.Instance.isBlockPlayerControl = true;
+
         ShowDialogue();
         lines.Clear();
         foreach (DialogueLine dialogueLine in dialogue.dialogueLines)
@@ -68,7 +89,7 @@ public class DialogueManager : UIComponent
         DialogueLine currentLine = lines.Dequeue();
         // characterIcon.sprite = currentLine.character.icon;
         characterName.text = currentLine.character.name;
-
+        currentLine.ActionWhileTalking?.Invoke();
 
         StopAllCoroutines();
         StartCoroutine(TypeSentence(currentLine));
@@ -76,14 +97,26 @@ public class DialogueManager : UIComponent
     IEnumerator TypeSentence(DialogueLine dialogueLine)
     {
         dialogueArea.text = "";
+        isTyping = true;
+        isSkip = false;
         foreach (char letter in dialogueLine.line.ToCharArray())
         {
+            if (isSkip)
+            {
+                dialogueArea.text = dialogueLine.line;
+                // break;
+                isSkip = false;
+                break;
+            }
             dialogueArea.text += letter;
             yield return new WaitForSeconds(typingSpeed);
         }
+        isTyping = false;
     }
     void EndDialogue()
     {
+        GameController.Instance.isBlockPlayerControl = false;
+
         isDialogueActive = false;
         HideDialogue();
     }

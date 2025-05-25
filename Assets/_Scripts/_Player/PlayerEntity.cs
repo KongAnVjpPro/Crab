@@ -150,5 +150,21 @@ public class PlayerEntity : EntityController
         LoadInventory();
         LoadRecoil();
 
+
+
     }
+    void Start()
+    {
+        // SaveSystem.Instance.LoadPlayerData();
+    }
+    #region test
+    void Update()
+    {
+        // if (Input.GetKeyDown(KeyCode.P))
+        // {
+        //     SaveSystem.Instance.SavePlayerData();
+        // }
+        // if(Input.GetKeyDown(KeyCo))
+    }
+    #endregion
 }

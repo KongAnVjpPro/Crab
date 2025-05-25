@@ -60,6 +60,11 @@ public class PlayerAnimator : PlayerComponent
         anim.ResetTrigger("Hurting");
         anim.SetTrigger("Hurting");
     }
+    public void Respawn()
+    {
+        ResetTrigger();
+        anim.SetTrigger("Respawn");
+    }
     public void Death()
     {
         anim.SetTrigger("Death");

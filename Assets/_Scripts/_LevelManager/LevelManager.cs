@@ -47,8 +47,9 @@ public class LevelManager : MyMonobehaviour
 
         AsyncOperation scene = SceneManager.LoadSceneAsync(sceneName);
         scene.allowSceneActivation = false;
+        GameController.Instance.isBlockPlayerControl = true;
+        // yield return UIEntity.Instance.uISaveScreen.EnterSaveScreen();
         yield return transition.AnimateTransitionIn();
-
         // progressBar.gameObject.SetActive(true);
 
         do
@@ -62,6 +63,8 @@ public class LevelManager : MyMonobehaviour
         // progressBar.gameObject.SetActive(false);
 
         yield return transition.AnimateTransitionOut();
+        GameController.Instance.isBlockPlayerControl = false;
+        // yield return UIEntity.Instance.uISaveScreen.ExitScreen();
     }
 
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
+using UnityEngine.SceneManagement;
 public class SavePoint : MyMonobehaviour
 {
     public bool isTrigger;
@@ -55,6 +56,7 @@ public class SavePoint : MyMonobehaviour
         // });
         // AnimationIn();
         // UIManager.Instance.ActivateDeathScreen
+        GameController.Instance.respawnPoint = transform.position;
         yield return UIEntity.Instance.uISaveScreen.EnterSaveScreen();
         Restore();
         SaveData();
@@ -65,10 +67,18 @@ public class SavePoint : MyMonobehaviour
     protected virtual void SaveData()
     {
         Debug.Log("Save here", gameObject);
+        SaveSystem.Instance.shellSceneName = SceneManager.GetActiveScene().name;
+        SaveSystem.Instance.shellStationPos = transform.position;
+        SaveSystem.Instance.SaveShellStation();
+        SaveSystem.Instance.SavePlayerData();
+        SaveSystem.Instance.SaveNPCAppear();
     }
     protected virtual void Restore()
     {
-        PlayerEntity.Instance.playerStat.ChangeCurrentStats(StatComponent.StatType.Health, 200);
+        // PlayerEntity.Instance.playerStat.ChangeCurrentStats(StatComponent.StatType.Health, 200);
+        PlayerEntity.Instance.playerStat.RestoreStat();
+
         PlayerEntity.Instance.playerBlocking.isBlocking = false;
+
     }
 }

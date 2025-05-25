@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Events;
 [System.Serializable]
 public class DialogueCharacter
 {
@@ -13,6 +14,7 @@ public class DialogueLine
     public DialogueCharacter character;
     [TextArea(3, 10)]
     public string line;
+    public UnityEvent ActionWhileTalking;
 }
 [System.Serializable]
 public class Dialogue
@@ -21,11 +23,17 @@ public class Dialogue
 }
 public class DialogueTrigger : MonoBehaviour
 {
-    public Dialogue dialogue;
+    public Dialogue mainDialogue;
+    public Dialogue currentDialogue;
+    public List<Dialogue> alterDialogue;
     [SerializeField] bool interact = false;
+    void Awake()
+    {
+        currentDialogue = mainDialogue;
+    }
     public void TriggerDialogue()
     {
-        UIEntity.Instance.dialogueManager.StartDialogue(dialogue);
+        UIEntity.Instance.dialogueManager.StartDialogue(currentDialogue);
     }
     void OnTriggerEnter2D(Collider2D collision)
     {

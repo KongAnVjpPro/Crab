@@ -70,7 +70,7 @@ public class ShellUnlocked : MyMonobehaviour
         PlayerEntity.Instance.playerShell.ownedShellList.Add(shellProvided);
         received = true;
         unlockedParticle.Play();
-        UIEntity.Instance.uiUnlockedShell.UnlockedShellUI(timeUI, shellProvided.shellName);
+        UIEntity.Instance.uiNotification.UnlockedShellUI(timeUI, shellProvided.shellName);
         shellAnim.SetBool("Activate", true);
         yield return new WaitForSeconds(timeUI);
         if (unlockedParticle.IsAlive())

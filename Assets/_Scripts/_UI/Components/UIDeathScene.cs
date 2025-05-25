@@ -26,6 +26,8 @@ public class UIDeathScene : UIComponent
         GameController.Instance.isBlockPlayerControl = false;
 
         //do some respawn mechanic
+        // PlayerEntity.Instance.playerStat.Respawn();
+        GameController.Instance.RespawnPlayer();
     }
 
     Sequence seq;
