@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -10,7 +11,9 @@ public class EnemyStateMachine : EnemyComponent
     public Transform player;
     public LayerMask playerLayer;
     public Rigidbody2D rb;
+    public Collider2D collie;
     public EnemyEntity enemyEntity;
+
 
     public Dictionary<EnemyStateID, EnemyState> stateList = new Dictionary<EnemyStateID, EnemyState>();
 
@@ -30,15 +33,26 @@ public class EnemyStateMachine : EnemyComponent
     [SerializeField] public float rangeAttackDistanceCheck = 10f;
 
 
-
+    [Header("For Boss: ")]
+    public GameObject shield;
+    public LayerMask enemyLayer;
+    public LayerMask talkLayer;
+    public CinemachineImpulseSource impulseSource;
+    public float bossBoost = 1;
+    public bool isOnPhase2 = false;
+    public bool isMinionAlive = true;
+    public List<EnemyEntity> minions;
+    public bool isBoss = false;
+    public BossType bossType;
     protected override void Awake()
     {
         LoadComponents();
-
+        impulseSource = GetComponent<CinemachineImpulseSource>();
         // if (player == null) player = FindAnyObjectByType<PlayerEntity>().transform;
         StartCoroutine(WaitForPlayer());
         enemyEntity = enemyController;
         enemyAnim = enemyController.enemyAnimator.GetAnimator();
+        collie = GetComponent<Collider2D>();
     }
     protected override void LoadComponents()
     {
@@ -56,6 +70,16 @@ public class EnemyStateMachine : EnemyComponent
 
     private void Start()
     {
+        if (isBoss)
+        {
+            switch (bossType)
+            {
+                case BossType.SeaWeed:
+                    ChangeState(stateList[EnemyStateID.SeaWeedTalk]);
+                    break;
+            }
+            return;
+        }
         if (stateList[EnemyStateID.Patrolling] != null)
             ChangeState(stateList[EnemyStateID.Patrolling]);
         player = PlayerEntity.Instance.transform;
@@ -109,10 +133,18 @@ public class EnemyStateMachine : EnemyComponent
     {
         currentState?.FixedDo();
     }
-
+    public void ChangeState(EnemyStateID stateID)
+    {
+        ChangeState(stateList[stateID]);
+    }
     void ChangeState(EnemyState newState)
     {
-
+        int cnt = 0;
+        foreach (var minion in minions)
+        {
+            if (minion.gameObject.activeSelf) cnt++;
+        }
+        isMinionAlive = (cnt != 0);
         if (currentState == newState || newState == null) return;
 
         currentState?.Exit();

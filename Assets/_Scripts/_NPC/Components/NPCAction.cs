@@ -3,7 +3,7 @@ using UnityEngine;
 public class NPCAction : NPCComponent
 {
     public ItemSO itemToGive;
-    public void ChangeDialogue(int id)
+    public virtual void ChangeDialogue(int id)
     {
         List<Dialogue> dl = npcController.dialogueTrigger.alterDialogue;
         if (id < 0) return;

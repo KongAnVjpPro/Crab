@@ -50,6 +50,7 @@ public class Coin : MyMonobehaviour
         if (isGrab) return;
         isGrab = true;
         collision.GetComponent<PlayerInventory>()?.AddCoin(1);
+        SoundManager.Instance.PlaySound3D("CoinPickup", transform.position);
         SelfDestroy();
     }
 }

@@ -43,6 +43,7 @@ public class PlayerEntity : EntityController
     public Recoil playerRecoil;
     public PlayerShellController playerShell;
     public PlayerAbility playerAbility;
+    public PlayerAudio playerAudio;
     protected virtual void LoadCollider()
     {
         if (selfCollider != null) return;
@@ -128,9 +129,15 @@ public class PlayerEntity : EntityController
         if (playerAbility != null) return;
         playerAbility = GetComponent<PlayerAbility>();
     }
+    protected virtual void LoadAudio()
+    {
+        if (playerAudio != null) return;
+        playerAudio = GetComponent<PlayerAudio>();
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
+        rb.gravityScale = 0;
         LoadSingleton();
         // OnPlayerEntityReady?.Invoke();
 
@@ -149,6 +156,7 @@ public class PlayerEntity : EntityController
         LoadPlayerBlock();
         LoadInventory();
         LoadRecoil();
+        LoadAudio();
 
 
 

@@ -57,6 +57,7 @@ public class GameController : MyMonobehaviour
     public void StartGame()
     {
         StartCoroutine(StartAnimation());
+        MusicManager.Instance.PlayMusic("SeaWeed", 5f);
     }
     public void OnClickQuitGame()
     {
@@ -93,7 +94,11 @@ public class GameController : MyMonobehaviour
         startCanvas.blocksRaycasts = true;
         yield return new WaitForSeconds(quitTime);
         SaveSystem.Instance.LoadNPCAppear();
+        SaveSystem.Instance.LoadBossDefeated();
+
         SaveSystem.Instance.LoadPlayerData();
+
+        StartMenu.Instance.Activate(false);
 
     }
     public void DeactiveStartCanvas()

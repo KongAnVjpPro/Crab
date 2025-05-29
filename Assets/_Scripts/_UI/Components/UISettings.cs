@@ -74,8 +74,13 @@ public class UISetting : UIComponent
     }
     public void OnClickQuit()
     {
+        PlayerEntity.Instance.rb.gravityScale = 0;
+        FadeOut(quitWarningCanvas);
+        CloseSettings();
         LevelManager.Instance.LoadScene("MenuStart", "WaveFade");
         UIEntity.Instance.ActivateCanvas(false);
+        StartMenu.Instance.Activate(true);
+        MusicManager.Instance.PlayMusic("MenuStart", 0.5f);
         // SceneManager.LoadScene("MenuStart");
     }
 }

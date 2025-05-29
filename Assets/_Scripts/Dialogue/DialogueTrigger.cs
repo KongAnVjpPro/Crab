@@ -31,7 +31,7 @@ public class DialogueTrigger : MonoBehaviour
     {
         currentDialogue = mainDialogue;
     }
-    public void TriggerDialogue()
+    public virtual void TriggerDialogue()
     {
         UIEntity.Instance.dialogueManager.StartDialogue(currentDialogue);
     }
@@ -50,7 +50,7 @@ public class DialogueTrigger : MonoBehaviour
             interact = false;
         }
     }
-    void Update()
+    protected virtual void Update()
     {
         if (interact)
         {

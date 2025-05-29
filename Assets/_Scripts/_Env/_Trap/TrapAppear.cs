@@ -8,7 +8,7 @@ public class TrapAppear : MyMonobehaviour
     [SerializeField] Vector2 inertia = new Vector2(0, 0.2f);
     [SerializeField] float originToInertiaTime = 0.5f;
     [SerializeField] float inertiaToOriginTime = 0.2f;
-    [SerializeField] ParticleSystem dustEffect;
+    [SerializeField] public ParticleSystem dustEffect;
 
     [Header("Config time between Appear: ")]
     [SerializeField] float cooldownTime = 1.0f;

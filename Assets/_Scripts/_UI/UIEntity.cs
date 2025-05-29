@@ -15,7 +15,9 @@ public class UIEntity : EntityController
     public UISetting uiSetting;
     public bool isSomethingOpened = false;
     public CanvasGroup mainCanvas;
-
+    public UIBoss uiBoss;
+    // public AudioSource audioSource;
+    // public UIAudio uiAudio;
     private void LoadSingleton()
     {
         if (instance == null)
@@ -44,9 +46,27 @@ public class UIEntity : EntityController
         LoadPlayerDeathScene();
         LoadShellUnlockedUI();
         LoadSettingUI();
+        LoadUIBoss();
+        // LoadAudio();
+        // LoadUIAudio();
 
 
         this.LoadSingleton();
+    }
+    // protected virtual void LoadUIAudio()
+    // {
+    //     if (uiAudio != null) return;
+    //     uiAudio = GetComponent<UIAudio>();
+    // }
+    // protected virtual void LoadAudio()
+    // {
+    //     if (audioSource != null) return;
+    //     audioSource = GetComponent<AudioSource>();
+    // }
+    protected virtual void LoadUIBoss()
+    {
+        if (uiBoss != null) return;
+        uiBoss = GetComponent<UIBoss>();
     }
     protected virtual void LoadHotKey()
     {

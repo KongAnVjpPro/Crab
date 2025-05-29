@@ -141,6 +141,8 @@ public class PatrolState : EnemyState
 
     }
 
+    [SerializeField] float walkSoundCooldown = 0.3f;
+    float walkSoundTimer = 0f;
     void MoveInDirection(Vector2 dir)
     {
         // dir = new Vector2(dir.x, Random.Range(0.1f, 0.9f));
@@ -156,6 +158,17 @@ public class PatrolState : EnemyState
         else
         {
             stateMachine.Flip(dir.x >= 0 ? EnemyRotator.FlipDirection.Right : EnemyRotator.FlipDirection.Left);
+            // walkSoundTimer += Time.deltaTime;
+
+
+            // if (walkSoundTimer >= walkSoundCooldown)
+            // {
+            //     walkSoundTimer = 0f;
+
+            //     SoundManager.Instance.PlaySound3D("Walk", transform.position);
+            // }
+            // SoundManager.Instance.PlaySound3D("Walk", stateMachine.transform.position);
+
         }
 
     }

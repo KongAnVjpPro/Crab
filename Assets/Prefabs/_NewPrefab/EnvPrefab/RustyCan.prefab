@@ -658,6 +658,7 @@ MonoBehaviour:
   isRevived: 0
   destroyedTime: 2
   particle: {fileID: 43911254725895106}
+  isInvincible: 0
   OnHittedEvent:
     m_PersistentCalls:
       m_Calls:
@@ -1330,7 +1331,7 @@ ParticleSystem:
   emitterVelocityMode: 1
   looping: 0
   prewarm: 0
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   startDelay:

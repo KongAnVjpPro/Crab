@@ -102,12 +102,33 @@ public class PlayerMovement : PlayerComponent
             playerController.pState.lookingRight = true;
         }
     }
+    [SerializeField] float walkSoundCooldown = 0.3f;
+    float walkSoundTimer = 0f;
     public virtual void Move()
     {
         if (canMove)
         {
 
             MoveHorizontal(xAxis);
+            // if (Mathf.Abs(xAxis) > 0.4f && IsOnGround())
+            // {
+            //     // walkSoundTimer += Time.deltaTime;
+            //     playerController.playerAudio.ActivateFootStepAudio(true);
+            // }
+            // else
+            // {
+            //     playerController.playerAudio.ActivateFootStepAudio(false);
+            // }
+            // else
+            // {
+            //     walkSoundTimer = 0f;
+            // }
+            // if (walkSoundTimer >= walkSoundCooldown)
+            // {
+            //     walkSoundTimer = 0f;
+
+            //     SoundManager.Instance.PlaySound3D("Walk", transform.position);
+            // }
         }
         Flip();
 

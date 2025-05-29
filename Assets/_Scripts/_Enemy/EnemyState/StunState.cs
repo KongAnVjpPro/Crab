@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class StunState : EnemyState
 {
-    [SerializeField] private float stunDuration = 0.1f;
-    [SerializeField] private float recoilForce = 5f;
+    [SerializeField] protected float stunDuration = 0.1f;
+    [SerializeField] protected float recoilForce = 5f;
 
-    private float stunTimer = 0f;
-    private bool isRecoiling = false;
+    protected float stunTimer = 0f;
+    protected bool isRecoiling = false;
     public override void Init(EnemyStateMachine machine)
     {
         base.Init(machine);
@@ -35,7 +35,7 @@ public class StunState : EnemyState
         }
     }
 
-    private void ApplyRecoil()
+    protected void ApplyRecoil()
     {
 
         // Vector2 recoilDirection = stateMachine.rb.velocity.normalized;
@@ -53,12 +53,12 @@ public class StunState : EnemyState
 
     }
 
-    float RecoilDirX()
+    protected float RecoilDirX()
     {
         return stateMachine.transform.position.x >= stateMachine.player.position.x ? 1 : -1;
     }
 
-    float RecoilDirY()
+    protected float RecoilDirY()
     {
         return stateMachine.transform.position.y >= stateMachine.player.position.y ? 1 : -1;
     }

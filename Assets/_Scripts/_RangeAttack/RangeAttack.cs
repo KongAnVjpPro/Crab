@@ -1,4 +1,5 @@
 using System.Collections;
+using Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,6 +20,7 @@ public class RangeAttack : MyMonobehaviour
     [SerializeField] Vector2 currentDir;
     [SerializeField] float currentTimeExist = 0;
     [SerializeField] float maxTimeExist = 10f;
+    [SerializeField] CinemachineImpulseSource impulseSource;
     public void SetSpawner(RangeAttackSpawner spawner)
     {
         this.spawner = spawner;
@@ -40,6 +42,22 @@ public class RangeAttack : MyMonobehaviour
     {
         if (((1 << collision.gameObject.layer) & groundLayer.value) != 0)
         {
+            if (bounceCount < bounceLimit)
+            {
+                bounceCount++;
+                //logic dan nay
+                RaycastHit2D hit = Physics2D.Raycast(transform.position, currentDir, 0.5f, groundLayer);
+                if (hit.collider != null)
+                {
+                    currentDir = Vector2.Reflect(currentDir, hit.normal);
+                    Debug.Log(currentDir);
+                    rgBullet.velocity = currentDir.normalized * bulletSpeed;
+                    float angle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
+                    Quaternion rot = Quaternion.Euler(0, 0, angle);
+                }
+
+                return;
+            }
             DespawnBullet();
             return;
         }
@@ -49,9 +67,17 @@ public class RangeAttack : MyMonobehaviour
             TargetCallBack?.Invoke();
         }
     }
-
+    [SerializeField] int bounceCount = 0;
+    [SerializeField] int bounceLimit = 0;
     public void DespawnBullet()
     {
+        // if (bounceCount < bounceLimit)
+        // {
+        //     bounceCount++;
+
+        //     return;
+        // }
+        bounceCount = 0;
         rgBullet.velocity = Vector2.zero;
         bulletCollide.enabled = false;
 
@@ -84,6 +110,7 @@ public class RangeAttack : MyMonobehaviour
         if (currentTimeExist > maxTimeExist)
         {
             DespawnBullet();
+            return;
         }
     }
     public UnityEvent TargetCallBack;
@@ -92,6 +119,10 @@ public class RangeAttack : MyMonobehaviour
     public void DealDmg()
     {
         PlayerEntity.Instance.playerStat.ReceiveDamage(new Vector2(currentDir.x * -1, currentDir.y), bulletDamage);
+    }
+    public void Impact()
+    {
+        impulseSource?.GenerateImpulse();
     }
     #endregion
 

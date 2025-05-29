@@ -45,6 +45,12 @@ public class SaveSystem : MyMonobehaviour
     public bool canOldLobsterAppear = true;
 
 
+    //boss defeated
+    public bool isSeawWeedDefeated = false;
+    public bool isJellyFishDefeated = false;
+    public bool isCrabDefeated = false;
+    public bool isFinalBossDefeated = false;
+
 
 
 
@@ -64,6 +70,10 @@ public class SaveSystem : MyMonobehaviour
         {
             BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.npcAppear.data"));
         }
+        if (!File.Exists(Application.persistentDataPath + "/save.boss.data"))
+        {
+            BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.boss.data"));
+        }
     }
 
     public void ClearData()
@@ -71,7 +81,8 @@ public class SaveSystem : MyMonobehaviour
         string[] files = {
         "/save.shell.data",
         "/save.playerStat.data",
-        "/save.npcAppear.data"
+        "/save.npcAppear.data",
+        "/save.boss.data"
     };
 
         foreach (string file in files)
@@ -90,8 +101,8 @@ public class SaveSystem : MyMonobehaviour
         // playerTotalHP = 0;
         // playerTotalMana = 0;
         // playerTotalStamina = 0;
-        // playerPosition = Vector2.zero;
-        // lastScene = "";
+        playerPosition = new Vector2(-43.41f, -3.77f);
+        lastScene = "Cave_Tutorial";
 
         // canOldLobsterAppear = false;
 
@@ -162,6 +173,7 @@ public class SaveSystem : MyMonobehaviour
                 GameController.Instance.DeactiveStartCanvas();
                 UIEntity.Instance.ActivateCanvas(true);
                 // PlayerEntity.Instance.transform.position = playerPosition;
+                PlayerEntity.Instance.rb.gravityScale = 3;
                 return;
             }
             using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.playerStat.data")))
@@ -188,7 +200,7 @@ public class SaveSystem : MyMonobehaviour
                 SceneManager.LoadScene(lastScene);
                 GameController.Instance.DeactiveStartCanvas();
                 UIEntity.Instance.ActivateCanvas(true);
-
+                PlayerEntity.Instance.rb.gravityScale = 3;
             }
         }
         else
@@ -197,6 +209,8 @@ public class SaveSystem : MyMonobehaviour
             SceneManager.LoadScene(lastScene);
             GameController.Instance.DeactiveStartCanvas();
             UIEntity.Instance.ActivateCanvas(true);
+            PlayerEntity.Instance.transform.position = playerPosition;
+            PlayerEntity.Instance.rb.gravityScale = 3;
             // PlayerController
         }
     }
@@ -250,6 +264,78 @@ public class SaveSystem : MyMonobehaviour
         else
         {
             Debug.LogError("file ko ton tai");
+        }
+    }
+    #endregion
+    #region boss defeated
+    public void SaveBossDefeated()
+    {
+        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.boss.data")))
+        {
+            writer.Write(isSeawWeedDefeated);
+            writer.Write(isJellyFishDefeated);
+            writer.Write(isCrabDefeated);
+            writer.Write(isFinalBossDefeated);
+        }
+    }
+    public void LoadBossDefeated()
+    {
+        if (File.Exists(Application.persistentDataPath + "/save.boss.data"))
+        {
+            FileInfo fileInfo = new FileInfo(Application.persistentDataPath + "/save.boss.data");
+            if (fileInfo.Length == 0)
+            {
+
+                return;
+            }
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.boss.data")))
+            {
+                isSeawWeedDefeated = reader.ReadBoolean();
+                isJellyFishDefeated = reader.ReadBoolean();
+                isCrabDefeated = reader.ReadBoolean();
+                isFinalBossDefeated = reader.ReadBoolean();
+            }
+        }
+        else
+        {
+            Debug.LogError("file ko ton tai");
+        }
+    }
+    public bool GetBossDefeated(BossType bossType)
+    {
+        switch (bossType)
+        {
+            case BossType.SeaWeed:
+                return isSeawWeedDefeated;
+
+            case BossType.JellyFish:
+                return isJellyFishDefeated;
+
+            case BossType.Crab:
+                return isCrabDefeated;
+
+            case BossType.Final:
+                return isFinalBossDefeated;
+
+        }
+        return false;
+    }
+    public void SetBossDefeated(BossType bossType, bool isDefeated)
+    {
+        switch (bossType)
+        {
+            case BossType.SeaWeed:
+                isSeawWeedDefeated = isDefeated;
+                break;
+            case BossType.JellyFish:
+                isJellyFishDefeated = isDefeated;
+                break;
+            case BossType.Crab:
+                isCrabDefeated = isDefeated;
+                break;
+            case BossType.Final:
+                isFinalBossDefeated = isDefeated;
+                break;
         }
     }
     #endregion
