@@ -15,6 +15,7 @@ public class UIEntity : EntityController
     public UISetting uiSetting;
     public bool isSomethingOpened = false;
     public CanvasGroup mainCanvas;
+    public UICinematic uiCinematic;
     public UIBoss uiBoss;
     // public AudioSource audioSource;
     // public UIAudio uiAudio;
@@ -47,6 +48,7 @@ public class UIEntity : EntityController
         LoadShellUnlockedUI();
         LoadSettingUI();
         LoadUIBoss();
+        LoadCinematicUI();
         // LoadAudio();
         // LoadUIAudio();
 
@@ -63,6 +65,11 @@ public class UIEntity : EntityController
     //     if (audioSource != null) return;
     //     audioSource = GetComponent<AudioSource>();
     // }
+    protected virtual void LoadCinematicUI()
+    {
+        if (this.uiCinematic != null) return;
+        this.uiCinematic = GetComponent<UICinematic>();
+    }
     protected virtual void LoadUIBoss()
     {
         if (uiBoss != null) return;

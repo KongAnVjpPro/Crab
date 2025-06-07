@@ -130,6 +130,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateID: 1
   stateMachine: {fileID: 0}
+  flipCooldown: 0.5
+  flipTimer: 0
   patrolDuration: 1
   speed: 2
   patrolCenter: {x: -45, y: -6, z: 0}
@@ -1758,7 +1760,7 @@ MonoBehaviour:
   stateID: 4
   stateMachine: {fileID: 0}
   stunDuration: 0.1
-  recoilForce: 20
+  recoilForce: 5
 --- !u!1 &4609444161359135353
 GameObject:
   m_ObjectHideFlags: 0
@@ -2586,7 +2588,8 @@ MonoBehaviour:
   stateID: 6
   stateMachine: {fileID: 3690446148328521436}
   canRevive: 0
-  delayTime: 5
+  reviveTime: 5
+  deathTime: 2
 --- !u!1 &5870466703815725095
 GameObject:
   m_ObjectHideFlags: 0
@@ -4348,7 +4351,7 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!61 &2577513414775688790
 BoxCollider2D:
@@ -4372,7 +4375,7 @@ BoxCollider2D:
     m_Bits: 4294967295
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 81791
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -4468,9 +4471,27 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   rb: {fileID: 980147820329734245}
+  collie: {fileID: 0}
   enemyEntity: {fileID: 0}
   isSwimming: 0
+  isRangeAttack: 0
+  enemyAnim: {fileID: 0}
   currentState: {fileID: 0}
+  rangeAttackDistanceCheck: 10
+  shield: {fileID: 0}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  talkLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  impulseSource: {fileID: 0}
+  bossBoost: 1
+  isOnPhase2: 0
+  isMinionAlive: 1
+  minions: []
+  isBoss: 0
+  bossType: 0
 --- !u!95 &2236221216288092765
 Animator:
   serializedVersion: 5
@@ -4564,6 +4585,7 @@ MonoBehaviour:
   dropRateItem: 1
   itemDropAble: {fileID: 11400000, guid: 1ff35764c8c95c3438d8610b7b8adf34, type: 2}
   amountRange: 5
+  coinAmount: 5
 --- !u!114 &6228567771602039268
 MonoBehaviour:
   m_ObjectHideFlags: 0

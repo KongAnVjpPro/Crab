@@ -5,6 +5,8 @@ using Unity.VisualScripting;
 using UnityEngine.EventSystems;
 public class PatrolState : EnemyState
 {
+    [SerializeField] float flipCooldown = 0.5f;
+    [SerializeField] float flipTimer = 0f;
     private float timer;
     public float patrolDuration = 3f;
     public float speed = 2f;
@@ -38,7 +40,7 @@ public class PatrolState : EnemyState
     public override void Do()
     {
         // Debug.DrawRay(stateMachine.transform.position, stateMachine.transform.right);
-
+        flipTimer += Time.deltaTime;
         timer += Time.deltaTime;
         if (timer >= patrolDuration)
         {
@@ -87,6 +89,8 @@ public class PatrolState : EnemyState
         // right = moveDirection * stateMachine.transform.right;
         if (distToCenter > patrolRadius || IsBlocked(stateMachine.transform.right))
         {
+            if (flipTimer < flipCooldown) return;
+            flipTimer = 0f;
             // Debug.Log("Obstacle");
             if (stateMachine.isSwimming)
             {
@@ -141,8 +145,8 @@ public class PatrolState : EnemyState
 
     }
 
-    [SerializeField] float walkSoundCooldown = 0.3f;
-    float walkSoundTimer = 0f;
+    // [SerializeField] float walkSoundCooldown = 0.3f;
+    // float walkSoundTimer = 0f;
     void MoveInDirection(Vector2 dir)
     {
         // dir = new Vector2(dir.x, Random.Range(0.1f, 0.9f));

@@ -5607,7 +5607,7 @@ MonoBehaviour:
   moveSpeed: 5
   scaledMoveSpeed: 1
   canMove: 1
-  jumpForce: 12
+  jumpForce: 13
   scaledJumpForce: 1
   jumpBufferFrames: 0.1
   coyoteTime: 0.15

@@ -14,6 +14,9 @@ public class DamagedAbleObject : MyMonobehaviour
     [SerializeField] float destroyedTime = 2f;
     [SerializeField] ParticleSystem particle;
     [SerializeField] bool isInvincible = false;
+    // public bool isAppliedAnimation = true;
+    [Header("Level:")]
+    [SerializeField] bool isLevelObject = false;
     public void PlayParticle()
     {
         if (particle == null) return;
@@ -47,6 +50,10 @@ public class DamagedAbleObject : MyMonobehaviour
     {
         if (isInvincible)
         {
+            if (isLevelObject)
+            {
+                OnHittedEvent?.Invoke();
+            }
             return;
         }
         currentObjectHp -= damage;

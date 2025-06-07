@@ -19,6 +19,7 @@ public class DialogueLine
 [System.Serializable]
 public class Dialogue
 {
+    public string dialogueKey;
     public List<DialogueLine> dialogueLines = new List<DialogueLine>();
 }
 public class DialogueTrigger : MonoBehaviour

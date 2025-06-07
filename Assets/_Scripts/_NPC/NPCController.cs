@@ -1,16 +1,20 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 public class NPCController : EntityController
 {
     public DialogueTrigger dialogueTrigger;
     public NPCAction npcAction;
     [SerializeField] bool canAppear = true;
-    public NPNCCanAppear npcEnum;
+    // public NPNCCanAppear npcEnum;
+    public string npcKey;
     public Animator anim;
     // public Rigidbody2D rb;
     [Header("Disappear func: ")]
     [SerializeField] float disappearTime = 5f;
+    public bool canTurn = true;
+    public UnityEvent ActionOnDisappear;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -20,9 +24,13 @@ public class NPCController : EntityController
 
 
         //
+
+        // CanAppear();
+    }
+    void Start()
+    {
         GetCanAppear();
         DoOnChangeAppear();
-        // CanAppear();
     }
     protected virtual void LoadDialogue()
     {
@@ -39,13 +47,7 @@ public class NPCController : EntityController
         if (this.anim != null) return;
         this.anim = GetComponentInChildren<Animator>();
     }
-    // public void CanAppear()
-    // {
-    //     if (!canAppear)
-    //     {
-    //         gameObject.SetActive(false);
-    //     }
-    // }
+
     public void DoOnChangeAppear()
     {
         // gameObject.SetActive(canAppear);
@@ -55,7 +57,8 @@ public class NPCController : EntityController
         }
         else
         {
-            gameObject.SetActive(false);
+            ActionOnDisappear?.Invoke();
+            // gameObject.SetActive(false);
         }
     }
     public void Disappear()
@@ -80,11 +83,11 @@ public class NPCController : EntityController
     }
     public void GetCanAppear()//load 
     {
-        CanAppear = SaveSystem.Instance.GetNPCAppear(npcEnum);
+        CanAppear = SaveSystem.Instance.GetNPCAppear(npcKey);
     }
     public void SetCanAppear(bool val)
     {
-        SaveSystem.Instance.SetNPCAppear(npcEnum, val);
+        SaveSystem.Instance.SetNPCAppear(npcKey, val);
         GetCanAppear();
     }
     public bool CanAppear
@@ -126,6 +129,7 @@ public class NPCController : EntityController
 
 
         if (!canAppear) return;
+        if (!canTurn) return;
         bool turnValue = transform.position.x > PlayerEntity.Instance.transform.position.x;
         anim.SetBool("Turn", turnValue);
 

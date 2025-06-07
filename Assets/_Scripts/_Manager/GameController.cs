@@ -97,7 +97,8 @@ public class GameController : MyMonobehaviour
         SaveSystem.Instance.LoadBossDefeated();
 
         SaveSystem.Instance.LoadPlayerData();
-
+        SaveSystem.Instance.LoadDoorData();
+        SaveSystem.Instance.LoadShellStation();
         StartMenu.Instance.Activate(false);
 
     }

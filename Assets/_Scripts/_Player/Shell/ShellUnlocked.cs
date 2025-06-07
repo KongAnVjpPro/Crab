@@ -9,11 +9,16 @@ public class ShellUnlocked : MyMonobehaviour
     [SerializeField] ParticleSystem unlockedParticle;
     [SerializeField] Animator shellAnim;
     [SerializeField] float timeUI = 8f;
+    [SerializeField] string ancientShellKey;//for save
     protected override void Awake()
     {
         base.Awake();
         LoadShellProvided();
         unlockedParticle.Stop();
+    }
+    void Start()
+    {
+        //load recieved state
     }
     protected virtual void LoadShellProvided()
     {

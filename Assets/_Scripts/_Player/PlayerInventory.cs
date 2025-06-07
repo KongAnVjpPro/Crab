@@ -177,7 +177,7 @@ public class PlayerInventory : PlayerComponent
         OnCoinChange?.Invoke();
     }
 
-    bool CanUseCoin(int useAmout)
+    public bool CanUseCoin(int useAmout)
     {
         return currentCoin >= useAmout;
     }

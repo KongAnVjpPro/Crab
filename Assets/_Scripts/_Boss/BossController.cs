@@ -47,8 +47,9 @@ public class BossController : EnemyEntity
     {
         isDefeated = true;
         SaveSystem.Instance.SetBossDefeated(bossType, isDefeated);
-        SaveSystem.Instance.SaveBossDefeated();
-        SaveSystem.Instance.SavePlayerData();
+        // SaveSystem.Instance.SaveBossDefeated();
+        // SaveSystem.Instance.SavePlayerData();
+        SaveSystem.Instance.SaveGlobalData();
         DisableBoss();
     }
 

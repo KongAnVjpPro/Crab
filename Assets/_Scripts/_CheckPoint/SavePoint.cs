@@ -6,7 +6,7 @@ public class SavePoint : MyMonobehaviour
 {
     public bool isTrigger;
     public Animator anim;
-
+    bool inSaveProcess = false;
     public void ResetTrigger()
     {
         anim.ResetTrigger("In");
@@ -14,13 +14,14 @@ public class SavePoint : MyMonobehaviour
     }
     public void AnimationIn()
     {
-        ResetTrigger();
+        // ResetTrigger();
         anim.SetTrigger("In");
     }
     public void AnimationOut()
     {
-        ResetTrigger();
+        // ResetTrigger();
         anim.SetTrigger("Out");
+        // Debug.Log("out");
     }
     //save
 
@@ -40,6 +41,7 @@ public class SavePoint : MyMonobehaviour
         if (!isTrigger) return;
         if (!PlayerEntity.Instance.playerInput.interact) return;
         // SaveData();
+        if (inSaveProcess) return;
         GameController.Instance.isBlockPlayerControl = true;
         StartCoroutine(AnimationHandle());
 
@@ -52,6 +54,7 @@ public class SavePoint : MyMonobehaviour
     {
         // PlayerController.Instance.transform.DOMove(transform.position, 0.5f).OnComplete(() =>
         // {
+        inSaveProcess = true;
         AnimationIn();
         // });
         // AnimationIn();
@@ -63,15 +66,19 @@ public class SavePoint : MyMonobehaviour
         yield return UIEntity.Instance.uISaveScreen.ExitScreen();
         AnimationOut();
         GameController.Instance.isBlockPlayerControl = false;
+        inSaveProcess = false;
+        // ResetTrigger();
     }
     protected virtual void SaveData()
     {
         Debug.Log("Save here", gameObject);
         SaveSystem.Instance.shellSceneName = SceneManager.GetActiveScene().name;
         SaveSystem.Instance.shellStationPos = transform.position;
-        SaveSystem.Instance.SaveShellStation();
-        SaveSystem.Instance.SavePlayerData();
-        SaveSystem.Instance.SaveNPCAppear();
+        // SaveSystem.Instance.SaveShellStation();
+        // SaveSystem.Instance.SavePlayerData();
+        // SaveSystem.Instance.SaveNPCAppear();
+        // SaveSystem.Instance.SaveDoorData();
+        SaveSystem.Instance.SaveGlobalData();
     }
     protected virtual void Restore()
     {

@@ -16,7 +16,7 @@ public class BossDeath : EnemyState//reuseable
         }
     }
     [SerializeField] float deathTime = 5f;
-    [SerializeField] float deathTimer = 0;
+    // [SerializeField] float deathTimer = 0;
     [SerializeField] List<ParticleSystem> particles;
 
     void Awake()
@@ -55,10 +55,11 @@ public class BossDeath : EnemyState//reuseable
         BossController boss = stateMachine.GetComponent<BossController>();
         if (boss != null)
         {
+            GameController.Instance.isBlockPlayerControl = false;
             boss.Defeated();
         }
         UIEntity.Instance.uiNotification.NoticeSomething(4f, bossDeathNotification, subBossDeathNotification);
-        GameController.Instance.isBlockPlayerControl = true;
+
     }
     public override EnemyStateID? CheckNextState()
     {

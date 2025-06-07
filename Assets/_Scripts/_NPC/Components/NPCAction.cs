@@ -13,6 +13,28 @@ public class NPCAction : NPCComponent
         }
         npcController.dialogueTrigger.currentDialogue = dl[id];
     }
+    public virtual void ChangeDialogue(string key)
+    {
+        List<Dialogue> dlist = new List<Dialogue>();
+        foreach (var dl in npcController.dialogueTrigger.alterDialogue)
+        {
+            if (dl.dialogueKey == key)
+            {
+                dlist.Add(dl);
+                // npcController.dialogueTrigger.currentDialogue = dl;
+                // return;
+            }
+        }
+        if (dlist.Count > 0)
+        {
+            int rand = Random.Range(0, dlist.Count);
+            npcController.dialogueTrigger.currentDialogue = dlist[rand];
+        }
+        else
+        {
+            Debug.LogWarning("No dialogue found with key: " + key);
+        }
+    }
     // public void GiveItemToPlayer(NPCItemType itemType, int amount)
     // {
     //     ItemSO itemSO = FormItemTypeToItemSO(itemType);
@@ -50,14 +72,15 @@ public class NPCAction : NPCComponent
     #region set appear
     public void SetAppear(bool appearValue)
     {
-        if (appearValue)
-        {
-            npcController.SetCanAppear(appearValue);
-        }
-        else
-        {
-            npcController.Disappear();
-        }
+
+        npcController.SetCanAppear(appearValue);
+
+
+    }
+    public void SetTalk(bool talkValue)
+    {
+        // npcController.dialogueTrigger.enabled = talkValue;
+        npcController.anim.SetBool("Talk", talkValue);
     }
     #endregion
 }

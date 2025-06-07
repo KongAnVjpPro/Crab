@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine.SceneManagement;
 using UnityEngine.Experimental.GlobalIllumination;
+using UnityEngine.Events;
+using System;
 
 [System.Serializable]
 public class SaveSystem : MyMonobehaviour
@@ -43,6 +45,7 @@ public class SaveSystem : MyMonobehaviour
 
     //NPC Appear
     public bool canOldLobsterAppear = true;
+    Dictionary<string, bool> npcAppearData = new Dictionary<string, bool>();
 
 
     //boss defeated
@@ -51,8 +54,9 @@ public class SaveSystem : MyMonobehaviour
     public bool isCrabDefeated = false;
     public bool isFinalBossDefeated = false;
 
-
-
+    //map data
+    Dictionary<string, bool> doorData = new Dictionary<string, bool>();
+    public Action<string, bool> OnDoorDataChanged;
 
 
     public void Initialize()
@@ -74,6 +78,10 @@ public class SaveSystem : MyMonobehaviour
         {
             BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.boss.data"));
         }
+        if (!File.Exists(Application.persistentDataPath + "/save.door.data"))
+        {
+            BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.door.data"));
+        }
     }
 
     public void ClearData()
@@ -82,7 +90,8 @@ public class SaveSystem : MyMonobehaviour
         "/save.shell.data",
         "/save.playerStat.data",
         "/save.npcAppear.data",
-        "/save.boss.data"
+        "/save.boss.data",
+        "/save.door.data"
     };
 
         foreach (string file in files)
@@ -108,6 +117,21 @@ public class SaveSystem : MyMonobehaviour
 
         Debug.Log("Save data cleared.");
     }
+    public void SaveGlobalData()
+    {
+        SaveShellStation();
+        SavePlayerData();
+        SaveNPCAppear();
+        SaveDoorData();
+        SaveBossDefeated();
+    }
+    #region Ancient Shell Station
+
+    public void SaveShellAcient()
+    {
+
+    }
+    #endregion
     #region check point data
     public void SaveShellStation()
     {
@@ -220,30 +244,55 @@ public class SaveSystem : MyMonobehaviour
 
 
 
-    public bool GetNPCAppear(NPNCCanAppear npcEnum)
+    public bool GetNPCAppear(string npcKey)
     {
-        switch (npcEnum)
+        // switch (npcEnum)
+        // {
+        //     case NPNCCanAppear.OldLobster:
+        //         return canOldLobsterAppear;
+        // }
+        // return true;
+        if (npcAppearData.ContainsKey(npcKey))
         {
-            case NPNCCanAppear.OldLobster:
-                return canOldLobsterAppear;
+            return npcAppearData[npcKey];
         }
-        return true;
+        else
+        {
+            // Default value if the NPC key does not exist
+            return true;
+        }
+
     }
-    public void SetNPCAppear(NPNCCanAppear npcEnum, bool val)
+    public void SetNPCAppear(string npcKey, bool val)
     {
-        switch (npcEnum)
+        // switch (npcEnum)
+        // {
+        //     case NPNCCanAppear.OldLobster:
+        //         canOldLobsterAppear = val;
+        //         break;
+        // }
+        if (npcAppearData.ContainsKey(npcKey))
         {
-            case NPNCCanAppear.OldLobster:
-                canOldLobsterAppear = val;
-                break;
+            npcAppearData[npcKey] = val;
         }
+        else
+        {
+            npcAppearData.Add(npcKey, val);
+        }
+
     }
 
     public void SaveNPCAppear()
     {
         using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.npcAppear.data")))
         {
-            writer.Write(canOldLobsterAppear);
+            // writer.Write(canOldLobsterAppear);
+            writer.Write(npcAppearData.Count);
+            foreach (var pair in npcAppearData)
+            {
+                writer.Write(pair.Key);
+                writer.Write(pair.Value);
+            }
         }
     }
     public void LoadNPCAppear()
@@ -258,7 +307,14 @@ public class SaveSystem : MyMonobehaviour
             }
             using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.npcAppear.data")))
             {
-                canOldLobsterAppear = reader.ReadBoolean();
+                // canOldLobsterAppear = reader.ReadBoolean();
+                int npcCount = reader.ReadInt32();
+                for (int i = 0; i < npcCount; i++)
+                {
+                    string npcKey = reader.ReadString();
+                    bool npcValue = reader.ReadBoolean();
+                    npcAppearData.Add(npcKey, npcValue);
+                }
             }
         }
         else
@@ -339,9 +395,79 @@ public class SaveSystem : MyMonobehaviour
         }
     }
     #endregion
+    #region Door
+    public bool GetDoorState(string doorKey)
+    {
+        if (doorData.ContainsKey(doorKey))
+        {
+            return doorData[doorKey];
+        }
+        return false;
+    }
+    public void SetDoorState(string doorKey, bool isOpened)
+    {
+        if (doorData.ContainsKey(doorKey))
+        {
+            doorData[doorKey] = isOpened;
+        }
+        else
+        {
+            doorData.Add(doorKey, isOpened);
+        }
+        OnDoorDataChanged?.Invoke(doorKey, isOpened);
+    }
+    public void LoadDoorData()
+    {
+        if (File.Exists(Application.persistentDataPath + "/save.door.data"))
+        {
+            FileInfo fileInfo = new FileInfo(Application.persistentDataPath + "/save.door.data");
+            if (fileInfo.Length == 0)
+            {
+
+                return;
+            }
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.door.data")))
+            {
+                // isSeawWeedDefeated = reader.ReadBoolean();
+                // isJellyFishDefeated = reader.ReadBoolean();
+                // isCrabDefeated = reader.ReadBoolean();
+                // isFinalBossDefeated = reader.ReadBoolean();
+                int doorCount = reader.ReadInt32();
+                for (int i = 0; i < doorCount; i++)
+                {
+                    string doorKey = reader.ReadString();
+                    bool doorValue = reader.ReadBoolean();
+                    doorData.Add(doorKey, doorValue);
+                }
+
+            }
+        }
+        else
+        {
+            Debug.LogError("file ko ton tai");
+        }
+    }
+    public void SaveDoorData()
+    {
+        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.door.data")))
+        {
+            // writer.Write(isSeawWeedDefeated);
+            // writer.Write(isJellyFishDefeated);
+            // writer.Write(isCrabDefeated);
+            // writer.Write(isFinalBossDefeated);
+            writer.Write(doorData.Count);
+            foreach (var pair in doorData)
+            {
+                writer.Write(pair.Key);
+                writer.Write(pair.Value);
+            }
+        }
+    }
+    #endregion
+
 }
-public enum NPNCCanAppear
-{
-    //bione seaweed
-    OldLobster = 0,
-}
+// public enum NPNCCanAppear
+// {
+//     //bione seaweed
+//     OldLobster = 0,
+// }
