@@ -10,7 +10,8 @@ public class LevelManager : MyMonobehaviour
     public GameObject transitionContainer;
     [SerializeField] private AnimationInOut[] transitions;
     // private SceneTransition
-    public Slider progressBar;
+    // public Slider progressBar;
+    public CanvasGroup blockCanvasGroup;
 
     protected override void LoadComponents()
     {
@@ -43,8 +44,9 @@ public class LevelManager : MyMonobehaviour
 
     private IEnumerator LoadSceneAsync(string sceneName, string transitionName)
     {
+        blockCanvasGroup.blocksRaycasts = true;
         AnimationInOut transition = transitions.First(t => t.name == transitionName);
-
+        // PlayerEntity.Instance.rb.gravityScale = 0f;
         AsyncOperation scene = SceneManager.LoadSceneAsync(sceneName);
         scene.allowSceneActivation = false;
         GameController.Instance.isBlockPlayerControl = true;
@@ -64,6 +66,8 @@ public class LevelManager : MyMonobehaviour
 
         yield return transition.AnimateTransitionOut();
         GameController.Instance.isBlockPlayerControl = false;
+        PlayerEntity.Instance.rb.gravityScale = 3f;
+        blockCanvasGroup.blocksRaycasts = false;
         // yield return UIEntity.Instance.uISaveScreen.ExitScreen();
     }
 

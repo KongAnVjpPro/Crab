@@ -45,13 +45,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shellSceneName: 
-  shellStationPos: {x: -43.41, y: -3.77}
+  shellStationPos: {x: 0, y: 0}
   playerTotalHP: 0
   playerTotalMana: 0
   playerTotalStamina: 0
-  playerPosition: {x: 0, y: 0}
+  playerPosition: {x: -43.41, y: -3.77}
   lastScene: Cave_Tutorial
   canOldLobsterAppear: 1
+  isSeawWeedDefeated: 0
+  isJellyFishDefeated: 0
+  isCrabDefeated: 0
+  isFinalBossDefeated: 0
+  shellSaveKey: []
+  lastShellEquippedKey: 
 --- !u!1 &651707240066018662
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,7 +163,7 @@ AudioSource:
   m_GameObject: {fileID: 2880747069082984590}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -7510886685741365575, guid: 406f8cbc88f049a44ba225ece0db0363, type: 2}
   m_audioClip: {fileID: 8300000, guid: d76a06ce7eb005844a989cb87e543dc3, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -273,6 +279,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 1ada0e2efa216e74485e03fa06e6e8d5, type: 3}
   - trackName: Boss_Final
     clip: {fileID: 8300000, guid: cfd186ea2bcd4da40bc82b5eb1ffb738, type: 3}
+  - trackName: Ambient
+    clip: {fileID: 8300000, guid: cd9681dba4bdc1540b4b8b20c8a1ba8b, type: 3}
 --- !u!114 &6193243754555993916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,6 +295,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicLibrary: {fileID: 6897499867377631261}
   musicSource: {fileID: 7282649169614488297}
+  sliderVolume: {fileID: 0}
 --- !u!1 &3844466946774486180
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,7 +544,7 @@ CanvasGroup:
   m_Enabled: 1
   m_Alpha: 1
   m_Interactable: 0
-  m_BlocksRaycasts: 0
+  m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
 --- !u!1 &4468634256697386155
 GameObject:
@@ -736,6 +745,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sfxLibrary: {fileID: 3701104715091414462}
   sfx2DSource: {fileID: 815083828623928453}
+  sliderVolume: {fileID: 0}
 --- !u!114 &3701104715091414462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -771,7 +781,7 @@ AudioSource:
   m_GameObject: {fileID: 6867166330546389265}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -4711958873212477982, guid: 406f8cbc88f049a44ba225ece0db0363, type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
   m_Volume: 1
@@ -914,6 +924,7 @@ MonoBehaviour:
   isBlockPlayerControl: 0
   itemSpawner: {fileID: 1276286125013241043}
   effectHolder: {fileID: 2472145396840701987}
+  isGameStarted: 0
   savePoint: {fileID: 0}
   respawnPoint: {x: 0, y: 0}
   trapRespawnPoint: {x: 0, y: 0}

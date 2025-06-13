@@ -10,6 +10,7 @@ public class PlayerEntity : EntityController
     private static PlayerEntity instance;
     public static PlayerEntity Instance => instance;
 
+    public float speedBoost = 1f;
 
     protected virtual void LoadSingleton()
     {
@@ -44,6 +45,7 @@ public class PlayerEntity : EntityController
     public PlayerShellController playerShell;
     public PlayerAbility playerAbility;
     public PlayerAudio playerAudio;
+    public PlayerSpell playerSpell;
     protected virtual void LoadCollider()
     {
         if (selfCollider != null) return;
@@ -134,10 +136,15 @@ public class PlayerEntity : EntityController
         if (playerAudio != null) return;
         playerAudio = GetComponent<PlayerAudio>();
     }
+    protected virtual void LoadSpell()
+    {
+        if (playerSpell != null) return;
+        playerSpell = GetComponent<PlayerSpell>();
+    }
     protected override void LoadComponents()
     {
         base.LoadComponents();
-        rb.gravityScale = 0;
+        // rb.gravityScale = 0;
         LoadSingleton();
         // OnPlayerEntityReady?.Invoke();
 
@@ -157,6 +164,7 @@ public class PlayerEntity : EntityController
         LoadInventory();
         LoadRecoil();
         LoadAudio();
+        LoadSpell();
 
 
 

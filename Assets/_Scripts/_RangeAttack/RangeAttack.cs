@@ -9,6 +9,9 @@ public class RangeAttack : MyMonobehaviour
     [SerializeField] LayerMask targetLayer;//playerlayer
     [SerializeField] LayerMask groundLayer;
 
+    [Header("Layer Env (for player: )")]
+    [SerializeField] LayerMask environmentLayer;
+
     [Header("Bullet Config: ")]
     [SerializeField] float bulletDamage = 1f;
     [SerializeField] RangeAttackSpawner spawner;
@@ -21,6 +24,8 @@ public class RangeAttack : MyMonobehaviour
     [SerializeField] float currentTimeExist = 0;
     [SerializeField] float maxTimeExist = 10f;
     [SerializeField] CinemachineImpulseSource impulseSource;
+    [Header("Player range attack: ")]
+    [SerializeField] Collider2D targetCollider;
     public void SetSpawner(RangeAttackSpawner spawner)
     {
         this.spawner = spawner;
@@ -55,15 +60,18 @@ public class RangeAttack : MyMonobehaviour
                     float angle = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
                     Quaternion rot = Quaternion.Euler(0, 0, angle);
                 }
-
+                Impact();
                 return;
             }
+            Impact();
             DespawnBullet();
             return;
         }
-        if (((1 << collision.gameObject.layer) & targetLayer.value) != 0)
+        if ((((1 << collision.gameObject.layer) & targetLayer.value) != 0) || (((1 << collision.gameObject.layer) & environmentLayer.value) != 0))
         {
+
             DespawnBullet();
+            targetCollider = collision;
             TargetCallBack?.Invoke();
         }
     }
@@ -123,6 +131,47 @@ public class RangeAttack : MyMonobehaviour
     public void Impact()
     {
         impulseSource?.GenerateImpulse();
+    }
+    //player
+
+    public void BulletImpactFromPlayer(float radius)
+    {
+        // //env handle
+        // if (((1 << targetCollider.gameObject.layer) & environmentLayer.value) != 0)
+        // {
+
+        //     DespawnBullet();
+        //     return;
+        // }
+        //creature handle
+        // if (((1 << targetCollider.gameObject.layer) & targetLayer.value) != 0)
+        // {
+
+        // }
+        Collider2D[] enemiesToDamage = Physics2D.OverlapCircleAll(transform.position, radius, targetLayer);
+        foreach (Collider2D enemy in enemiesToDamage)
+        {
+            EnemyEntity enemyCtrl = enemy.GetComponent<EnemyEntity>();
+            if (enemyCtrl == null) continue;
+            if (!enemyCtrl.state.IsDead())
+            {
+                enemyCtrl.enemyStat.ChangeCurrentStats(StatComponent.StatType.Health, -bulletDamage);
+                enemyCtrl.state.SetInterruptState(EnemyStateID.Stunned);
+                // playerController.playerEffect.SpawnEffect(enemyCtrl.transform, EffectAnimationID.Slash);
+                // enemyCtrl.enemyRecoil.RecoilHorizontal(playerController.pState.lookingRight ? 1 : -1);
+                // Debug.Log("Attack");
+                // hitTarget = true;
+            }
+        }
+        Collider2D[] breakableObject = Physics2D.OverlapCircleAll(transform.position, radius, environmentLayer);
+        foreach (Collider2D obj in breakableObject)
+        {
+            DamagedAbleObject damagedAbleobj = obj.GetComponent<DamagedAbleObject>();
+            if (damagedAbleobj == null) continue;
+            damagedAbleobj.TakeDamage(bulletDamage);
+
+        }
+
     }
     #endregion
 

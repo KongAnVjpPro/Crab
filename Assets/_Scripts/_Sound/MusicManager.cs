@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 public class MusicManager : MyMonobehaviour
 {
     public static MusicManager Instance;
     [SerializeField] MusicLibrary musicLibrary;
     [SerializeField] AudioSource musicSource;
+    [SerializeField] Slider sliderVolume;
     protected override void LoadComponents()
     {
         base.LoadComponents();
@@ -54,4 +56,21 @@ public class MusicManager : MyMonobehaviour
         }
     }
 
+    public void SetVolume()
+    {
+        if (sliderVolume != null)
+        {
+            musicSource.volume = sliderVolume.value;
+        }
+    }
+    public void SetSlider(Slider slider)
+    {
+        sliderVolume = slider;
+        SetVolume();
+    }
+    public float GetVolume()
+    {
+        return musicSource.volume;
+
+    }
 }

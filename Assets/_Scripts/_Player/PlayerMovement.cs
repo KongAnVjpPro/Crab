@@ -60,7 +60,7 @@ public class PlayerMovement : PlayerComponent
 
     }
     #region Checker
-    bool IsOnGround()
+    public bool IsOnGround()
     {
         bool grounded = playerController.groundCheck.Grounded() || playerController.groundCheck.OtherLayerCheck(LayerMask.GetMask("Enemy"));
         if (grounded) playerController.playerDash.dashed = false;

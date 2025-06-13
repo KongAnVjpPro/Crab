@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerAttack : PlayerComponent
 {
     [SerializeField] float damage = 1f;
+    public float Damage => damage;
     [SerializeField] float attackCD = 1f;
     [SerializeField] float currentCD = 0;
 
@@ -55,7 +56,7 @@ public class PlayerAttack : PlayerComponent
     public void Attack()
     {
 
-        if (currentCD >= attackCD)
+        if (currentCD >= (attackCD / playerController.speedBoost))
         {
             playerController.pState.attacking = true;
             hitTarget = false;
@@ -178,7 +179,7 @@ public class PlayerAttack : PlayerComponent
         // playerController.rb.velocity = ;
 
     }
-    void ApplyRecoil()
+    public void ApplyRecoil()
     {
         if (!hitTarget) return;
         if (currentState == AttackState.forwardAttack)
@@ -252,4 +253,11 @@ public class PlayerAttack : PlayerComponent
         playerController.pState.attacking = false;
         Debug.Log("End");
     }
+    #region  upgrade
+    public void SetDamage(float value)
+    {
+        damage = value;
+    }
+
+    #endregion
 }

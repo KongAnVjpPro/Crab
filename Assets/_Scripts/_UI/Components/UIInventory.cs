@@ -21,6 +21,10 @@ public class UIInventory : UIComponent
     [Header("Handle Click Slot: ")]
     [SerializeField] public UIInventorySlot currentSlot;
     [SerializeField] public UIInventorySlot previousSlot;
+
+
+    [Header("Controller: ")]
+    [SerializeField] UIInventoryController inventoryController;
     protected override void Awake()
     {
         base.Awake();
@@ -58,6 +62,7 @@ public class UIInventory : UIComponent
             // HideInventory();
             return;
         }
+        SetInventory(PlayerEntity.Instance.playerInventory.inventory);
         UIController.isSomethingOpened = true;
         // if (isInventoryOpen) return;
         isInventoryOpen = true;
@@ -73,6 +78,8 @@ public class UIInventory : UIComponent
         currentSlot = null;
         previousSlot?.EndClickHandle();
         previousSlot = null;
+
+        inventoryController.isTabSwitchingEnabled = true;
     }
     public void HideInventory()
     {
@@ -94,6 +101,11 @@ public class UIInventory : UIComponent
         previousSlot = null;
 
         HideItemDescription();
+
+        inventoryController.isTabSwitchingEnabled = false;
+        inventoryController.UpdateMapCanvas();
+        inventoryController.UpdateStatAndSkillCanvas();
+        //inventory dc handle o day
     }
     protected virtual void LoadItemSlot()
     {

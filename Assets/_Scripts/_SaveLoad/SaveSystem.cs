@@ -31,9 +31,12 @@ public class SaveSystem : MyMonobehaviour
 
 
 
-    //shell station
+    //shell station // check point
     public string shellSceneName;
     public Vector2 shellStationPos;
+
+    //shell ancient
+    Dictionary<string, bool> shellAncientData = new Dictionary<string, bool>();
 
     //player
     public float playerTotalHP = 5;
@@ -58,10 +61,27 @@ public class SaveSystem : MyMonobehaviour
     Dictionary<string, bool> doorData = new Dictionary<string, bool>();
     public Action<string, bool> OnDoorDataChanged;
 
+    //shell owned data
+
+    public List<string> shellSaveKey = new List<string>();
+    public string lastShellEquippedKey = "";
+
+
+    //inventory and coin
+    public int coinAmount;
+    public Inventory inventory;
+
+
+    //player skill
+
+    public bool isTideBurstUnlocked = false;
+    public bool isCrushingWaveUnlocked = false;
+    public bool isAbyssalPulseUnlocked = false;
+
 
     public void Initialize()
     {
-        if (!File.Exists(Application.persistentDataPath + "/save.shell.data"))
+        if (!File.Exists(Application.persistentDataPath + "/save.shell.data"))//check point
         {
             BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.shell.data"));
         }
@@ -82,6 +102,15 @@ public class SaveSystem : MyMonobehaviour
         {
             BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.door.data"));
         }
+        if (!File.Exists(Application.persistentDataPath + "/save.shellAncient.data")) // ancient shell
+        {
+            BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.shellAncient.data"));
+        }
+        if (!File.Exists(Application.persistentDataPath + "/save.shellOwned.data")) // shell to equip
+        {
+            BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.shellOwned.data"));
+        }
+
     }
 
     public void ClearData()
@@ -91,7 +120,9 @@ public class SaveSystem : MyMonobehaviour
         "/save.playerStat.data",
         "/save.npcAppear.data",
         "/save.boss.data",
-        "/save.door.data"
+        "/save.door.data",
+        "/save.shellAncient.data",
+        "/save.shellOwned.data"
     };
 
         foreach (string file in files)
@@ -100,8 +131,10 @@ public class SaveSystem : MyMonobehaviour
             if (File.Exists(path))
             {
                 File.Delete(path);
+                Debug.Log($"File {file} cleared.");
             }
         }
+        GameController.Instance.isGameStarted = false;
 
         //reset field data
         // shellSceneName = "";
@@ -124,12 +157,127 @@ public class SaveSystem : MyMonobehaviour
         SaveNPCAppear();
         SaveDoorData();
         SaveBossDefeated();
+        SaveShellAcient();
+        SaveShellOwnedData();
     }
+    #region Shell Owned Data
+    public List<string> GetShellSaveKey()
+    {
+        return shellSaveKey;
+    }
+    public void SetShellSaveKey(List<string> keys)
+    {
+        shellSaveKey = keys;
+    }
+    public string GetLastShellEquippedKey()
+    {
+        return lastShellEquippedKey;
+    }
+    public void SetLastShellEquippedKey(string key)
+    {
+        lastShellEquippedKey = key;
+    }
+    public void SaveShellOwnedData()
+    {
+        shellSaveKey = PlayerEntity.Instance.playerShell.shellSaveKey;
+        lastShellEquippedKey = PlayerEntity.Instance.playerShell.lastShellEquippedKey;
+        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.shellOwned.data")))
+        {
+            writer.Write(shellSaveKey.Count);
+            foreach (var key in shellSaveKey)
+            {
+                writer.Write(key);
+            }
+            writer.Write(lastShellEquippedKey);
+        }
+    }
+
+    public void LoadShellOwnedData()
+    {
+        if (File.Exists(Application.persistentDataPath + "/save.shellOwned.data"))
+        {
+            FileInfo fileInfo = new FileInfo(Application.persistentDataPath + "/save.shellOwned.data");
+            if (fileInfo.Length == 0)
+            {
+
+                return;
+            }
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.shellOwned.data")))
+            {
+                int count = reader.ReadInt32();
+                // shellSaveKey.Clear();
+                for (int i = 0; i < count; i++)
+                {
+                    string key = reader.ReadString();
+                    shellSaveKey.Add(key);
+                }
+                lastShellEquippedKey = reader.ReadString();
+            }
+        }
+        else
+        {
+            Debug.LogError("file ko ton tai");
+        }
+    }
+    #endregion
     #region Ancient Shell Station
 
     public void SaveShellAcient()
     {
+        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.shellAncient.data")))
+        {
+            writer.Write(shellAncientData.Count);
+            foreach (var pair in shellAncientData)
+            {
+                writer.Write(pair.Key);
+                writer.Write(pair.Value);
+            }
+        }
+    }
+    public void LoadShellAcient()
+    {
+        if (File.Exists(Application.persistentDataPath + "/save.shellAncient.data"))
+        {
+            FileInfo fileInfo = new FileInfo(Application.persistentDataPath + "/save.shellAncient.data");
+            if (fileInfo.Length == 0)
+            {
 
+                return;
+            }
+            using (BinaryReader reader = new BinaryReader(File.OpenRead(Application.persistentDataPath + "/save.shellAncient.data")))
+            {
+                int count = reader.ReadInt32();
+                for (int i = 0; i < count; i++)
+                {
+                    string key = reader.ReadString();
+                    bool value = reader.ReadBoolean();
+                    shellAncientData[key] = value;
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("file ko ton tai");
+        }
+    }
+    public bool GetShellAncientData(string key)
+    {
+        if (shellAncientData.ContainsKey(key))
+        {
+            return shellAncientData[key];
+        }
+        return false;
+    }
+    public void SetShellAncientData(string key, bool value)
+    {
+        if (shellAncientData.ContainsKey(key))
+        {
+            shellAncientData[key] = value;
+        }
+        else
+        {
+            shellAncientData.Add(key, value);
+        }
     }
     #endregion
     #region check point data
@@ -196,7 +344,7 @@ public class SaveSystem : MyMonobehaviour
                 SceneManager.LoadScene(lastScene);
                 GameController.Instance.DeactiveStartCanvas();
                 UIEntity.Instance.ActivateCanvas(true);
-                // PlayerEntity.Instance.transform.position = playerPosition;
+                PlayerEntity.Instance.transform.position = playerPosition;
                 PlayerEntity.Instance.rb.gravityScale = 3;
                 return;
             }
@@ -214,6 +362,11 @@ public class SaveSystem : MyMonobehaviour
 
                 // LevelManager.Instance.LoadScene(lastScene, "WaveFade");
 
+
+                //change stats that ra la cong hoac tru stats
+                PlayerEntity.Instance.playerStat.ChangeTotalStats(StatComponent.StatType.Health, -200);
+                PlayerEntity.Instance.playerStat.ChangeTotalStats(StatComponent.StatType.Mana, -200);
+                PlayerEntity.Instance.playerStat.ChangeTotalStats(StatComponent.StatType.Stamina, -200);
 
                 PlayerEntity.Instance.playerStat.ChangeTotalStats(StatComponent.StatType.Health, playerTotalHP);
                 PlayerEntity.Instance.playerStat.ChangeTotalStats(StatComponent.StatType.Mana, playerTotalMana);

@@ -6,13 +6,17 @@ public class CameraController : MyMonobehaviour
     static List<CinemachineVirtualCamera> cameras = new List<CinemachineVirtualCamera>();
 
     public static CinemachineVirtualCamera activeCamera = null;
-
+    void Start()
+    {
+        // Debug.Log(cameras.Count);
+    }
     public static bool IsActiveCamera(CinemachineVirtualCamera camera)
     {
         return camera == activeCamera;
     }
     public static void SwitchCamera(CinemachineVirtualCamera newCamera)
     {
+        // Debug.Log(newCamera.name, newCamera.gameObject);
         newCamera.Priority = 10;
         activeCamera = newCamera;
         foreach (var cam in cameras)

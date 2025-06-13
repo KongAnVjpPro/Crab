@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   shellName: Double Jump Shell
-  shellDescription: Just a normal shell
+  shellDescription: Allows you to jump a second time in mid-air.
   abilityID: 01000000
   spriteBase: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
   decorColor: {r: 0.8490566, g: 0.10012458, b: 0.8001585, a: 1}

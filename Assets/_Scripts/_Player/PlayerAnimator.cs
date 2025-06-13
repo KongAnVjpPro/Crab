@@ -69,6 +69,18 @@ public class PlayerAnimator : PlayerComponent
     {
         anim.SetTrigger("Death");
     }
+    public void Upcast(bool value)
+    {
+        anim.SetBool("UpCast", value);
+    }
+    public void DownCast(bool value)
+    {
+        anim.SetBool("DownCast", value);
+    }
+    public void SideCast(bool value)
+    {
+        anim.SetBool("SideCast", value);
+    }
 
     void LateUpdate()
     {

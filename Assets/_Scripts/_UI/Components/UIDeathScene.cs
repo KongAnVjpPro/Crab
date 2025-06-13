@@ -27,6 +27,7 @@ public class UIDeathScene : UIComponent
 
         //do some respawn mechanic
         // PlayerEntity.Instance.playerStat.Respawn();
+        MusicManager.Instance.PlayMusic("Ambient", 5f);
         GameController.Instance.RespawnPlayer();
     }
 

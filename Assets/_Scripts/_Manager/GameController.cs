@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using DG.Tweening;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 public class GameController : MyMonobehaviour
@@ -10,6 +11,7 @@ public class GameController : MyMonobehaviour
     public bool isBlockPlayerControl = false;
     public ItemSpawner itemSpawner;
     public Transform effectHolder;
+    public bool isGameStarted = false;
     // public Transform bulletHolder;
     // public AbilityManager abilityManager;
 
@@ -22,15 +24,24 @@ public class GameController : MyMonobehaviour
     {
         base.LoadComponents();
 
-        SaveSystem.Instance.Initialize();
+        // SaveSystem.Instance.Initialize();
 
 
         this.LoadSingleton();
+        StartCoroutine(WaitForSaveSystem());
         // this.LoadPlayerEntity();
         this.LoadItemSpawner();
         SaveScene();
         // this.LoadAbilityManager();
 
+    }
+    IEnumerator WaitForSaveSystem()
+    {
+        while (SaveSystem.Instance == null)
+        {
+            yield return null;
+        }
+        SaveSystem.Instance.Initialize();
     }
     // void LoadD
     protected virtual void LoadSingleton()
@@ -73,6 +84,8 @@ public class GameController : MyMonobehaviour
     void QuitGameAnimationHandle()
     {
         // StartCoroutine(QuitAnimation)
+        quitCanvas.blocksRaycasts = true;
+        quitCanvas.interactable = true;
         quitCanvas.DOFade(1, quitTime).OnComplete(() =>
         {
 
@@ -93,12 +106,29 @@ public class GameController : MyMonobehaviour
         startCanvas.DOFade(1, fadeTime);
         startCanvas.blocksRaycasts = true;
         yield return new WaitForSeconds(quitTime);
+        if (!isGameStarted)
+        {
+            isGameStarted = true;
+            // LoadGame();
+
+        }
+        else
+        {
+            SaveSystem.Instance.LoadPlayerData();
+            StartMenu.Instance.Activate(false);
+            yield break;
+        }
         SaveSystem.Instance.LoadNPCAppear();
         SaveSystem.Instance.LoadBossDefeated();
 
         SaveSystem.Instance.LoadPlayerData();
         SaveSystem.Instance.LoadDoorData();
         SaveSystem.Instance.LoadShellStation();
+        SaveSystem.Instance.LoadShellAcient();
+        SaveSystem.Instance.LoadShellOwnedData();
+
+
+        LoadPlayerData();
         StartMenu.Instance.Activate(false);
 
     }
@@ -143,6 +173,7 @@ public class GameController : MyMonobehaviour
         if (SaveSystem.Instance.shellSceneName != null)
         {
             // SceneManager.LoadScene(SaveSystem.Instance.shellSceneName);
+            PlayerEntity.Instance.rb.gravityScale = 0;
             LevelManager.Instance.LoadScene(SaveSystem.Instance.shellSceneName, "WaveFade");
         }
         if (SaveSystem.Instance.shellStationPos != null)
@@ -159,5 +190,21 @@ public class GameController : MyMonobehaviour
         string currentSceneName = SceneManager.GetActiveScene().name;
 
     }
+    #endregion
+
+    #region LoadPlayerData
+
+    void LoadPlayerData()
+    {
+        //shell owned
+        PlayerEntity.Instance.playerShell.GetData();
+        // PlayerEntity.Instance.playerShell.GetData();
+    }
+    #endregion
+    #region Settings
+    // public void OnClickSettings()
+    // {
+    //     UIEntity.Instance.uiSettings.ShowSettings();
+    // }
     #endregion
 }

@@ -13,12 +13,13 @@ public class PlayerInput : PlayerComponent
      cast,
      block,
      inventory,
-     hotkey1;
+     hotkey1,
+     escape;
     void GetInput()
     {
         // inventory = Input.GetKeyDown(KeyCode.I);
         inventory = Input.GetButtonDown("Inventory");
-
+        escape = Input.GetKeyDown(KeyCode.Escape);
 
         if (GameController.Instance.isBlockPlayerControl)
         {

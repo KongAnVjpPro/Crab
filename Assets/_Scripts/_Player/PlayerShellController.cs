@@ -33,12 +33,40 @@ public class PlayerShellController : PlayerComponent
         this.LoadDict();
 
 
+
+        // EquipShell(ownedShellList[0]);
+    }
+    #region Save Load
+    public void GetData()
+    {
+        shellSaveKey.Clear();
+        shellSaveKey = SaveSystem.Instance.GetShellSaveKey();
+        // Debug.Log("Shell Save Key Count: " + shellSaveKey.Count);
+        lastShellEquippedKey = SaveSystem.Instance.GetLastShellEquippedKey();
+        if (lastShellEquippedKey == null || lastShellEquippedKey == "")
+        {
+            // lastShellEquippedKey = "";
+            if (currentShell != null)
+            {
+                lastShellEquippedKey = currentShell.GetKey();
+                UnEquippedShell();
+                lastShellEquippedKey = "";
+                // shellSaveKey.Clear();
+                ownedShellList.Clear();
+            }
+
+        }
         this.LoadOwnedShells();
         this.LoadCurrentShell();
-        EquipShell(ownedShellList[0]);
-    }
 
-    void LoadOwnedShells()//load data
+    }
+    public void SetData()
+    {
+        // SaveSystem.Instance.SetShellSaveKey(shellSaveKey);
+        // SaveSystem.Instance.SetLastShellEquippedKey(lastShellEquippedKey);
+    }
+    #endregion
+    public void LoadOwnedShells()//load data
     {
         ownedShellList.Clear();
 
@@ -64,6 +92,12 @@ public class PlayerShellController : PlayerComponent
                 var combined = new CombinedShellData(baseShells);
                 ownedShellList.Add(combined);
                 combinedShellDict[combined.GetKey()] = combined;
+                if (lastShellEquippedKey == combined.GetKey())
+                {
+                    currentShell = combined;
+                    // LoadShellVisual(currentShell);
+                    // playerController.playerAbility.UnlockAbility(currentShell);
+                }
             }
         }
     }
@@ -72,6 +106,8 @@ public class PlayerShellController : PlayerComponent
         if (shellA == shellB)
         {
             result = null;
+            Debug.Log("trung");
+            UIEntity.Instance.uiNotification.NoticeSomething(4f, "Cannot combine the same shell", "");
             return false;
         }
         var baseShells = shellA.baseShellIDs.Concat(shellB.baseShellIDs)
@@ -83,6 +119,8 @@ public class PlayerShellController : PlayerComponent
 
         if (combinedShellDict.TryGetValue(key, out result))
         {
+            Debug.Log("da co shell");
+            UIEntity.Instance.uiNotification.NoticeSomething(4f, "Shell already exists", "");
             return false;
         }
 
@@ -95,6 +133,7 @@ public class PlayerShellController : PlayerComponent
         if (baseShellSOs.Count != baseShells.Count)
         {
             Debug.LogWarning("thieu shellID");
+            UIEntity.Instance.uiNotification.NoticeSomething(4f, "Missing shell data", "Check your shell list");
             result = null;
             return false;
         }
@@ -111,13 +150,14 @@ public class PlayerShellController : PlayerComponent
 
         ownedShellList.Add(result);
         shellSaveKey.Add(result.GetKey());
-
+        UIEntity.Instance.uiNotification.NoticeSomething(4f, "Shell combined successfully", result.shellName);
+        SetData();
         return true;
     }
 
 
 
-    protected virtual void LoadCurrentShell()
+    public virtual void LoadCurrentShell()
     {
         EquipShell(currentShell);
     }
@@ -140,6 +180,8 @@ public class PlayerShellController : PlayerComponent
         playerController.playerAbility.RemoveAbility(currentShell);
         currentShell = null;
         ActiveShell(false);
+        lastShellEquippedKey = "";
+        SetData();
         //remove ability
         // playerController.playerAbility.UnlockAbilit
     }
@@ -149,6 +191,8 @@ public class PlayerShellController : PlayerComponent
         currentShell = shell;
         LoadShellVisual(shell);
         playerController.playerAbility.UnlockAbility(currentShell);
+        lastShellEquippedKey = shell.GetKey();
+        SetData();
         //add ability
     }
     #region Graphic handle

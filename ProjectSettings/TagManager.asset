@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Death
+  - OneWayPlatform
+  - SpecialPlatform
   layers:
   - Default
   - TransparentFX
@@ -21,8 +23,8 @@ TagManager:
   - Enemy
   - NPC
   - DamageAble
-  - 
-  - 
+  - OneWayLayer
+  - SpecialPlatfom
   - post
   - 
   - 
@@ -57,4 +59,7 @@ TagManager:
     locked: 0
   - name: Guide
     uniqueID: 325439103
+    locked: 0
+  - name: New Layer 6
+    uniqueID: 476652977
     locked: 0

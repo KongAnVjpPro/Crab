@@ -3063,7 +3063,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transitionContainer: {fileID: 2651319330602152699}
   transitions: []
-  progressBar: {fileID: 7393336260191751585}
+  blockCanvasGroup: {fileID: 5978737380963478387}
 --- !u!225 &5978737380963478387
 CanvasGroup:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 public class ShellUnlocked : MyMonobehaviour
 {
@@ -18,8 +19,18 @@ public class ShellUnlocked : MyMonobehaviour
     }
     void Start()
     {
-        //load recieved state
+        LoadShellAncient();
     }
+    #region save and load
+    public void LoadShellAncient()
+    {
+        received = SaveSystem.Instance.GetShellAncientData(ancientShellKey);
+    }
+    public void SaveShellAncient()
+    {
+        SaveSystem.Instance.SetShellAncientData(ancientShellKey, received);
+    }
+    #endregion
     protected virtual void LoadShellProvided()
     {
         // if (shellProvided != null) return;
@@ -47,6 +58,7 @@ public class ShellUnlocked : MyMonobehaviour
         if (!received)
         {
             GivePlayerAbility();
+
         }
         else
         {
@@ -73,6 +85,7 @@ public class ShellUnlocked : MyMonobehaviour
     {
         GameController.Instance.isBlockPlayerControl = true;
         PlayerEntity.Instance.playerShell.ownedShellList.Add(shellProvided);
+        PlayerEntity.Instance.playerShell.shellSaveKey.Add(shellProvided.GetKey());
         received = true;
         unlockedParticle.Play();
         UIEntity.Instance.uiNotification.UnlockedShellUI(timeUI, shellProvided.shellName);
@@ -84,10 +97,12 @@ public class ShellUnlocked : MyMonobehaviour
         }
         shellAnim.SetBool("Activate", false);
         GameController.Instance.isBlockPlayerControl = false;
+        SaveShellAncient();
     }
     #endregion
     public void HandleShellStation()
     {
-
+        if (UIEntity.Instance.isSomethingOpened) return;
+        UIEntity.Instance.uiShellStation.ShowShellStation();
     }
 }

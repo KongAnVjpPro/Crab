@@ -25,13 +25,32 @@ public class TrapHorn : MyMonobehaviour
         base.Awake();
         // CallBackHorn += SpawnInSaveZone();
     }
-
+    #region callbacks
     public void SpawnInSaveZone()
     {
         if (!PlayerEntity.Instance.pState.alive) return;
         StartCoroutine(Respawn());
 
     }
+    [Header("Callback Slow Down: ")]
+    [SerializeField] float slowDownAmount = 0.5f;
+    [SerializeField] float slowDownDuration = 2f;
+    public void SlowDown()
+    {
+        StartCoroutine(ApplySlowDown());
+
+    }
+    IEnumerator ApplySlowDown()
+    {
+        if (!PlayerEntity.Instance.pState.alive) yield break;
+        PlayerEntity.Instance.playerMovement.BoostSpeedAndJump(slowDownAmount, slowDownAmount);
+        yield return new WaitForSeconds(slowDownDuration);
+        PlayerEntity.Instance.playerMovement.ResetBoost();
+        // PlayerEntity.Instance.playerMovement.BoostSpeedAndJump(restoreAmount, restoreAmount);
+    }
+
+
+    #endregion
     IEnumerator Respawn()
     {
         PlayerEntity.Instance.pState.invincible = true;

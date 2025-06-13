@@ -17,6 +17,7 @@ public class UIEntity : EntityController
     public CanvasGroup mainCanvas;
     public UICinematic uiCinematic;
     public UIBoss uiBoss;
+    public UIShellStation uiShellStation;
     // public AudioSource audioSource;
     // public UIAudio uiAudio;
     private void LoadSingleton()
@@ -49,6 +50,7 @@ public class UIEntity : EntityController
         LoadSettingUI();
         LoadUIBoss();
         LoadCinematicUI();
+        LoadUIShellStation();
         // LoadAudio();
         // LoadUIAudio();
 
@@ -65,6 +67,11 @@ public class UIEntity : EntityController
     //     if (audioSource != null) return;
     //     audioSource = GetComponent<AudioSource>();
     // }
+    protected virtual void LoadUIShellStation()
+    {
+        if (uiShellStation != null) return;
+        uiShellStation = GetComponent<UIShellStation>();
+    }
     protected virtual void LoadCinematicUI()
     {
         if (this.uiCinematic != null) return;

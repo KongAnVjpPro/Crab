@@ -10,6 +10,12 @@ public class GuideTriggerEffect : AnimationInOut
     }
     public override IEnumerator AnimateTransitionOut()
     {
+        if (canvasGroup.gameObject.activeSelf == false)
+        {
+            // canvasGroup.gameObject.SetActive(true);
+            canvasGroup.alpha = 0f;
+            yield break;
+        }
         var tweener = canvasGroup.DOFade(0f, 1f).SetEase(Ease.OutQuad);
         yield return tweener.WaitForCompletion();
     }

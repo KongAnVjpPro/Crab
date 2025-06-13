@@ -1,9 +1,11 @@
 using UnityEngine;
+using UnityEngine.UI;
 public class SoundManager : MyMonobehaviour
 {
     public static SoundManager Instance;
     [SerializeField] SoundLibrary sfxLibrary;
     [SerializeField] AudioSource sfx2DSource;
+    [SerializeField] Slider sliderVolume;
     protected virtual void LoadSingleton()
     {
         if (Instance == null)
@@ -38,5 +40,21 @@ public class SoundManager : MyMonobehaviour
     public void PlaySound2D(string soundName)
     {
         sfx2DSource.PlayOneShot(sfxLibrary.GetClipFromName(soundName));
+    }
+    public void SetVolume()
+    {
+        if (sliderVolume != null)
+        {
+            sfx2DSource.volume = sliderVolume.value;
+        }
+    }
+    public void SetSlider(Slider slider)
+    {
+        sliderVolume = slider;
+        SetVolume();
+    }
+    public float GetVolume()
+    {
+        return sfx2DSource.volume;
     }
 }

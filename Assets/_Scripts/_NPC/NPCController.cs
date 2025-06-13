@@ -136,4 +136,55 @@ public class NPCController : EntityController
 
 
     }
+    #region wait for disappear
+    public void WaitForDisappear(float Time)
+    {
+        StartCoroutine(WaitForDisappearCoroutine(Time));
+    }
+    IEnumerator WaitForDisappearCoroutine(float Time)
+    {
+        yield return new WaitForSeconds(Time);
+        // Disappear();
+        SetCanAppear(false);
+    }
+    #endregion
+    #region  sin move
+    [Header("Sin Move Settings")]
+    public Vector2 moveDirection = Vector2.right;
+    public float moveSpeed = 2f;
+    public float amplitude = 0.5f;
+    public float frequency = 2f;
+
+    public void StartSinMove(float duration)
+    {
+
+        StartCoroutine(MoveSinusoidal(duration));
+    }
+
+    private IEnumerator MoveSinusoidal(float duration)
+    {
+
+        Vector2 direction = moveDirection.normalized;
+        Vector2 perpendicular = new Vector2(-direction.y, direction.x);
+
+        float timeCounter = 0f;
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            timeCounter += Time.deltaTime;
+            elapsed += Time.deltaTime;
+
+            float sinOffset = Mathf.Sin(timeCounter * frequency) * amplitude;
+            Vector2 offset = perpendicular * sinOffset;
+
+            Vector2 forwardMove = direction * moveSpeed * Time.deltaTime;
+
+            transform.position += (Vector3)(forwardMove + offset * Time.deltaTime);
+
+            yield return null;
+        }
+
+    }
+    #endregion
 }

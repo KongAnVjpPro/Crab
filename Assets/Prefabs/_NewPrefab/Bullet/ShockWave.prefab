@@ -198,6 +198,9 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  environmentLayer:
+    serializedVersion: 2
+    m_Bits: 128
   bulletDamage: 3
   spawner: {fileID: 0}
   bulletSpeed: 10
@@ -209,6 +212,7 @@ MonoBehaviour:
   currentTimeExist: 0
   maxTimeExist: 5
   impulseSource: {fileID: 0}
+  targetCollider: {fileID: 0}
   bounceCount: 0
   bounceLimit: 5
   TargetCallBack:

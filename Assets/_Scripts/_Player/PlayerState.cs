@@ -16,5 +16,10 @@ public class PlayerState : MyMonobehaviour
     public bool unlockedDash = false;
     public bool unlockedDoubleJump = false;
     public bool unlockedParry = false;
+    public bool unlockedWallClimb = false;
+    [Header("Spell: ")]
+    public bool unlockedTideBurst = false;
+    public bool unlockedCurshingWave = false;
+    public bool unlockedAbyssalPulse = false;
 
 }

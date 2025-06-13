@@ -6,7 +6,7 @@ partial class CameraRegister : MyMonobehaviour
     {
         CameraController.Register(GetComponent<CinemachineVirtualCamera>());
     }
-    private void Osable()
+    private void OnDisable()
     {
         CameraController.Unregister(GetComponent<CinemachineVirtualCamera>());
     }
