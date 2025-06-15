@@ -43,7 +43,12 @@ public class TrapHorn : MyMonobehaviour
     IEnumerator ApplySlowDown()
     {
         if (!PlayerEntity.Instance.pState.alive) yield break;
+        if (PlayerEntity.Instance.playerMovement.isOnBuffMove)
+        {
+            yield break;
+        }
         PlayerEntity.Instance.playerMovement.BoostSpeedAndJump(slowDownAmount, slowDownAmount);
+
         yield return new WaitForSeconds(slowDownDuration);
         PlayerEntity.Instance.playerMovement.ResetBoost();
         // PlayerEntity.Instance.playerMovement.BoostSpeedAndJump(restoreAmount, restoreAmount);

@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4101b4b90ada24a4981951830bd4ba9f, type: 3}
+  m_Name: BubbleJump
+  m_EditorClassIdentifier: 
+  itemType: 1
+  itemEffectSO: {fileID: 11400000, guid: 3102929c953f2634490154bc61087080, type: 2}
+  itemName: Bubble
+  itemSprite: {fileID: 21300000, guid: 20307a8aec8e784489f2b274c422ea3a, type: 3}
+  itemDescription: Jump Higher in a minute
+  maxStack: 999

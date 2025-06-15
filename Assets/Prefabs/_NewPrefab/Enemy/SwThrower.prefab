@@ -936,6 +936,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pool: []
   prefab: {fileID: 2487251929637239227, guid: 9fae2d1dd21b1544ab98f4cf7010a114, type: 3}
+  holder: {fileID: 0}
 --- !u!114 &3821999801057834638
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1151,6 +1152,7 @@ MonoBehaviour:
   maxHealth: 25
   maxMana: 25
   maxStamina: 25
+  damageReduceRate: 0
 --- !u!114 &2620311249663925544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1203,12 +1205,29 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   rb: {fileID: 3143163569801100764}
+  collie: {fileID: 0}
   enemyEntity: {fileID: 0}
+  damageReceiveScale: 1
   isSwimming: 0
   isRangeAttack: 1
   enemyAnim: {fileID: 0}
   currentState: {fileID: 0}
   rangeAttackDistanceCheck: 10
+  closeCombatRange: 2.5
+  shield: {fileID: 0}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  talkLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  impulseSource: {fileID: 0}
+  bossBoost: 1
+  isOnPhase2: 0
+  isMinionAlive: 1
+  minions: []
+  isBoss: 0
+  bossType: 0
 --- !u!95 &1880006225316612044
 Animator:
   serializedVersion: 5
@@ -1300,8 +1319,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyController: {fileID: 3417063554926382924}
   dropRateItem: 1
-  itemDropAble: {fileID: 11400000, guid: 1ff35764c8c95c3438d8610b7b8adf34, type: 2}
-  amountRange: 5
+  itemDropAble: {fileID: 11400000, guid: a2227390cb83b7141a518be71c248a45, type: 2}
+  amountRange: 2
   coinAmount: 5
 --- !u!114 &6469468587501448140
 MonoBehaviour:
@@ -2543,6 +2562,11 @@ MonoBehaviour:
   timer: 0
   timeBetweenDeal: 2
   playerInZone: 0
+  CallBackHorn:
+    m_PersistentCalls:
+      m_Calls: []
+  slowDownAmount: 0.5
+  slowDownDuration: 2
 --- !u!61 &8268251457164333157
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2918,7 +2942,8 @@ MonoBehaviour:
   stateID: 6
   stateMachine: {fileID: 2875309154385931128}
   canRevive: 0
-  delayTime: 5
+  reviveTime: 5
+  deathTime: 2
 --- !u!1 &8114666265210529295
 GameObject:
   m_ObjectHideFlags: 0
@@ -3161,6 +3186,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateID: 1
   stateMachine: {fileID: 0}
+  flipCooldown: 0.5
+  flipTimer: 0
   patrolDuration: 0.5
   speed: 0.5
   patrolCenter: {x: 70, y: -5.5, z: 0}
@@ -3171,7 +3198,6 @@ MonoBehaviour:
   moveDirection: 1
   returningToCenter: 0
   rangeRandomDirection: 45
-  aiPath: {fileID: 0}
 --- !u!1 &9040069000965801095
 GameObject:
   m_ObjectHideFlags: 0

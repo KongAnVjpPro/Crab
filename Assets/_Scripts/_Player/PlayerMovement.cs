@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 [RequireComponent(typeof(GroundCheck))]
 [RequireComponent(typeof(WallCheck))]
@@ -35,7 +36,10 @@ public class PlayerMovement : PlayerComponent
     bool isWallJumping;
     void Update()
     {
-
+        // if (Input.GetKeyDown(KeyCode.P))
+        // {
+        //     BoostInTime(5f, 5f, 5);
+        // }
         UpdateMoveVariable();
         UpdateJumpVariables();
 
@@ -261,6 +265,7 @@ public class PlayerMovement : PlayerComponent
     {
         if (!playerController.pState.unlockedDash) return;
         int _dir = playerController.pState.lookingRight ? 1 : -1;
+        _dir *= Mathf.RoundToInt(scaledMoveSpeed);
         if (playerController.playerInput.dash)
         {
             playerController.playerDash.StartDash(_dir);
@@ -298,6 +303,40 @@ public class PlayerMovement : PlayerComponent
         scaledJumpForce = 1f;
         scaledMoveSpeed = 1f;
     }
+    public bool isOnBuffMove = false;
+    [SerializeField] float totalBoostTime = 0;
+    [SerializeField] float boostTimeCounter = 0;
+    public void BoostInTime(float boostMove, float boostJump, float time)
+    {
+        StartCoroutine(BoostSpeedInTime(boostMove, boostJump, time));
+    }
+    IEnumerator BoostSpeedInTime(float boostMove, float boostJump, float time)
+    {
+        if (isOnBuffMove)
+        {
+            totalBoostTime += time;
+            // BoostSpeedAndJump(scaledMoveSpeed < boostMove ? boostMove : scaledMoveSpeed, scaledJumpForce < boostJump ? boostJump : scaledJumpForce);
+            BoostSpeedAndJump(scaledMoveSpeed < boostMove ? boostMove : scaledMoveSpeed, scaledJumpForce < boostJump ? boostJump : scaledJumpForce);
+            yield break;
+        }
+        isOnBuffMove = true;
+        totalBoostTime = 0;
+        totalBoostTime = time;
+        BoostSpeedAndJump(scaledMoveSpeed < boostMove ? boostMove : scaledMoveSpeed, scaledJumpForce < boostJump ? boostJump : scaledJumpForce);
+        // BoostSpeedAndJump);
+        while (boostTimeCounter < totalBoostTime)
+        {
+            boostTimeCounter += Time.deltaTime;
+            yield return null;
+        }
+        Debug.Log(boostTimeCounter);
+        boostTimeCounter = 0;
+        totalBoostTime = 0;
+        isOnBuffMove = false;
+        ResetBoost();
+
+    }
+
     #endregion
 
 }

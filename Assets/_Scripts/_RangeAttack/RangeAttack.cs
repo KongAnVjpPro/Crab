@@ -173,6 +173,10 @@ public class RangeAttack : MyMonobehaviour
         }
 
     }
+    public void InkedScreen(float duration)
+    {
+        UIEntity.Instance.InkedScreen(duration);
+    }
     #endregion
 
 }

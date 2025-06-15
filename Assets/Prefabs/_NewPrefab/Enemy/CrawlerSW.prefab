@@ -4152,6 +4152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateID: 1
   stateMachine: {fileID: 0}
+  flipCooldown: 0.5
+  flipTimer: 0
   patrolDuration: 1
   speed: 2
   patrolCenter: {x: -26.5, y: -5, z: 0}
@@ -4162,7 +4164,6 @@ MonoBehaviour:
   moveDirection: 1
   returningToCenter: 0
   rangeRandomDirection: 45
-  aiPath: {fileID: 0}
 --- !u!1 &7196795305226958223
 GameObject:
   m_ObjectHideFlags: 0
@@ -4531,6 +4532,7 @@ MonoBehaviour:
   maxHealth: 25
   maxMana: 25
   maxStamina: 25
+  damageReduceRate: 0
 --- !u!114 &6838332774715088034
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4583,12 +4585,29 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   rb: {fileID: 1487846503045229100}
+  collie: {fileID: 0}
   enemyEntity: {fileID: 0}
+  damageReceiveScale: 1
   isSwimming: 0
   isRangeAttack: 0
   enemyAnim: {fileID: 0}
   currentState: {fileID: 0}
   rangeAttackDistanceCheck: 10
+  closeCombatRange: 2.5
+  shield: {fileID: 0}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  talkLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  impulseSource: {fileID: 0}
+  bossBoost: 1
+  isOnPhase2: 0
+  isMinionAlive: 1
+  minions: []
+  isBoss: 0
+  bossType: 0
 --- !u!95 &1950810591907037703
 Animator:
   serializedVersion: 5
@@ -4680,8 +4699,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyController: {fileID: 2760141252675837564}
   dropRateItem: 1
-  itemDropAble: {fileID: 11400000, guid: 1ff35764c8c95c3438d8610b7b8adf34, type: 2}
-  amountRange: 5
+  itemDropAble: {fileID: 11400000, guid: d21d976a356f74844bc9850b8fa75775, type: 2}
+  amountRange: 3
   coinAmount: 5
 --- !u!114 &4101523161480497336
 MonoBehaviour:
@@ -5048,6 +5067,11 @@ MonoBehaviour:
   timer: 0
   timeBetweenDeal: 2
   playerInZone: 0
+  CallBackHorn:
+    m_PersistentCalls:
+      m_Calls: []
+  slowDownAmount: 0.5
+  slowDownDuration: 2
 --- !u!61 &4571651944081892270
 BoxCollider2D:
   m_ObjectHideFlags: 0

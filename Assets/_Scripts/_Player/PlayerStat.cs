@@ -9,7 +9,7 @@ public class PlayerStat : StatComponent
     [SerializeField] float staminaTimer = 0;
 
     [Header("Parry: ")]
-    [SerializeField] float damageReduceRate = 0.8f;
+    // [SerializeField] float damageReduceRate = 0.8f;
     [SerializeField] float staminaBlockedSuccess = 2f;
 
     [Header("Invincible: ")]
@@ -54,6 +54,10 @@ public class PlayerStat : StatComponent
         base.Awake();
         if (playerController == null)
             playerController = entityController.GetComponent<PlayerEntity>();
+        if (damageReduceRate == 0)
+        {
+            damageReduceRate = 0.8f;
+        }
     }
     // public bool isHealDecrease = true;
     public override void ChangeCurrentStats(StatType statType, float amount)

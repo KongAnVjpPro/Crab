@@ -37,5 +37,10 @@ public class SwordFishAnimator : EnemyAnimator
         base.PrepareRangeAttack();
         animator.SetTrigger("RangeAttack");
     }
+    public override void Block()
+    {
+        base.Block();
+        animator.SetTrigger("Block");
+    }
 
 }

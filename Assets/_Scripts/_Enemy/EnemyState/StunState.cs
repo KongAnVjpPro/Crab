@@ -21,6 +21,7 @@ public class StunState : EnemyState
         isRecoiling = false;
         isComplete = false;
         ApplyRecoil();
+        stateMachine.enemyEntity.enemyStat.damageReduceRate = 0;
     }
 
     public override void Do()

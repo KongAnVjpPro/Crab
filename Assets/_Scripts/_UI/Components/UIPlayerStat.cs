@@ -18,6 +18,13 @@ public class UIPlayerStat : UIComponent
     [SerializeField] protected float totalStamina;
     [SerializeField] protected float currentStamina;
 
+    [Header("Mana: ")]
+    [SerializeField] protected Slider manaSlider;
+    [SerializeField] protected Slider easeManaSlider;
+    [SerializeField] protected float totalMana;
+    [SerializeField] protected float currentMana;
+
+
 
 
     [Header("Others: ")]
@@ -35,6 +42,11 @@ public class UIPlayerStat : UIComponent
         this.currentStamina = PlayerEntity.Instance.playerStat.CurrentStamina;
         staminaSlider.maxValue = totalStamina;
         easeStaminaSlider.maxValue = totalStamina;
+
+        this.totalMana = PlayerEntity.Instance.playerStat.TotalMana;
+        this.currentMana = PlayerEntity.Instance.playerStat.CurrentMana;
+        manaSlider.maxValue = totalMana;
+        easeManaSlider.maxValue = totalMana;
     }
     void OnEnable()
     {
@@ -49,6 +61,7 @@ public class UIPlayerStat : UIComponent
     void Start()
     {
         Init();
+        Reload();
         // UpdateStatUI();
     }
     IEnumerator RegisterAction()
@@ -86,6 +99,12 @@ public class UIPlayerStat : UIComponent
             easeStaminaSlider.value = Mathf.Lerp(easeStaminaSlider.value, currentStamina, lerpSpeed);
         }
 
+        if (manaSlider.value != easeManaSlider.value)
+        {
+            easeManaSlider.value = Mathf.Lerp(easeManaSlider.value, currentMana, lerpSpeed);
+        }
+
+
     }
     //test
 
@@ -108,6 +127,15 @@ public class UIPlayerStat : UIComponent
 
         staminaSlider.value = currentStamina;
         // Debug.Log("b");
+
+
+        currentMana = PlayerEntity.Instance.playerStat.CurrentMana;
+        totalMana = PlayerEntity.Instance.playerStat.TotalMana;
+
+        manaSlider.maxValue = totalMana;
+        easeManaSlider.maxValue = totalMana;
+
+        manaSlider.value = currentMana;
     }
     #region Coin HUD
     Sequence s;

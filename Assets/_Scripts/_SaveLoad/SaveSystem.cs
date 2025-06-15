@@ -24,7 +24,17 @@ public class SaveSystem : MyMonobehaviour
             }
         }
         DontDestroyOnLoad(gameObject);
+        LoadItemDict();
 
+    }
+    void LoadItemDict()
+    {
+        ItemSO[] effs = Resources.LoadAll<ItemSO>("ScriptableObject/");
+        foreach (var eff in effs)
+        {
+            itemDict.Add(eff.itemName, eff);
+            Debug.Log("1");
+        }
     }
     //map
 
@@ -68,8 +78,9 @@ public class SaveSystem : MyMonobehaviour
 
 
     //inventory and coin
-    public int coinAmount;
-    public Inventory inventory;
+    public int coinAmount = 0;
+    public List<ItemData> itemData = new List<ItemData>();
+    public Dictionary<string, ItemSO> itemDict = new Dictionary<string, ItemSO>();
 
 
     //player skill
@@ -110,6 +121,10 @@ public class SaveSystem : MyMonobehaviour
         {
             BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.shellOwned.data"));
         }
+        if (!File.Exists(Application.persistentDataPath + "/save.inventory.data")) // invent
+        {
+            BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.inventory.data"));
+        }
 
     }
 
@@ -122,7 +137,8 @@ public class SaveSystem : MyMonobehaviour
         "/save.boss.data",
         "/save.door.data",
         "/save.shellAncient.data",
-        "/save.shellOwned.data"
+        "/save.shellOwned.data",
+        "/save.inventory.data"
     };
 
         foreach (string file in files)
@@ -330,6 +346,14 @@ public class SaveSystem : MyMonobehaviour
 
             lastScene = SceneManager.GetActiveScene().name;
             writer.Write(lastScene);
+
+            isTideBurstUnlocked = PlayerEntity.Instance.pState.unlockedTideBurst;
+            writer.Write(isTideBurstUnlocked);
+            isCrushingWaveUnlocked = PlayerEntity.Instance.pState.unlockedCurshingWave;
+            writer.Write(isCrushingWaveUnlocked);
+            isAbyssalPulseUnlocked = PlayerEntity.Instance.pState.unlockedAbyssalPulse;
+            writer.Write(isAbyssalPulseUnlocked);
+
         }
     }
     public void LoadPlayerData()
@@ -359,6 +383,12 @@ public class SaveSystem : MyMonobehaviour
 
                 lastScene = reader.ReadString();
 
+                isTideBurstUnlocked = reader.ReadBoolean();
+                isCrushingWaveUnlocked = reader.ReadBoolean();
+                isAbyssalPulseUnlocked = reader.ReadBoolean();
+
+
+
 
                 // LevelManager.Instance.LoadScene(lastScene, "WaveFade");
 
@@ -373,6 +403,10 @@ public class SaveSystem : MyMonobehaviour
                 PlayerEntity.Instance.playerStat.ChangeTotalStats(StatComponent.StatType.Stamina, playerTotalStamina);
                 PlayerEntity.Instance.playerStat.RestoreStat();
                 PlayerEntity.Instance.transform.position = playerPosition;
+
+                PlayerEntity.Instance.pState.unlockedTideBurst = isTideBurstUnlocked;
+                PlayerEntity.Instance.pState.unlockedCurshingWave = isCrushingWaveUnlocked;
+                PlayerEntity.Instance.pState.unlockedAbyssalPulse = isAbyssalPulseUnlocked;
 
                 SceneManager.LoadScene(lastScene);
                 GameController.Instance.DeactiveStartCanvas();
@@ -391,6 +425,38 @@ public class SaveSystem : MyMonobehaviour
             // PlayerController
         }
     }
+    #endregion
+    #region  Inventory
+    public void SaveInventory()
+    {
+        // if (!File.Exists(Application.persistentDataPath + "/save.inventory.data")) // invent
+        // {
+        //     BinaryWriter writer = new BinaryWriter(File.Create(Application.persistentDataPath + "/save.inventory.data"));
+        // }
+        using (BinaryWriter writer = new BinaryWriter(File.OpenWrite(Application.persistentDataPath + "/save.inventory.data")))
+        {
+            // writer.Write(isSeawWeedDefeated);
+            // writer.Write(isJellyFishDefeated);
+            // writer.Write(isCrabDefeated);
+            // writer.Write(isFinalBossDefeated);
+            itemData = PlayerEntity.Instance.playerInventory.inventory;
+            coinAmount = PlayerEntity.Instance.playerInventory.GetCurrentCoin();
+            writer.Write(coinAmount);
+            writer.Write(itemData.GetItems().Count);
+            foreach (ItemData item in itemData)
+            {
+                writer.Write(item.itemSO.itemName);
+                writer.
+            }
+
+        }
+
+    }
+    public void LoadInventory()
+    {
+
+    }
+
     #endregion
 
     #region npc

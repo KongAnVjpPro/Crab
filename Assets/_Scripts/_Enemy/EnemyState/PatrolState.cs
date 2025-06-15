@@ -233,8 +233,16 @@ public class PatrolState : EnemyState
             // if (stateMachine.isRangeAttack) return EnemyStateID.RangeAttack;
             return EnemyStateID.Attacking;
         }
-        if (dist <= 6f) return EnemyStateID.Chasing;
+        if (dist <= 6f)
+        {
+            if (stateMachine.stateList.ContainsKey(EnemyStateID.Block))
+            {
+                return EnemyStateID.Block;
+            }
+            return EnemyStateID.Chasing;
+        }
+
         return EnemyStateID.Patrolling;
     }
-    public AIPath aiPath;
+    // public AIPath aiPath;
 }

@@ -46,7 +46,9 @@ public class EnemyAnimator : EnemyComponent
             case EnemyStateID.Dead:
                 Death();
                 break;
-
+            case EnemyStateID.Block:
+                Block();
+                break;
         }
     }
     public virtual void ResetTrigger()
@@ -74,6 +76,10 @@ public class EnemyAnimator : EnemyComponent
 
     }
     public virtual void PrepareRangeAttack()
+    {
+
+    }
+    public virtual void Block()
     {
 
     }

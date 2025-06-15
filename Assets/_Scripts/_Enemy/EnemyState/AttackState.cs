@@ -6,9 +6,9 @@ public class AttackState : EnemyState
     public float attackCooldown = 1.0f;
     private bool hasAttacked;
     private float timer;
-    public float attackAnimTime = 0.1f;
+    // public float attackAnimTime = 0.1f;
     [SerializeField] Transform attackPos;
-    [SerializeField] float attackRange = 0.3f;
+    // [SerializeField] float attackRange = 0.3f;
     [SerializeField] float damage = 1f;
     [SerializeField] float velocityMoveScale = 5f;
     [Header("Config for not swimming creature: ")]
@@ -28,6 +28,7 @@ public class AttackState : EnemyState
         timer = 0f;
         hasAttacked = false;
         stateMachine.rb.velocity = Vector2.zero;
+        stateMachine.enemyEntity.enemyStat.damageReduceRate = 0;
     }
 
     public override void Do()
@@ -140,7 +141,7 @@ public class AttackState : EnemyState
             return EnemyStateID.Patrolling;
         }
         float dist = Vector2.Distance(transform.position, stateMachine.player.position);
-        if (dist <= 2.5f) return EnemyStateID.Attacking;
+        if (dist <= stateMachine.closeCombatRange) return EnemyStateID.Attacking;
         if (dist <= 6f) return EnemyStateID.Chasing;
         return EnemyStateID.Patrolling;
 

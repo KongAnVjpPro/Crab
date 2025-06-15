@@ -142,7 +142,6 @@ MonoBehaviour:
   moveDirection: 1
   returningToCenter: 0
   rangeRandomDirection: 45
-  aiPath: {fileID: 0}
 --- !u!1 &279162616837927187
 GameObject:
   m_ObjectHideFlags: 0
@@ -4419,6 +4418,7 @@ MonoBehaviour:
   maxHealth: 25
   maxMana: 25
   maxStamina: 25
+  damageReduceRate: 0
 --- !u!114 &6044270928213345462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4473,11 +4473,13 @@ MonoBehaviour:
   rb: {fileID: 980147820329734245}
   collie: {fileID: 0}
   enemyEntity: {fileID: 0}
+  damageReceiveScale: 1
   isSwimming: 0
   isRangeAttack: 0
   enemyAnim: {fileID: 0}
   currentState: {fileID: 0}
   rangeAttackDistanceCheck: 10
+  closeCombatRange: 2.5
   shield: {fileID: 0}
   enemyLayer:
     serializedVersion: 2

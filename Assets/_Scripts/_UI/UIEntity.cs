@@ -18,8 +18,24 @@ public class UIEntity : EntityController
     public UICinematic uiCinematic;
     public UIBoss uiBoss;
     public UIShellStation uiShellStation;
+    public UIIncreaseStatController uiStatUpgrade;
+
+
+    public CanvasGroup inkBullet;
     // public AudioSource audioSource;
     // public UIAudio uiAudio;
+    public void InkedScreen(float duration)
+    {
+        Tween tweener = inkBullet.DOFade(1, 0.5f).OnComplete(() =>
+        {
+            DOVirtual.DelayedCall(duration, () =>
+            {
+                inkBullet.DOFade(0, 0.5f);
+            });
+        });
+
+
+    }
     private void LoadSingleton()
     {
         if (instance == null)
@@ -51,6 +67,7 @@ public class UIEntity : EntityController
         LoadUIBoss();
         LoadCinematicUI();
         LoadUIShellStation();
+        LoadStatUpgrade();
         // LoadAudio();
         // LoadUIAudio();
 
@@ -67,6 +84,11 @@ public class UIEntity : EntityController
     //     if (audioSource != null) return;
     //     audioSource = GetComponent<AudioSource>();
     // }
+    protected virtual void LoadStatUpgrade()
+    {
+        if (uiStatUpgrade != null) return;
+        uiStatUpgrade = GetComponent<UIIncreaseStatController>();
+    }
     protected virtual void LoadUIShellStation()
     {
         if (uiShellStation != null) return;

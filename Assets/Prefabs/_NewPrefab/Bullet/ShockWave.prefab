@@ -211,7 +211,7 @@ MonoBehaviour:
   currentDir: {x: 0, y: 0}
   currentTimeExist: 0
   maxTimeExist: 5
-  impulseSource: {fileID: 0}
+  impulseSource: {fileID: 1408808028802599098}
   targetCollider: {fileID: 0}
   bounceCount: 0
   bounceLimit: 5

@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 public class ShellUnlocked : MyMonobehaviour
 {
-    [SerializeField] List<ShellSO> shellBase;
+    [SerializeField] List<ShellSO> shellBase = new List<ShellSO>();
     [SerializeField] CombinedShellData shellProvided;
     [Header("Visualize: ")]
     [SerializeField] ParticleSystem unlockedParticle;

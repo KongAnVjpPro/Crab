@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemType: 1
   itemEffectSO: {fileID: 11400000, guid: 49a16592a1cbd8149b9de111de94e9a6, type: 2}
-  itemName: SeaWeed
+  itemName: SeaWeed Big
   itemSprite: {fileID: 21300000, guid: 6e2f4af52ada995498f224f3c535cbf6, type: 3}
   itemDescription: Heal 25 unit HP
-  maxStack: 10
+  maxStack: 999

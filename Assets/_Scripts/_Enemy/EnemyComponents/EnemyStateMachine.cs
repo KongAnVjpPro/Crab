@@ -13,6 +13,7 @@ public class EnemyStateMachine : EnemyComponent
     public Rigidbody2D rb;
     public Collider2D collie;
     public EnemyEntity enemyEntity;
+    // public float damageReceiveScale = 1f;
 
 
     public Dictionary<EnemyStateID, EnemyState> stateList = new Dictionary<EnemyStateID, EnemyState>();
@@ -31,7 +32,7 @@ public class EnemyStateMachine : EnemyComponent
     [SerializeField] private EnemyState currentState;
     [Header("For rangeAttack")]
     [SerializeField] public float rangeAttackDistanceCheck = 10f;
-
+    public float closeCombatRange = 2.5f;
 
     [Header("For Boss: ")]
     public GameObject shield;

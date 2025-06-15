@@ -38,4 +38,28 @@ public class PlayerAbility : PlayerComponent
                 break;
         }
     }
+    public void UnLockSpell(SpellType id)
+    {
+        switch (id)
+        {
+            case SpellType.TideBurst:
+                playerController.pState.unlockedTideBurst = true;
+                UIEntity.Instance.uiNotification.NoticeSomething(4f, "Unlocked Tide Burst Spell", "Check Inventory For Details");
+                break;
+
+            case SpellType.CrushingWave:
+                playerController.pState.unlockedCurshingWave = true;
+                UIEntity.Instance.uiNotification.NoticeSomething(4f, "Unlocked Crushing Wave Spell", "Check Inventory For Details");
+                break;
+
+            case SpellType.AbyssalPulse:
+                playerController.pState.unlockedAbyssalPulse = true;
+                UIEntity.Instance.uiNotification.NoticeSomething(4f, "Unlocked Abyssal Pulse Spell", "Check Inventory For Details");
+                break;
+
+            default:
+                Debug.LogWarning("Unknown ability ID.");
+                break;
+        }
+    }
 }

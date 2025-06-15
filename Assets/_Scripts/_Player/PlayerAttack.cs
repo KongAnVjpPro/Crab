@@ -137,7 +137,7 @@ public class PlayerAttack : PlayerComponent
         // {
         //     StartCoroutine(ApplyUpwardForce());
         // }
-        Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(currentAttackPos.position, currentAtkArea, enemyLayer);
+        Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(currentAttackPos.position, currentAtkArea, 0, enemyLayer);
         foreach (Collider2D enemy in enemiesToDamage)
         {
             EnemyEntity enemyCtrl = enemy.GetComponent<EnemyEntity>();
@@ -154,9 +154,10 @@ public class PlayerAttack : PlayerComponent
 
         }
 
-        Collider2D[] breakableObject = Physics2D.OverlapBoxAll(currentAttackPos.position, currentAtkArea, LayerMask.GetMask("DamageAble"));
+        Collider2D[] breakableObject = Physics2D.OverlapBoxAll(currentAttackPos.position, currentAtkArea, 0, LayerMask.GetMask("DamageAble"));
         foreach (Collider2D obj in breakableObject)
         {
+            // Debug.Log(obj.name);
             DamagedAbleObject damagedAbleobj = obj.GetComponent<DamagedAbleObject>();
             if (damagedAbleobj == null) continue;
             damagedAbleobj.TakeDamage(damage);
@@ -257,6 +258,11 @@ public class PlayerAttack : PlayerComponent
     public void SetDamage(float value)
     {
         damage = value;
+    }
+    [SerializeField] float maxDamage = 5f;
+    public void IncreaseDamage(float amount)
+    {
+        damage = Mathf.Clamp(damage + amount, damage, maxDamage);
     }
 
     #endregion

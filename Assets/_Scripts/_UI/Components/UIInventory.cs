@@ -46,12 +46,12 @@ public class UIInventory : UIComponent
             if (isInventoryOpen)
             {
                 ShowInventory();
-                GameController.Instance.isBlockPlayerControl = true;
+
             }
             else
             {
                 HideInventory();
-                GameController.Instance.isBlockPlayerControl = false;
+
             }
         }
     }
@@ -78,8 +78,11 @@ public class UIInventory : UIComponent
         currentSlot = null;
         previousSlot?.EndClickHandle();
         previousSlot = null;
+        inventoryController.UpdateStatAndSkillCanvas();
+
 
         inventoryController.isTabSwitchingEnabled = true;
+        GameController.Instance.isBlockPlayerControl = true;
     }
     public void HideInventory()
     {
@@ -106,6 +109,8 @@ public class UIInventory : UIComponent
         inventoryController.UpdateMapCanvas();
         inventoryController.UpdateStatAndSkillCanvas();
         //inventory dc handle o day
+
+        GameController.Instance.isBlockPlayerControl = false;
     }
     protected virtual void LoadItemSlot()
     {

@@ -15,7 +15,11 @@ public class PlayerBlocking : PlayerComponent
         else
         {
             playerController.pState.blocking = false;
-            playerController.playerMovement.ResetBoost();
+            if (!playerController.playerMovement.isOnBuffMove)
+            {
+                playerController.playerMovement.ResetBoost();
+            }
+
             isBlocking = false;
         }
     }
@@ -42,14 +46,23 @@ public class PlayerBlocking : PlayerComponent
         {
             isBlocking = false;
             playerController.playerAnimator.Blocking(false);
-            playerController.playerMovement.ResetBoost();
+            // playerController.playerMovement.ResetBoost();
+            if (!playerController.playerMovement.isOnBuffMove)
+            {
+                playerController.playerMovement.ResetBoost();
+            }
             return;
         }
 
 
 
         playerController.playerStat.ChangeCurrentStats(StatComponent.StatType.Stamina, -Time.deltaTime * staminaUsePerSecond);
-        playerController.playerMovement.BoostSpeedAndJump(reduceMovementWhileBlock, reduceMovementWhileBlock);
+        if (!playerController.playerMovement.isOnBuffMove)
+        {
+            // playerController.playerMovement.ResetBoost();
+            playerController.playerMovement.BoostSpeedAndJump(reduceMovementWhileBlock, reduceMovementWhileBlock);
+        }
+
         //block or do sth
         isBlocking = true;
     }

@@ -110,6 +110,14 @@ public class DamagedAbleObject : MyMonobehaviour
             ReviveAnimation();
         }
     }
+    #region Level
+    bool levelSwitch = false;
+    public void LevelSwitch()
+    {
+        levelSwitch = !levelSwitch;
+        objectAnimator.SetBool("IsOpened", levelSwitch);
+    }
+    #endregion
     public UnityEvent OnHittedEvent;
     public UnityEvent OnDestroyedEvent;
 }

@@ -26,12 +26,19 @@ public class StatComponent : EntityComponent
     [SerializeField] protected float maxHealth = 25;
     [SerializeField] protected float maxMana = 25;
     [SerializeField] protected float maxStamina = 25;
+    public bool canReduceDamage = false;
+    public float damageReduceRate = 0f;
 
     public virtual void ChangeCurrentStats(StatType statType, float amount)//add or sub
     {
+
         switch (statType)
         {
             case StatType.Health:
+                if (amount < 0 && canReduceDamage)
+                {
+                    amount *= (1 - damageReduceRate);
+                }
                 currentHealth = Mathf.Clamp(currentHealth + amount, 0, totalHealth);
                 break;
             case StatType.Mana:
@@ -63,6 +70,11 @@ public class StatComponent : EntityComponent
     {
         // currentHealth = Mathf.Clamp(currentHealth + amount, 0, totalHealth);
         ChangeCurrentStats(StatType.Health, amount);
+    }
+    public void RecoverMana(float amount)
+    {
+        // currentHealth = Mathf.Clamp(currentHealth + amount, 0, totalHealth);
+        ChangeCurrentStats(StatType.Mana, amount);
     }
     public bool IsDead()
     {

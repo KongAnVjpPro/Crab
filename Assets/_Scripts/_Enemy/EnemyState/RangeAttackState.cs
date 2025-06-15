@@ -28,6 +28,9 @@ public class RangeAttackState : EnemyState
 
         Vector2 dirToTarget = stateMachine.DirecionToPlayer().normalized;
         stateMachine.Flip(dirToTarget.x >= 0 ? EnemyRotator.FlipDirection.Right : EnemyRotator.FlipDirection.Left);
+        stateMachine.enemyEntity.rb.velocity = Vector2.zero;
+        //  Vector2 dirToTarget = stateMachine.DirecionToPlayer().normalized;
+
     }
     public override void Do()
     {
@@ -40,6 +43,11 @@ public class RangeAttackState : EnemyState
         Vector2 dirToTarget = stateMachine.DirecionToPlayer().normalized;
         stateMachine.Flip(dirToTarget.x >= 0 ? EnemyRotator.FlipDirection.Right : EnemyRotator.FlipDirection.Left);
         hasAttacked = true;
+        if (stateMachine.isSwimming)
+        {
+            stateMachine.Flip((dirToTarget.x >= 0) ? EnemyRotator.FlipDirection.Up : EnemyRotator.FlipDirection.Down);
+            stateMachine.RotateZ(dirToTarget);
+        }
 
         // bulletSpawner.Spawn(stateMachine.transform.position, new Vector2(dirToTarget.x, dirToTarget.y));
 

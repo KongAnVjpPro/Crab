@@ -83,6 +83,29 @@ public class NPCAction : NPCComponent
         npcController.anim.SetBool("Talk", talkValue);
     }
     #endregion
+    #region Turn to player Side 
+    public void TurnToPlayerSide(bool turnValue)
+    {
+        if (!turnValue)
+        {
+            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            return;
+        }
+        float dir = (PlayerEntity.Instance.transform.position.x > transform.position.x) ? transform.localScale.x : transform.localScale.x * -1;
+        transform.localScale = new Vector3(dir, transform.localScale.y, transform.localScale.z);
+    }
+    #endregion
+    #region Teach skill
+    public SpellType skillToTeachPlayer;
+    public void TeachSkill()
+    {
+        PlayerEntity.Instance.playerAbility.UnLockSpell(skillToTeachPlayer);
+    }
+    public void Training()
+    {
+        UIEntity.Instance.uiStatUpgrade.ShowSlot();
+    }
+    #endregion
 }
 public enum NPCItemType
 {

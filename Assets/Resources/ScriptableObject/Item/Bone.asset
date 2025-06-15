@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Bone
   m_EditorClassIdentifier: 
   itemType: 1
+  itemEffectSO: {fileID: 11400000, guid: 4717d66990e9c0e4684e81f4de00a642, type: 2}
   itemName: Bone
   itemSprite: {fileID: 21300000, guid: ea3db1e9128786f4e800cc171433b547, type: 3}
-  itemDescription: 
-  maxStack: 10
+  itemDescription: 'Refresh 3 unit MN '
+  maxStack: 999

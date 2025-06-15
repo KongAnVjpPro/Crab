@@ -48,6 +48,7 @@ public enum EnemyStateID
     Chasing = 2,
     Attacking = 3,
     RangeAttack = 7,
+    Block = 16,
 
     //khach quan
     Stunned = 4,
@@ -63,3 +64,4 @@ public enum EnemyStateID
     SeaWeedTieUp = 14,// trói khi ở phase2
     SeaWeedPrepareDeath = 15
 }
+//16
